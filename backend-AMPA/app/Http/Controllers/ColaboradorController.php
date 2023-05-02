@@ -12,7 +12,7 @@ class ColaboradorController extends Controller
      */
     public function index()
     {
-        //
+        return Colaborador::all();
     }
 
     /**
@@ -20,7 +20,13 @@ class ColaboradorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $colaborador = new Colaborador;
+        $colaborador->nombre = $request->nombre;
+        $colaborador->descripcion = $request->descripcion;
+        $colaborador->ventaja = $request->ventaja;
+        $colaborador->save();
+
+        return $colaborador;
     }
 
     /**
@@ -28,7 +34,7 @@ class ColaboradorController extends Controller
      */
     public function show(Colaborador $colaborador)
     {
-        //
+        return $colaborador;
     }
 
     /**
@@ -36,14 +42,26 @@ class ColaboradorController extends Controller
      */
     public function update(Request $request, Colaborador $colaborador)
     {
-        //
+        $colaborador->nombre = $request->nombre;
+        $colaborador->descripcion = $request->descripcion;
+        $colaborador->ventaja = $request->ventaja;
+        $colaborador->save();
+
+        return $colaborador;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Colaborador $colaborador)
+    public function destroy($idColaborador)
     {
-        //
+        $colaborador = Colaborador::find($idColaborador);
+
+        if(is_null($colaborador)) {
+            return response()->json('No se pudo realizar la operación', 404);
+        }
+
+        $colaborador->delete();
+        return response()->noContent();
     }
 }

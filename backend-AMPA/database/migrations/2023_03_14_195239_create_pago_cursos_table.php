@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pago_cursos', function (Blueprint $table) {
             $table->id();
-            $table->integer('cantidad');
+            $table->float('cantidad');
             $table->string('estado');
             $table->string('metodo_pago');
             $table->date('fecha');

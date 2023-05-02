@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sugerencia extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'titulo',
+        'descripcion',
+        'fecha',
+        'hora',
+    ];
 }

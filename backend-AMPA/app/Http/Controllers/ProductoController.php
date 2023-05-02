@@ -12,7 +12,7 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        //
+        return Producto::all();
     }
 
     /**
@@ -20,7 +20,16 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $producto = new Producto;
+        $producto->nombre = $request->producto;
+        $producto->descripcion = $request->descripcion;
+        $producto->imagen = $request->imagen;
+        $producto->precio_general = $request->precio_general;
+        $producto->precio_socio = $request->precio_socio;
+        $producto->stock = $request->stock;
+        $producto->save();
+
+        return $producto;
     }
 
     /**
@@ -28,7 +37,7 @@ class ProductoController extends Controller
      */
     public function show(Producto $producto)
     {
-        //
+        return $producto;
     }
 
     /**
@@ -36,14 +45,29 @@ class ProductoController extends Controller
      */
     public function update(Request $request, Producto $producto)
     {
-        //
+        $producto->nombre = $request->producto;
+        $producto->descripcion = $request->descripcion;
+        $producto->imagen = $request->imagen;
+        $producto->precio_general = $request->precio_general;
+        $producto->precio_socio = $request->precio_socio;
+        $producto->stock = $request->stock;
+        $producto->save();
+
+        return $producto;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Producto $producto)
+    public function destroy($idProducto)
     {
-        //
+        $producto = Producto::find($idProducto);
+
+        if(is_null($producto)) {
+            return response()->json('No se pudo realizar la operación', 404);
+        }
+
+        $producto->delete();
+        return response()->noContent();
     }
 }

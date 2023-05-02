@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('descripcion');
             $table->string('imagen');
-            $table->double('precio_general');
-            $table->double('precio_socio');
+            $table->float('precio_general');
+            $table->float('precio_socio');
+            $table->integer('stock');
             $table->timestamps();
         });
     }

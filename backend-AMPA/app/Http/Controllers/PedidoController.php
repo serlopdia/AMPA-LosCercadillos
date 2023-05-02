@@ -12,7 +12,7 @@ class PedidoController extends Controller
      */
     public function index()
     {
-        //
+        return Pedido::all();
     }
 
     /**
@@ -20,7 +20,15 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $pedido = new Pedido;
+        $pedido->estado = $request->estado;
+        $pedido->notas = $request->notas;
+        $pedido->fecha = $request->fecha;
+        $pedido->hora = $request->hora;
+        $pedido->id_socio = $request->id_socio;
+        $pedido->save();
+
+        return $pedido;
     }
 
     /**
@@ -28,7 +36,7 @@ class PedidoController extends Controller
      */
     public function show(Pedido $pedido)
     {
-        //
+        return $pedido;
     }
 
     /**
@@ -36,14 +44,28 @@ class PedidoController extends Controller
      */
     public function update(Request $request, Pedido $pedido)
     {
-        //
+        $pedido->estado = $request->estado;
+        $pedido->notas = $request->notas;
+        $pedido->fecha = $request->fecha;
+        $pedido->hora = $request->hora;
+        $pedido->id_socio = $request->id_socio;
+        $pedido->save();
+
+        return $pedido;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pedido $pedido)
+    public function destroy($idPedido)
     {
-        //
+        $pedido = Pedido::find($idPedido);
+
+        if(is_null($pedido)) {
+            return response()->json('No se pudo realizar la operación', 404);
+        }
+
+        $pedido->delete();
+        return response()->noContent();
     }
 }

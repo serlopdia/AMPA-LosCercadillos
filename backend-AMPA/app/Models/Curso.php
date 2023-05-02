@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Curso extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'nombre',
+        'precio_cuota',
+        'fecha_inicio',
+        'fecha_fin',
+    ];
 }

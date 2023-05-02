@@ -12,7 +12,7 @@ class SugerenciaController extends Controller
      */
     public function index()
     {
-        //
+        return Sugerencia::all();
     }
 
     /**
@@ -20,7 +20,14 @@ class SugerenciaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $sugerencia = new Sugerencia;
+        $sugerencia->titulo = $request->titulo;
+        $sugerencia->descripcion = $request->descripcion;
+        $sugerencia->fecha = $request->fecha;
+        $sugerencia->hora = $request->hora;
+        $sugerencia->save();
+
+        return $sugerencia;
     }
 
     /**
@@ -28,7 +35,7 @@ class SugerenciaController extends Controller
      */
     public function show(Sugerencia $sugerencia)
     {
-        //
+        return $sugerencia;
     }
 
     /**
@@ -36,14 +43,27 @@ class SugerenciaController extends Controller
      */
     public function update(Request $request, Sugerencia $sugerencia)
     {
-        //
+        $sugerencia->titulo = $request->titulo;
+        $sugerencia->descripcion = $request->descripcion;
+        $sugerencia->fecha = $request->fecha;
+        $sugerencia->hora = $request->hora;
+        $sugerencia->save();
+
+        return $sugerencia;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sugerencia $sugerencia)
+    public function destroy($idSugerencia)
     {
-        //
+        $sugerencia = Sugerencia::find($idSugerencia);
+
+        if(is_null($sugerencia)) {
+            return response()->json('No se pudo realizar la operación', 404);
+        }
+
+        $sugerencia->delete();
+        return response()->noContent();
     }
 }

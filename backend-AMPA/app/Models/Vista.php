@@ -7,5 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vista extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'nombre',
+        'markdown',
+    ];
 }

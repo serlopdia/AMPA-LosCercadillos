@@ -12,7 +12,7 @@ class EventoController extends Controller
      */
     public function index()
     {
-        //
+        return Evento::all();
     }
 
     /**
@@ -20,7 +20,14 @@ class EventoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $evento = new Evento;
+        $evento->titulo = $request->titulo;
+        $evento->descripcion = $request->descripcion;
+        $evento->capacidad = $request->capacidad;
+        $evento->precio = $request->precio;
+        $evento->save();
+
+        return $evento;
     }
 
     /**
@@ -28,7 +35,7 @@ class EventoController extends Controller
      */
     public function show(Evento $evento)
     {
-        //
+        return $evento;
     }
 
     /**
@@ -36,14 +43,27 @@ class EventoController extends Controller
      */
     public function update(Request $request, Evento $evento)
     {
-        //
+        $evento->titulo = $request->titulo;
+        $evento->descripcion = $request->descripcion;
+        $evento->capacidad = $request->capacidad;
+        $evento->precio = $request->precio;
+        $evento->save();
+
+        return $evento;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Evento $evento)
+    public function destroy($idEvento)
     {
-        //
+        $evento = Evento::find($idEvento);
+
+        if(is_null($evento)) {
+            return response()->json('No se pudo realizar la operación', 404);
+        }
+
+        $evento->delete();
+        return response()->noContent();
     }
 }

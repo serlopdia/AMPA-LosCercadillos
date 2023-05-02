@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
             $table->string('estado');
+            $table->string('notas');
             $table->date('fecha');
             $table->time('hora');
             $table->foreign('id_socio');

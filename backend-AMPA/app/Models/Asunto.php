@@ -7,5 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Asunto extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'nombre',
+        'minutos_frecuencia',
+        'fecha_inicio',
+        'fecha_fin',
+        'hora_inicio',
+        'hora_fin',
+    ];
 }

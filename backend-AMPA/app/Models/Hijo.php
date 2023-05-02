@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hijo extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'nombre',
+        'apellidos',
+        'fecha_nacimiento',
+        'id_socio',
+    ];
 }

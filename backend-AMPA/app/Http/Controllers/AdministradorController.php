@@ -12,7 +12,7 @@ class AdministradorController extends Controller
      */
     public function index()
     {
-        //
+        return Administrador::all();
     }
 
     /**
@@ -20,7 +20,12 @@ class AdministradorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $administrador = new Administrador;
+        $administrador->email = $request->email;
+        $administrador->password = $request->password;
+        $administrador->save();
+
+        return $administrador;
     }
 
     /**
@@ -28,7 +33,7 @@ class AdministradorController extends Controller
      */
     public function show(Administrador $administrador)
     {
-        //
+        return $administrador;
     }
 
     /**
@@ -36,14 +41,25 @@ class AdministradorController extends Controller
      */
     public function update(Request $request, Administrador $administrador)
     {
-        //
+        $administrador->email = $request->email;
+        $administrador->password = $request->password;
+        $administrador->save();
+
+        return $administrador;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Administrador $administrador)
+    public function destroy($idAdministrador)
     {
-        //
+        $administrador = Administrador::find($idAdministrador);
+
+        if(is_null($administrador)) {
+            return response()->json('No se pudo realizar la operación', 404);
+        }
+
+        $administrador->delete();
+        return response()->noContent();
     }
 }

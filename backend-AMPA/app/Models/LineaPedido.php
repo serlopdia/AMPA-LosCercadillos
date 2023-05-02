@@ -7,5 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class LineaPedido extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'cantidad',
+        'id_producto',
+        'id_pedido',
+    ];
 }

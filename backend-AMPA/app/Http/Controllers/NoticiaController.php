@@ -12,7 +12,7 @@ class NoticiaController extends Controller
      */
     public function index()
     {
-        //
+        return Noticia::all();
     }
 
     /**
@@ -20,7 +20,15 @@ class NoticiaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $noticia = new Noticia;
+        $noticia->titulo = $request->titulo;
+        $noticia->texto = $request->texto;
+        $noticia->imagen = $request->imagen;
+        $noticia->fecha = $request->fecha;
+        $noticia->hora = $request->hora;
+        $noticia->save();
+
+        return $noticia;
     }
 
     /**
@@ -28,7 +36,7 @@ class NoticiaController extends Controller
      */
     public function show(Noticia $noticia)
     {
-        //
+        return $noticia;
     }
 
     /**
@@ -36,14 +44,28 @@ class NoticiaController extends Controller
      */
     public function update(Request $request, Noticia $noticia)
     {
-        //
+        $noticia->titulo = $request->titulo;
+        $noticia->texto = $request->texto;
+        $noticia->imagen = $request->imagen;
+        $noticia->fecha = $request->fecha;
+        $noticia->hora = $request->hora;
+        $noticia->save();
+
+        return $noticia;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Noticia $noticia)
+    public function destroy($idNoticia)
     {
-        //
+        $noticia = Noticia::find($idNoticia);
+
+        if(is_null($noticia)) {
+            return response()->json('No se pudo realizar la operación', 404);
+        }
+
+        $noticia->delete();
+        return response()->noContent();
     }
 }

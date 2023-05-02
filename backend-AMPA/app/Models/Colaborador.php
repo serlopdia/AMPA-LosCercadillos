@@ -7,5 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Colaborador extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+        'ventaja',
+    ];
 }

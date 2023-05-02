@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('pagos', function (Blueprint $table) {
             $table->id();
-            $table->double('cantidad');
+            $table->float('cantidad');
             $table->string('estado');
             $table->string('metodo_pago');
             $table->date('fecha');
             $table->time('hora');
             $table->foreign('id_socio');
-            $table->foreign('id_evento');
             $table->foreign('id_pedido');
+            $table->foreign('id_evento');
             $table->timestamps();
         });
     }

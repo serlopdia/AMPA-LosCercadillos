@@ -12,7 +12,7 @@ class LineaPedidoController extends Controller
      */
     public function index()
     {
-        //
+        return LineaPedido::all();
     }
 
     /**
@@ -20,7 +20,13 @@ class LineaPedidoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $lineaPedido = new LineaPedido;
+        $lineaPedido->cantidad = $request->cantidad;
+        $lineaPedido->id_producto = $request->id_producto;
+        $lineaPedido->id_pedido = $request->id_pedido;
+        $lineaPedido->save();
+
+        return $lineaPedido;
     }
 
     /**
@@ -28,7 +34,7 @@ class LineaPedidoController extends Controller
      */
     public function show(LineaPedido $lineaPedido)
     {
-        //
+        return $lineaPedido;
     }
 
     /**
@@ -36,14 +42,26 @@ class LineaPedidoController extends Controller
      */
     public function update(Request $request, LineaPedido $lineaPedido)
     {
-        //
+        $lineaPedido->cantidad = $request->cantidad;
+        $lineaPedido->id_producto = $request->id_producto;
+        $lineaPedido->id_pedido = $request->id_pedido;
+        $lineaPedido->save();
+
+        return $lineaPedido;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LineaPedido $lineaPedido)
+    public function destroy($idLineaPedido)
     {
-        //
+        $lineaPedido = LineaPedido::find($idLineaPedido);
+
+        if(is_null($lineaPedido)) {
+            return response()->json('No se pudo realizar la operación', 404);
+        }
+
+        $lineaPedido->delete();
+        return response()->noContent();
     }
 }

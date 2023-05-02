@@ -12,7 +12,7 @@ class CursoController extends Controller
      */
     public function index()
     {
-        //
+        return Curso::all();
     }
 
     /**
@@ -20,7 +20,14 @@ class CursoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $curso = new Curso;
+        $curso->nombre = $request->nombre;
+        $curso->precio_cuota = $request->precio_cuota;
+        $curso->fecha_inicio = $request->fecha_inicio;
+        $curso->fecha_fin = $request->fecha_fin;
+        $curso->save();
+
+        return $curso;
     }
 
     /**
@@ -28,7 +35,7 @@ class CursoController extends Controller
      */
     public function show(Curso $curso)
     {
-        //
+        return $curso;
     }
 
     /**
@@ -36,14 +43,27 @@ class CursoController extends Controller
      */
     public function update(Request $request, Curso $curso)
     {
-        //
+        $curso->nombre = $request->nombre;
+        $curso->precio_cuota = $request->precio_cuota;
+        $curso->fecha_inicio = $request->fecha_inicio;
+        $curso->fecha_fin = $request->fecha_fin;
+        $curso->save();
+
+        return $curso;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Curso $curso)
+    public function destroy($idCurso)
     {
-        //
+        $curso = Curso::find($idCurso);
+
+        if(is_null($curso)) {
+            return response()->json('No se pudo realizar la operación', 404);
+        }
+
+        $curso->delete();
+        return response()->noContent();
     }
 }
