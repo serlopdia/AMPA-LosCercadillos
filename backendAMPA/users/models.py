@@ -13,3 +13,10 @@ class Socio(models.Model):
 
     class Meta:
         app_label="users"
+        
+class Administrador(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label="users"

@@ -1,8 +1,9 @@
 from rest_framework import routers
-from .api import SocioViewSet
+from .api import AdministradorViewSet, SocioViewSet
 
 router = routers.DefaultRouter()
 
-router.register('', SocioViewSet, basename='socios')
+router.register('socios', SocioViewSet, basename='socios')
+router.register('administradores', AdministradorViewSet, basename='administradores')
 
 urlpatterns = router.urls
