@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Administrador extends Model
+class Administrador extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-    protected $table='socios';
+    protected $table='administradores';
     /**
      * The attributes that are mass assignable.
      *

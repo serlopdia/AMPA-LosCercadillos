@@ -7,17 +7,11 @@ use Illuminate\Http\Request;
 
 class AdministradorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return Administrador::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $administrador = new Administrador;
@@ -28,17 +22,11 @@ class AdministradorController extends Controller
         return $administrador;
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Administrador $administrador)
     {
         return $administrador;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Administrador $administrador)
     {
         $administrador->email = $request->email;
@@ -48,9 +36,6 @@ class AdministradorController extends Controller
         return $administrador;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($idAdministrador)
     {
         $administrador = Administrador::find($idAdministrador);
@@ -61,5 +46,27 @@ class AdministradorController extends Controller
 
         $administrador->delete();
         return response()->noContent();
+    }
+    
+    public function login(Request $request)
+    {
+        $response = ["status"=>0, "msg"=>""];
+
+        $data = json_decode($request->getContent());
+        $administrador = Administrador::where('email', $data->email)->first();
+
+        if($administrador) {
+            if(Hash::check($data->password, $administrador->password)) {
+                $token = $administrador->createToken("example");
+                $response["status"] = 1;
+                $response["msg"] = $token->plainTextToken;
+            } else {
+                $response["msg"] = "Credenciales incorrectas.";
+            }
+        } else {
+            $response["msg"] = "Administrador no encontrado.";
+        }
+
+        return response()->json($response);
     }
 }
