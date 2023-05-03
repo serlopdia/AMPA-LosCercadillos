@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="author" content="Muhamad Nauval Azhar">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" content="This is a login page template based on Bootstrap 5">
+	<title>Hacerse socio</title>
+</head>
+
+<body>
+	<section class="h-100">
+		<div class="container h-100">
+			<div class="row justify-content-sm-center h-100">
+				<div class="col-xxl-6 col-xl-7 col-lg-7 col-md-9 col-sm-11">
+					<div class="text-center my-5">
+						<img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="logo" width="100">
+					</div>
+					<div class="card shadow-lg">
+						<div class="card-body p-5">
+							<h1 class="fs-4 card-title fw-bold mb-4">Hazte socio</h1>
+							<form method="POST" class="needs-validation" autocomplete="off">
+                                <div class="form-group row">
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="nombre">Nombre</label>
+                                        <input id="nombre" type="text" class="form-control" name="nombre" value="" required autofocus>
+                                        <div class="invalid-feedback">
+                                            El nombre es obligatorio
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="apellidos">Apellidos</label>
+                                        <input id="apellidos" type="text" class="form-control" name="apellidos" value="" required autofocus>
+                                        <div class="invalid-feedback">
+                                            Los apellidos son obligatorios
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="email">Email</label>
+                                        <input id="email" type="email" class="form-control" name="email" value="" required autofocus>
+                                        <div class="invalid-feedback">
+                                            El email es obligatorio
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="dni">DNI</label>
+                                        <input id="dni" type="text" class="form-control" name="dni" value="" required autofocus>
+                                        <div class="invalid-feedback">
+                                            El DNI es obligatorio
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="password">Contraseña</label>
+                                        <input id="password" type="password" class="form-control" name="password" value="" required autofocus>
+                                        <div class="invalid-feedback">
+                                            La contraseña es obligatoria
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="password_confirm">Confirmar contraseña</label>
+                                        <input id="password_confirm" type="password" class="form-control" name="password_confirm" value="" required autofocus>
+                                        <div class="invalid-feedback">
+                                            Debe confirmar la contraseña
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="telefono">Teléfono</label>
+                                        <input id="telefono" type="text" class="form-control" name="telefono" value="" required autofocus>
+                                        <div class="invalid-feedback">
+                                            El teléfono es obligatorio
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="direccion">Dirección</label>
+                                        <input id="direccion" type="text" class="form-control" name="direccion" value="" required autofocus>
+                                        <div class="invalid-feedback">
+                                            La dirección es obligatoria
+                                        </div>
+                                    </div>
+                                </div>
+
+								<p class="form-text text-muted mb-3">
+									Registrándote, aceptas nuestros términos y condiciones.
+								</p>
+
+								<div class="align-items-center d-flex">
+									<button type="submit" class="btn btn-primary ms-auto">
+										Hazte socio	
+									</button>
+								</div>
+							</form>
+						</div>
+						<div class="card-footer py-3 border-0">
+							<div class="text-center">
+								¿Tienes una cuenta? <a href="/login" class="text-dark">Inicia sesión</a>
+							</div>
+						</div>
+					</div>
+					<div class="text-center mt-5 text-muted">
+						Made with ❤️ by Sergio López
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+</body>
+</html>
