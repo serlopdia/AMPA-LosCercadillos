@@ -25,5 +25,5 @@ class SocioViewSet(viewsets.ModelViewSet):
 
 class AdministradorViewSet(viewsets.ModelViewSet):
     queryset = Administrador.objects.all()
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAdminUser]
     serializer_class = AdministradorSerializer
