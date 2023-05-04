@@ -43,17 +43,17 @@ class SocioSerializer(serializers.ModelSerializer):
 class AdministradorSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     password = serializers.CharField(source='user.password')
-    is_staff = serializers.BooleanField(source='user.is_staff')
+    is_staff = serializers.BooleanField(source='user.is_staff', read_only=True, default=True)
 
     class Meta:
         model = Administrador
         fields = ('id', 'username', 'password', 'is_staff', 'created_at')
-        read_only_fields = ('created_at', )
+        read_only_fields = ('created_at',)
 
     def create(self, validated_data):
         user_data = validated_data.pop('user', {})
         password = user_data.pop('password', None)
-        user_data['is_staff'] = 1  # Establecer el valor predeterminado de is_staff como 1
+        user_data['is_staff'] = True  # Establecer el valor predeterminado de is_staff como True
         user = User.objects.create(**user_data)
         if password:
             user.set_password(password)
