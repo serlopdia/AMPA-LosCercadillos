@@ -5,12 +5,14 @@ import { IndexComponent } from './pages/index/index.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginAdminComponent } from './pages/admin/login-admin/login-admin.component';
+import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 
 const routes: Routes = [
-  { path: 'index', component: IndexComponent },
+  { path: '', component: IndexComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login-admin', component: LoginAdminComponent },
+  { path: 'dashboard', component: DashboardComponent },
 ];
 
 @NgModule({

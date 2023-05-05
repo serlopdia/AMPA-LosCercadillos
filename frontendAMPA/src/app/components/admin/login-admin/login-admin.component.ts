@@ -5,7 +5,7 @@ import { UsersService } from 'src/app/services/users.service';
 @Component({
   selector: 'app-login-admin',
   templateUrl: './login-admin.component.html',
-  styleUrls: ['./login-admin.component.css']
+  styleUrls: ['./login-admin.component.scss']
 })
 export class LoginAdminComponent implements OnInit {
 
@@ -13,20 +13,33 @@ export class LoginAdminComponent implements OnInit {
     username: null,
     password: null
   }
-  isLoggedIn = false;
+
+  isAdminLogged = false;
+  isSocioLogged = false;
   isLoginFailed = false;
   errorMessage = '';
 
   constructor(private uService: UsersService, private http: HttpClient) { }
 
   ngOnInit(): void {
+    if(this.uService.isLoggedIn() && this.uService.isLogAdmin()) {
+      this.isAdminLogged=true;
+    }else if(this.uService.isLoggedIn() && !this.uService.isLogAdmin()) {
+      this.isSocioLogged=true;
+    }
   }
 
   logForm() {
     this.uService.login(this.form).subscribe({
       next: data => {
         this.uService.saveUser(data);
-        this.isLoggedIn = true;
+        if (!this.uService.isLogAdmin()) {
+          this.errorMessage = "Credenciales incorrectas.";
+          this.deleteSession();
+          this.isLoginFailed = true;
+          return;
+        }
+        this.isAdminLogged = true;
         this.reloadPage();
       },
       error: err => {
@@ -38,30 +51,23 @@ export class LoginAdminComponent implements OnInit {
   }
 
   reloadPage():void{
-    if(this.esLogAdmin()){
+    if(this.uService.isLogAdmin()){
       window.location.href="dashboard";
     }
     else{
-      window.location.href="index";
+      window.location.href="";
     }
   }
 
-  esLogAdmin(){
-    let res = false;
-    if(this.uService.isLoggedIn()){
-      var ck = localStorage.getItem('auth-user');
-
-      if(ck!=null){
-        var tk = JSON.parse(ck);
-        for(var i in tk){
-          if (i==='administrador id'){
-            res = true;
-          }
-        }
-        return res;
+  deleteSession(){
+    this.uService.logout().subscribe(
+      (data) =>{
+        localStorage.clear();
+      },
+      error =>{
+        console.log(error)
       }
-    }
-    return res;
+    );
   }
 
 }

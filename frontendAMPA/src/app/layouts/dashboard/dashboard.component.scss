@@ -1,0 +1,50 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.side-navbar {
+  width: 300px;
+  height: 100%; 
+  padding-left: 20px; 
+  padding-right: 20px;
+  position: fixed;
+  margin-left: -300px;
+  background-color: rgb(21, 30, 83);
+  transition: 0.5s;
+}
+
+.nav-link:active,
+.nav-link:focus,
+.nav-link:hover {
+  background-color: #ffffff26;
+}
+
+.my-container {
+  transition: 0.4s;
+}
+
+.active-nav {
+  margin-left: 0;
+}
+
+/* for main section */
+.active-cont {
+  margin-left: 300px;
+}
+
+#menu-btn {
+  background-color: rgb(21, 30, 83);
+  color: #fff;
+}
+
+.my-container input {
+  border-radius: 2rem;
+  padding: 2px 20px;
+}
