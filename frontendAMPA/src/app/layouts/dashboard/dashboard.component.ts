@@ -7,13 +7,13 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-
+  
   constructor(private userService: UsersService) { }
 
   ngOnInit() {
     this.toggleSidebar();
   }
-
+  
   toggleSidebar() {
     const menuBtn = document.querySelector("#menu-btn");
     const sidebar = document.querySelector("#sidebar");

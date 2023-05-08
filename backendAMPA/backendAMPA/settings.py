@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     # DJANGO INSTALLED APPS
+    'ampa',
+    'shop',
     'users',
 ]
 

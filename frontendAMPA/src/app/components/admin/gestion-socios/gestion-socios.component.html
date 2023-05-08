@@ -1,31 +1,59 @@
 <app-dashboard></app-dashboard>
 
-<table class="table table-bordered">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td colspan="2">Larry the Bird</td>
-        <td>@twitter</td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Main Wrapper -->
+  <div class="p-1 my-container active-cont">
+    <!-- Top Nav -->
+    <nav class="navbar top-navbar navbar-light bg-blank px-5">
+      <a class="btn border-0" id="menu-btn"><i class="fa-solid fa-bars"></i></a>
+    </nav>
+
+    <nav class="navbar navbar-blank bg-blank">
+      <form class="form-inline buscador">
+        <input class="form-control mr-sm-2" type="search" placeholder="Buscar socio" style="margin-right: 20px;" [(ngModel)]="valorBusqueda">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+      </form>
+    </nav>
+
+    <div class="table-container">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col" style="width: 50px;">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">DNI</th>
+            <th scope="col">Email</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col" style="width: 40px;">P</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let socio of listaSocios" 
+          id="{{ socio.id }}" 
+          class="socio" 
+          (mouseover)="onMouseOver(socio.id)" 
+          (mouseout)="onMouseOut(socio.id)">
+            <th scope="row">{{ socio.id }}</th>
+            <td>{{ socio.first_name }}</td>
+            <td>{{ socio.last_name }}</td>
+            <td>{{ socio.dni }}</td>
+            <td>{{ socio.email }}</td>
+            <td>{{ socio.tel }}</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <button type="button" class="btn btn-rosa enviar-correo">
+        <i class="fa-solid fa-file-export" style="margin-right: 10px;"></i>
+        Enviar correo
+      </button>
+      <button type="button" class="btn btn-success exportar">
+        <i class="fa-solid fa-file-arrow-down" style="margin-right: 10px;"></i>
+        Exportar a Excel
+      </button>
+    </div>
+
+  </div>

@@ -45,9 +45,9 @@ export class UsersService {
         let headers = new HttpHeaders()
         headers = headers.set('Authorization', 'Token '+ res[0])
         if(isAdmin){
-          return this.http.get(API_url + `users/socios/${res[1]}/`, {'headers':headers})
+          return this.http.get(API_url + `/users/socios/${res[1]}/`, {'headers':headers})
         }else{
-          return this.http.get(API_url + `users/administradores/${res[1]}/`, {'headers':headers})
+          return this.http.get(API_url + `/users/administradores/${res[1]}/`, {'headers':headers})
         }
       }
     }
@@ -55,11 +55,11 @@ export class UsersService {
   }
 
   login(user:any): Observable<any> {
-    return this.http.post(API_url + 'users/login/', user, httpOptions);
+    return this.http.post(API_url + '/users/login/', user, httpOptions);
   }
 
   public register(user:any): Observable<any>{
-    return this.http.post(API_url + 'users/socios/', user, httpOptions)
+    return this.http.post(API_url + '/users/socios/', user, httpOptions)
   }
 
   logout(): Observable<any> {
@@ -74,7 +74,7 @@ export class UsersService {
         let headers = new HttpHeaders()
         headers = headers.set('Authorization', 'Token ' + res[0])
 
-        return this.http.get(API_url + `users/logout/`, {'headers':headers})
+        return this.http.get(API_url + `/users/logout/`, {'headers':headers})
       }
     }
     return new Observable<any>;
@@ -103,6 +103,25 @@ export class UsersService {
       }
     }
     return res;
+  }
+  
+  // DEVUELVE UNA LISTA DE TODOS LOS SOCIOS
+  getSociosList(): Observable<any>{
+    if(this.isLogAdmin()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck != null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders()
+        headers = headers.set('Authorization', 'Token '+ res[0])
+
+        return this.http.get(API_url + '/users/socios/', { headers: headers });
+      }
+    }
+    return new Observable<any>;
   }
 
 }
