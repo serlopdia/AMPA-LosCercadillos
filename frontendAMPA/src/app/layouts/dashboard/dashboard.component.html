@@ -1,0 +1,78 @@
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous" />
+</head>
+
+  <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column" id="sidebar">
+    <ul class="nav nav-pills nav-fill flex-column text-white w-100">
+      <p class="h3 text-white my-2 menu-name">
+        Dashboard
+      </p>
+      <li>
+        <a href="/dashboard" class="nav-link text-white active menu-option">
+          <i class="fa-solid fa-gear" style="margin-right: 10px;"></i>
+          Gestión
+        </a>
+      </li>
+      <hr class="menu-separator">
+      <li>
+        <a href="/dashboard/socios" class="nav-link text-white menu-option">
+          <i class="fa-solid fa-handshake-angle" style="margin-right: 10px;"></i>
+          Socios
+        </a>
+      </li>
+      <hr class="menu-separator">
+      <li>
+        <a href="/dashboard" class="nav-link text-white menu-option">
+          <i class="fa-solid fa-bag-shopping" style="margin-right: 10px;"></i>
+          Productos
+        </a>
+      </li>
+      <hr class="menu-separator">
+      <li>
+        <a href="/dashboard" class="nav-link text-white menu-option">
+          <i class="fa-solid fa-scroll" style="margin-right: 10px;"></i>
+          Pedidos
+        </a>
+      </li>
+      <hr class="menu-separator">
+      <li>
+        <a href="/dashboard" class="nav-link text-white menu-option">
+          <i class="fa-solid fa-sack-dollar" style="margin-right: 10px;"></i>
+          Pagos
+        </a>
+      </li>
+      <hr class="menu-separator">
+      <li>
+        <a href="/dashboard" class="nav-link text-white menu-option">
+          <i class="fa-solid fa-scale-unbalanced" style="margin-right: 10px;"></i>
+          Cuentas
+        </a>
+      </li>
+      <hr class="menu-separator">
+      <li>
+        <a href="/dashboard" class="nav-link text-white menu-option">
+          <i class="fa-solid fa-inbox" style="margin-right: 10px;"></i>
+          Buzón
+        </a>
+      </li>
+      <li>
+        <div class="text-center" style="margin-top: 3vh;">
+          <img class="logo-img" src="../../../assets/images/logo.png" alt="logo">
+        </div>
+      </li>
+      <li>
+        <div class="dropdown position-fixed bottom-0" style="margin-bottom: 2.5vh;">
+          <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle menu-option" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-user-shield" style="margin-left: 10px; margin-right: 15px;"></i>
+            <strong>Administrador</strong>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark text-small shadow dropdown-menu-end">
+            <li><a class="dropdown-item" href="#">Admin profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" (click)="logout()">Sign out</a></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+
+  </div>

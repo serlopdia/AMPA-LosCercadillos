@@ -1,0 +1,15 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-<%= className %>',
+  templateUrl: './<%= kebabCaseName %>.component.html',
+  styleUrls: ['./<%= kebabCaseName %>.component.css']
+})
+export class <%= className %>Component implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+}

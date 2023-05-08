@@ -10,6 +10,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
 import { IndexComponent } from './pages/index/index.component';
 import { LoginAdminComponent } from './pages/admin/login-admin/login-admin.component';
+import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { LoginAdminComponent } from './pages/admin/login-admin/login-admin.compo
     NavbarComponent,
     IndexComponent,
     LoginAdminComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
