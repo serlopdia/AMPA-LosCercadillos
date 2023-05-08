@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.db.models import Q
 
 from users.serializer import SocioSerializer
-from .models import Asunto, Balance, Cita, Clase, Colaborador, Curso, CursoEscolar, EstadoPago, Evento, Hijo, Noticia, PagoCurso, Sugerencia, TipoClase, Vista
+from .models import Asunto, Balance, Cita, Clase, Colaborador, CursoEscolar, EstadoPago, Evento, Hijo, Noticia, PagoCurso, Sugerencia, TipoClase, Vista
 
 class VistaSerializer(serializers.ModelSerializer):
     class Meta:

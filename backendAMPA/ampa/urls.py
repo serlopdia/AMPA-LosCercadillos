@@ -1,7 +1,8 @@
 from django.urls import path
 from rest_framework import routers
 
-from .api import AsuntoViewSet, BalanceViewSet, CitaViewSet, ClaseViewSet, ColaboradorViewSet, CursoEscolarViewSet, CursoViewSet, EventoViewSet, HijoViewSet, NoticiaViewSet, PagoCursoViewSet, SugerenciaViewSet, VistaViewSet
+from .views import JoinEventoView
+from .api import AsuntoViewSet, BalanceViewSet, CitaViewSet, ClaseViewSet, ColaboradorViewSet, CursoEscolarViewSet, EventoViewSet, HijoViewSet, NoticiaViewSet, PagoCursoViewSet, SugerenciaViewSet, VistaViewSet
 
 router = routers.DefaultRouter()
 
@@ -21,4 +22,5 @@ router.register('pagos_cursos', PagoCursoViewSet, basename='pagos_cursos')
 urlpatterns = router.urls
 
 urlpatterns.extend([
+    path('eventos/<int:pk>/join/', JoinEventoView.as_view(), name='join_evento'),
 ])
