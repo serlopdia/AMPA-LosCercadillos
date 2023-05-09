@@ -1,1 +1,0 @@
-export const API_url: string = "https://ampa.pythonanywhere.com/";
