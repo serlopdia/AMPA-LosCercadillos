@@ -19,21 +19,21 @@ export class LoginAdminComponent implements OnInit {
   isLoginFailed = false;
   errorMessage = '';
 
-  constructor(private uService: UsersService, private http: HttpClient) { }
+  constructor(private usersService: UsersService, private http: HttpClient) { }
 
   ngOnInit(): void {
-    if(this.uService.isLoggedIn() && this.uService.isLogAdmin()) {
+    if(this.usersService.isLoggedIn() && this.usersService.isLogAdmin()) {
       this.isAdminLogged=true;
-    }else if(this.uService.isLoggedIn() && !this.uService.isLogAdmin()) {
+    }else if(this.usersService.isLoggedIn() && !this.usersService.isLogAdmin()) {
       this.isSocioLogged=true;
     }
   }
 
   logForm() {
-    this.uService.login(this.form).subscribe({
+    this.usersService.login(this.form).subscribe({
       next: data => {
-        this.uService.saveUser(data);
-        if (!this.uService.isLogAdmin()) {
+        this.usersService.saveUser(data);
+        if (!this.usersService.isLogAdmin()) {
           this.errorMessage = "Credenciales incorrectas.";
           this.deleteSession();
           this.isLoginFailed = true;
@@ -51,7 +51,7 @@ export class LoginAdminComponent implements OnInit {
   }
 
   reloadPage():void{
-    if(this.uService.isLogAdmin()){
+    if(this.usersService.isLogAdmin()){
       window.location.href="dashboard";
     }
     else{
@@ -60,7 +60,7 @@ export class LoginAdminComponent implements OnInit {
   }
 
   deleteSession(){
-    this.uService.logout().subscribe(
+    this.usersService.logout().subscribe(
       (data) =>{
         localStorage.clear();
       },

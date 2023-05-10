@@ -24,7 +24,7 @@ export class GestionSociosComponent implements OnInit {
   listaSocios: Socio[] = [];
   valorBusqueda = "";
 
-  constructor(private uService: UsersService) { }
+  constructor(private usersService: UsersService) { }
 
   ngOnInit() {
     this.getSociosList();
@@ -32,10 +32,10 @@ export class GestionSociosComponent implements OnInit {
   }
 
   getSociosList() {
-    this.uService.getSociosList().subscribe({
+    this.usersService.getSociosList().subscribe({
       next: res => {
         this.listaSocios = res;
-        console.log(res)
+        console.log(res);
       },error: err => {
         console.log(err);
       }
@@ -56,20 +56,6 @@ export class GestionSociosComponent implements OnInit {
   
   detallesSocio(idSocio: any) {
     window.location.href = '/dashboard/socios?detallesSocio=' + idSocio;
-  }
-
-  onMouseOver(id: number) {
-    const filaSocio = document.getElementById(id.toString());
-    if (filaSocio !== null) {
-      filaSocio.style.backgroundColor = '#f0f0f0';
-    }
-  }
-
-  onMouseOut(id: number) {
-    const filaSocio = document.getElementById(id.toString());
-    if (filaSocio !== null) {
-      filaSocio.style.backgroundColor = '';
-    }
   }
 
 }

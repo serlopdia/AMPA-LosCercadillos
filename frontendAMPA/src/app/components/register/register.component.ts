@@ -31,14 +31,14 @@ export class RegisterComponent implements OnInit {
   isLoginFailed = false;
   errorMessage = '';
 
-  constructor(private uService: UsersService, private http: HttpClient) { }
+  constructor(private usersService: UsersService, private http: HttpClient) { }
 
   ngOnInit(): void {
   }
 
   regForm(): void{
     if(this.form.password == this.form.password_confirm){
-      this.uService.register(this.form).subscribe({
+      this.usersService.register(this.form).subscribe({
         next: data => {
           this.isSuccessful = true;
           this.isSignUpFailed = false;
@@ -46,9 +46,9 @@ export class RegisterComponent implements OnInit {
           // SE PROCEDE A LOGUEAR AL USUARIO
           this.loginCredentials.username = this.form.username;
           this.loginCredentials.password = this.form.password;
-          this.uService.login(this.loginCredentials).subscribe({
+          this.usersService.login(this.loginCredentials).subscribe({
             next: data => {
-              this.uService.saveUser(data);
+              this.usersService.saveUser(data);
               this.reloadPage();
             },
             error: err => {

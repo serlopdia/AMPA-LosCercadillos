@@ -11,15 +11,15 @@ export class NavbarComponent implements OnInit {
   isLoggedIn = false;
   isAdmin = false;
 
-  constructor(private uService: UsersService) { }
+  constructor(private usersService: UsersService) { }
 
   ngOnInit(): void {
-    this.isLoggedIn = this.uService.isLoggedIn();
-    this.isAdmin = this.uService.isLogAdmin();
+    this.isLoggedIn = this.usersService.isLoggedIn();
+    this.isAdmin = this.usersService.isLogAdmin();
   }
 
   logout(){
-    this.uService.logout().subscribe(
+    this.usersService.logout().subscribe(
       (data) =>{
         localStorage.clear();
         window.location.href=""
