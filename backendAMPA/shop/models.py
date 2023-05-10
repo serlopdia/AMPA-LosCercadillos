@@ -25,7 +25,7 @@ class Producto(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label="ampa"
+        app_label="shop"
 
 class Pago(models.Model):
     estado = models.CharField(choices=EstadoPago.choices, max_length=64)
@@ -34,7 +34,7 @@ class Pago(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label="ampa"
+        app_label="shop"
 
     def clean(self):
         if self.estado not in ["PAGADO", "PENDIENTE", "RECHAZADO"]:
@@ -47,7 +47,7 @@ class Pedido(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label="ampa"
+        app_label="shop"
 
     def clean(self):
         if self.estado not in ["ENTREGADO", "PREPARACION", "DEVUELTO"]:
@@ -60,4 +60,4 @@ class LineaPedido(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label="ampa"
+        app_label="shop"
