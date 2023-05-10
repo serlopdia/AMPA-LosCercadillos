@@ -8,7 +8,7 @@ import { UsersService } from '../services/users.service';
 })
 export class SocioGuard implements CanActivate {
 
-  constructor(private router: Router, private uService: UsersService) {}
+  constructor(private router: Router, private usersService: UsersService) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -25,7 +25,7 @@ export class SocioGuard implements CanActivate {
 
   isSocioLogged(): boolean {
     let res = false;
-    if(this.uService.isLoggedIn() && !this.uService.isLogAdmin()) {
+    if(this.usersService.isLoggedIn() && !this.usersService.isLogAdmin()) {
       res = true;
     }
     return res;

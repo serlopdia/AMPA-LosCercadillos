@@ -8,7 +8,7 @@ import { UsersService } from '../services/users.service';
 })
 export class AdminGuard implements CanActivate {
 
-  constructor(private router: Router, private uService: UsersService) {}
+  constructor(private router: Router, private usersService: UsersService) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -24,7 +24,7 @@ export class AdminGuard implements CanActivate {
   }
 
   isAdminLogged(): boolean {
-    let res = this.uService.isLogAdmin()
+    let res = this.usersService.isLogAdmin()
     return res;
   }
   

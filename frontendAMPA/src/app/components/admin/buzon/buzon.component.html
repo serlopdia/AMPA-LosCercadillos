@@ -1,0 +1,26 @@
+<app-dashboard></app-dashboard>
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+        <!-- Top Nav -->
+        <nav class="navbar top-navbar navbar-light bg-blank px-5">
+            <a class="btn border-0" id="menu-btn"><i class="fa-solid fa-bars"></i></a>
+        </nav>
+
+        <div *ngFor="let sugerencia of sugerenciasFormateadas" id="{{ sugerencia.id }}" class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ sugerencia.titulo }}</h5>
+                <p class="card-text card-text-limitado" [ngClass]="{'card-text-extendido': mapMostrarDescripcionCompleta.get(sugerencia.id) || sugerencia.descripcion.length <= 350}">
+                    {{ sugerencia.descripcion }}
+                </p>
+                <div style="text-align: right;">
+                    <button *ngIf="sugerencia.descripcion.length > 350" class="btn btn-link p-0 m-0 ml-auto" (click)="mapMostrarDescripcionCompleta.set(sugerencia.id, !mapMostrarDescripcionCompleta.get(sugerencia.id))">
+                        {{ mapMostrarDescripcionCompleta.get(sugerencia.id) ? 'Ver menos' : 'Ver más' }}
+                    </button>
+                </div>
+            </div>
+            <div class="card-footer text-body-secondary">
+                {{ sugerencia.created_at }}
+            </div>
+        </div>
+    </div>

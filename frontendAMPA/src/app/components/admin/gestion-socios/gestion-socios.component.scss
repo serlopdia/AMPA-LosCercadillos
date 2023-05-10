@@ -25,7 +25,6 @@
 
 .buscador {
   display: flex;
-  justify-content: flex-end;
   margin: 1vh 50px;
 }
 
@@ -43,25 +42,9 @@
 
 .table-container {
   display: flex;
-  justify-content: flex-end;
   margin: 2vh 50px;
-  overflow-x: auto;
-}
-
-.table {
-  table-layout: fixed;
-}
-
-.table td {
-  min-width: 200px; /* Ajusta el valor de acuerdo a tus necesidades */
-  overflow: hidden;
-  text-align: justify;
-  word-wrap: break-word;
-}
-
-.table th {
-  overflow: hidden;
-  white-space: normal;
+  overflow: auto; /* Agrega scroll horizontal */
+  white-space: nowrap; /* Evita que el contenido se ajuste */
 }
 
 // CSS PARA HACER EL BOTÓN DE ENVIAR CORREO >>>>>>>>>>>>>>>>
