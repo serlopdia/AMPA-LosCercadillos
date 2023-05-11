@@ -29,7 +29,7 @@ class Producto(models.Model):
 
 class Pago(models.Model):
     estado = models.CharField(choices=EstadoPago.choices, max_length=64)
-    cantidad = models.IntegerField()
+    cantidad = models.FloatField()
     socio = models.ForeignKey(Socio, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
