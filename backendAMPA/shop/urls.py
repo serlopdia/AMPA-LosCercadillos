@@ -5,10 +5,10 @@ from shop.api import LineaPedidoViewSet, PagoViewSet, PedidoViewSet, ProductoVie
 
 router = routers.DefaultRouter()
 
-router.register('producto', ProductoViewSet, basename='producto')
-router.register('pago', PagoViewSet, basename='pago')
-router.register('pedido', PedidoViewSet, basename='pedido')
-router.register('lineapedido', LineaPedidoViewSet, basename='lineapedido')
+router.register('productos', ProductoViewSet, basename='productos')
+router.register('pagos', PagoViewSet, basename='pagos')
+router.register('pedidos', PedidoViewSet, basename='pedidos')
+router.register('lineapedidos', LineaPedidoViewSet, basename='lineapedidos')
 
 urlpatterns = router.urls
 
