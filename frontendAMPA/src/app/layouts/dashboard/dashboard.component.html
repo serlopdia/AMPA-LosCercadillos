@@ -8,51 +8,51 @@
         Dashboard
       </p>
       <li>
-        <a href="/dashboard/" class="nav-link text-white menu-option">
+        <a routerLink="/gestion/buzon" routerLinkActive="active" class="nav-link text-white menu-option">
           <i class="fa-solid fa-gear" style="margin-right: 10px;"></i>
-          Gestión
+          Gestión web
         </a>
       </li>
       <hr class="menu-separator">
       <li>
-        <a href="/dashboard/socios/" class="nav-link text-white active menu-option">
+        <a routerLink="/dashboard/socios/" routerLinkActive="active" class="nav-link text-white menu-option">
           <i class="fa-solid fa-handshake-angle" style="margin-right: 10px;"></i>
           Socios
         </a>
       </li>
       <hr class="menu-separator">
       <li>
-        <a href="/dashboard/productos/" class="nav-link text-white menu-option">
-          <i class="fa-solid fa-bag-shopping" style="margin-right: 10px;"></i>
+        <a routerLink="/dashboard/productos/" routerLinkActive="active" class="nav-link text-white menu-option">
+          <i class="fa-solid fa-cart-shopping" style="margin-right: 10px;"></i>
           Productos
         </a>
       </li>
       <hr class="menu-separator">
       <li>
-        <a href="/dashboard/pedidos/" class="nav-link text-white menu-option">
+        <a routerLink="/dashboard/pedidos/" routerLinkActive="active" class="nav-link text-white menu-option">
           <i class="fa-solid fa-scroll" style="margin-right: 10px;"></i>
           Pedidos
         </a>
       </li>
       <hr class="menu-separator">
       <li>
-        <a href="/dashboard/pagos/" class="nav-link text-white menu-option">
+        <a routerLink="/dashboard/pagos/" routerLinkActive="active" class="nav-link text-white menu-option">
           <i class="fa-solid fa-sack-dollar" style="margin-right: 10px;"></i>
           Pagos
         </a>
       </li>
       <hr class="menu-separator">
       <li>
-        <a href="/dashboard/balance/" class="nav-link text-white menu-option">
-          <i class="fa-solid fa-scale-unbalanced" style="margin-right: 10px;"></i>
-          Cuentas
+        <a routerLink="/dashboard/citas/" routerLinkActive="active" class="nav-link text-white menu-option">
+          <i class="fa-regular fa-calendar-days" style="margin-right: 10px;"></i>
+          Citas
         </a>
       </li>
       <hr class="menu-separator">
       <li>
-        <a href="/dashboard/buzon/" class="nav-link text-white menu-option">
-          <i class="fa-solid fa-inbox" style="margin-right: 10px;"></i>
-          Buzón
+        <a routerLink="/dashboard/eventos/" routerLinkActive="active" class="nav-link text-white menu-option">
+          <i class="fa-solid fa-people-group" style="margin-right: 10px;"></i>
+          Eventos
         </a>
       </li>
       <li>
@@ -75,4 +75,12 @@
       </li>
     </ul>
 
+  </div>
+
+  <!-- Main Wrapper -->
+  <div class="p-1 nav-container active-cont">
+    <!-- Top Nav -->
+    <nav class="navbar top-navbar navbar-light bg-blank px-5">
+      <a class="btn border-0" id="menu-btn"><i class="fa-solid fa-bars"></i></a>
+    </nav>
   </div>

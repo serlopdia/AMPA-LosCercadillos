@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,6 +22,11 @@ import { GestionEventosComponent } from './components/admin/gestion-eventos/gest
 import { GestionVistasComponent } from './components/admin/gestion-vistas/gestion-vistas.component';
 import { GestionNoticiasComponent } from './components/admin/gestion-noticias/gestion-noticias.component';
 import { GestionCitasComponent } from './components/admin/gestion-citas/gestion-citas.component';
+import { NavbarGestionComponent } from './layouts/navbar-gestion/navbar-gestion.component';
+import { SocioComponent } from './components/admin/forms/socio/socio.component';
+import { EventoComponent } from './components/admin/forms/evento/evento.component';
+import { NoticiaComponent } from './components/admin/forms/noticia/noticia.component';
+import { ProductoComponent } from './components/admin/forms/producto/producto.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +47,12 @@ import { GestionCitasComponent } from './components/admin/gestion-citas/gestion-
     GestionEventosComponent,
     GestionVistasComponent,
     GestionNoticiasComponent,
-    GestionCitasComponent
+    GestionCitasComponent,
+    NavbarGestionComponent,
+    SocioComponent,
+    EventoComponent,
+    NoticiaComponent,
+    ProductoComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +61,7 @@ import { GestionCitasComponent } from './components/admin/gestion-citas/gestion-
     FormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [Title],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

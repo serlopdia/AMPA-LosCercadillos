@@ -2,10 +2,6 @@
 
   <!-- Main Wrapper -->
   <div class="p-1 my-container active-cont">
-    <!-- Top Nav -->
-    <nav class="navbar top-navbar navbar-light bg-blank px-5">
-      <a class="btn border-0" id="menu-btn"><i class="fa-solid fa-bars"></i></a>
-    </nav>
 
     <nav class="navbar navbar-blank bg-blank">
       <form class="form-inline buscador">
@@ -30,7 +26,7 @@
         <tbody>
           <tr *ngFor="let socio of listaSocios" 
           id="{{ socio.id }}" 
-          class="socio">
+          class="socio"  [routerLink]="['/dashboard/socios/form/'+socio.id]">
             <th scope="row">{{ socio.id }}</th>
             <td>{{ socio.first_name }}</td>
             <td>{{ socio.last_name }}</td>

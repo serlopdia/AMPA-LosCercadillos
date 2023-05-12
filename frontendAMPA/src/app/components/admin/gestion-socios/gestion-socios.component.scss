@@ -23,6 +23,13 @@
   padding: 2px 20px;
 }
 
+.table-container {
+  display: flex;
+  margin: 2vh 50px;
+  overflow: auto; /* Agrega scroll horizontal */
+  white-space: nowrap; /* Evita que el contenido se ajuste */
+}
+
 .buscador {
   display: flex;
   margin: 1vh 50px;
@@ -38,13 +45,6 @@
   display: flex;
   align-items: center;
   margin: 1vh 50px;
-}
-
-.table-container {
-  display: flex;
-  margin: 2vh 50px;
-  overflow: auto; /* Agrega scroll horizontal */
-  white-space: nowrap; /* Evita que el contenido se ajuste */
 }
 
 // CSS PARA HACER EL BOTÓN DE ENVIAR CORREO >>>>>>>>>>>>>>>>

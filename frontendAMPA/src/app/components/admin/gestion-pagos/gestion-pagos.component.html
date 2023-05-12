@@ -1,3 +1,41 @@
 <app-dashboard></app-dashboard>
 
-<p>gestion-pagos works!</p>
+  <!-- Main Wrapper -->
+  <div class="p-1 my-container active-cont">
+
+    <nav class="navbar navbar-blank bg-blank">
+      <form class="form-inline buscador">
+        <input class="form-control mr-sm-2" type="search" placeholder="Buscar pago" style="margin-right: 20px;">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+      </form>
+    </nav>
+
+    <div class="table-container">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th scope="col" style="width: 50px;">Id</th>
+            <th scope="col">Socio</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pago of pagosFormateados" 
+          id="{{ pago.id }}" 
+          class="socio">
+            <th scope="row">{{ pago.id }}</th>
+            <td>{{ nombresSocios[pago.socio] }}</td>
+            <td>{{ pago.cantidad }} €</td>
+            <td>{{ pago.created_at }}</td>
+            <td [ngClass]="{
+              'text-danger': pago.estado === 'RECHAZADO',
+              'text-primary': pago.estado === 'PENDIENTE',
+              'text-success': pago.estado === 'PAGADO'}"><b>{{ pago.estado }}</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>

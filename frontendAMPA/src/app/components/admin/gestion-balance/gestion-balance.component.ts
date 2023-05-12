@@ -59,8 +59,8 @@ export class GestionBalanceComponent implements OnInit {
   nuevoIngreso(): void{    
     this.balanceService.postEntry(this.formIngreso).subscribe({
       next: data => {
-        document.location.href = "/dashboard/balance"
-        window.location.href = "/dashboard/balance"
+        document.location.href = "/gestion/balance"
+        window.location.href = "/gestion/balance"
       },
       error: err => {
         this.errorMessage = err.error.message;
@@ -72,8 +72,8 @@ export class GestionBalanceComponent implements OnInit {
   nuevoGasto(): void{    
     this.balanceService.postEntry(this.formGasto).subscribe({
       next: data => {
-        document.location.href = "/dashboard/balance"
-        window.location.href = "/dashboard/balance"
+        document.location.href = "/gestion/balance"
+        window.location.href = "/gestion/balance"
       },
       error: err => {
         this.errorMessage = err.error.message;
@@ -114,8 +114,8 @@ export class GestionBalanceComponent implements OnInit {
   eliminarRegistro(idEntrada: any) {
     this.balanceService.deleteEntry(idEntrada).subscribe({
       next: res => {
-        document.location.href = "/dashboard/balance"
-        window.location.href = "/dashboard/balance"
+        document.location.href = "/gestion/balance"
+        window.location.href = "/gestion/balance"
       },error: err => {
         console.log(err)
       }

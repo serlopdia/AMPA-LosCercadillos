@@ -1,11 +1,7 @@
-<app-dashboard></app-dashboard>
+<app-navbar-gestion></app-navbar-gestion>
 
     <!-- Main Wrapper -->
     <div class="p-1 my-container active-cont">
-        <!-- Top Nav -->
-        <nav class="navbar top-navbar navbar-light bg-blank px-5">
-            <a class="btn border-0" id="menu-btn"><i class="fa-solid fa-bars"></i></a>
-        </nav>
 
         <div *ngFor="let sugerencia of sugerenciasFormateadas" id="{{ sugerencia.id }}" class="card">
             <div class="card-body">
