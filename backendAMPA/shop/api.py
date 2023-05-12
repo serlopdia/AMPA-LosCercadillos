@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
-from shop.models import LineaPedido, Pago, Producto, Pedido
-from shop.serializer import LineaPedidoSerializer, PagoSerializer, ProductoSerializer, PedidoSerializer
+from shop.models import LineaPedido, Pago, Producto, Pedido, StockProducto
+from shop.serializer import LineaPedidoSerializer, PagoSerializer, ProductoSerializer, PedidoSerializer, StockProductoSerializer
 
 class IsOwnerOrAdmin(permissions.BasePermission):
     # Custom permission to only allow owners of an object or admin users to access it.
@@ -53,6 +53,20 @@ class LineaPedidoViewSet(viewsets.ModelViewSet):
     queryset = LineaPedido.objects.all()
     permission_classes = [permissions.IsAdminUser]
     serializer_class = LineaPedidoSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            permission_classes = [permissions.AllowAny]
+        elif self.request.method == 'GET':
+            permission_classes = [IsOwnerOrAdmin]
+        else:
+            permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
+
+class StockProductoViewSet(viewsets.ModelViewSet):
+    queryset = StockProducto.objects.all()
+    permission_classes = [permissions.IsAdminUser]
+    serializer_class = StockProductoSerializer
 
     def get_permissions(self):
         if self.request.method == 'POST':
