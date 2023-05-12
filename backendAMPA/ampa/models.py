@@ -1,4 +1,5 @@
-import datetime
+from django.utils import timezone
+from datetime import *
 from django.db import models
 from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -69,9 +70,8 @@ class Evento(models.Model):
     def clean(self):
         super().clean()
         # Verificar que la fecha_fin_inscripcion no sea anterior a la fecha actual
-        from datetime import date
-        if self.fecha_fin_inscripcion < date.today():
-            raise ValidationError("La fecha fin de inscripción debe ser posterior a la fecha actual")
+        if self.fecha_fin_inscripcion < datetime.now().date():
+            raise ValidationError("La fecha fin de inscripción debe ser posterior a la fecha y hora actual")
 
 class Colaborador(models.Model):
     nombre = models.CharField(max_length=64)
@@ -160,7 +160,7 @@ class Hijo(models.Model):
         
     def clean(self):
         # Compara la fecha de nacimiento con la fecha actual
-        if self.fecha_nacimiento >= datetime.now().date():
+        if self.fecha_nacimiento >= date.today():
             raise ValidationError('La fecha de nacimiento debe ser anterior a la fecha actual')
 
 class Asunto(models.Model):
@@ -177,7 +177,10 @@ class Asunto(models.Model):
     class Meta:
         app_label="ampa"
     
-    def clean(self):
+    def clean(self):        
+        if self.fecha_fin < date.today():
+            raise ValidationError('La fecha de finalización debe ser posterior a la fecha actual')
+        
         if self.fecha_fin <= self.fecha_inicio:
             raise ValidationError("La fecha de finalización debe ser posterior a la fecha de inicio")
 

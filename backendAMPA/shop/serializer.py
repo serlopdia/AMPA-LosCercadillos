@@ -1,11 +1,17 @@
 from rest_framework import serializers
-from .models import LineaPedido, Pago, Pedido, Producto
+from .models import LineaPedido, Pago, Pedido, Producto, StockProducto
 
 class ProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Producto
         fields = ('id', 'nombre', 'descripcion', 'precio_general', 'precio_socio', 'imagen', 'created_at')
         read_only_fields = ('id', 'created_at')
+        extra_kwargs = {
+            'nombre': {'required': True},
+            'descripcion': {'required': True},
+            'precio_general': {'required': True},
+            'precio_socio': {'required': True},
+        }
 
     def create(self, validated_data):
         producto = Producto.objects.create(**validated_data)
@@ -25,6 +31,11 @@ class PagoSerializer(serializers.ModelSerializer):
         model = Pago
         fields = ('id', 'estado', 'cantidad', 'socio', 'created_at')
         read_only_fields = ('id', 'created_at')
+        extra_kwargs = {
+            'estado': {'required': True},
+            'cantidad': {'required': True},
+            'socio': {'required': True},
+        }
 
     def validate_estado(self, value):
         if value not in ['PAGADO', 'PENDIENTE', 'RECHAZADO']:
@@ -47,10 +58,15 @@ class PedidoSerializer(serializers.ModelSerializer):
         model = Pedido
         fields = ('id', 'estado', 'pago', 'socio', 'created_at')
         read_only_fields = ('id', 'created_at')
+        extra_kwargs = {
+            'estado': {'required': True},
+            'pago': {'required': True},
+            'socio': {'required': True},
+        }
 
     def validate_estado(self, value):
-        if value not in ['ENTREGADO', 'PREPARACION', 'DEVUELTO']:
-            raise serializers.ValidationError("El valor del campo 'estado' debe ser uno de los siguientes: 'ENTREGADO', 'PREPARACION', 'DEVUELTO'")
+        if value not in ['ENTREGADO', 'PREPARACION', 'CANCELADO']:
+            raise serializers.ValidationError("El valor del campo 'estado' debe ser uno de los siguientes: 'ENTREGADO', 'PREPARACION', 'CANCELADO'")
         return value
 
     def create(self, validated_data):
@@ -69,6 +85,11 @@ class LineaPedidoSerializer(serializers.ModelSerializer):
         model = LineaPedido
         fields = ('id', 'producto', 'cantidad', 'pedido', 'created_at')
         read_only_fields = ('id', 'created_at')
+        extra_kwargs = {
+            'producto': {'required': True},
+            'cantidad': {'required': True},
+            'pedido': {'required': True},
+        }
 
     def create(self, validated_data):
         linea_pedido = LineaPedido.objects.create(**validated_data)
@@ -78,5 +99,27 @@ class LineaPedidoSerializer(serializers.ModelSerializer):
         instance.producto = validated_data.get('producto', instance.producto)
         instance.cantidad = validated_data.get('cantidad', instance.cantidad)
         instance.pedido = validated_data.get('pedido', instance.pedido)
+        instance.save()
+        return instance
+    
+class StockProductoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockProducto
+        fields = ('id', 'nombre', 'cantidad', 'producto', 'created_at')
+        read_only_fields = ('id', 'created_at')
+        extra_kwargs = {
+            'nombre': {'required': True},
+            'cantidad': {'required': True},
+            'producto': {'required': True},
+        }
+
+    def create(self, validated_data):
+        linea_pedido = StockProducto.objects.create(**validated_data)
+        return linea_pedido
+
+    def update(self, instance, validated_data):
+        instance.nombre = validated_data.get('nombre', instance.pedido)
+        instance.cantidad = validated_data.get('cantidad', instance.cantidad)
+        instance.producto = validated_data.get('producto', instance.producto)
         instance.save()
         return instance

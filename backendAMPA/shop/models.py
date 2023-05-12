@@ -14,7 +14,7 @@ class EstadoPago(models.TextChoices):
 class EstadoPedido(models.TextChoices):
     ENTREGADO = "ENTREGADO", _("Entregado"),
     PREPARACION = "PREPARACION", _("Preparación"),
-    DEVUELTO = "DEVUELTO", _("Devuelto"),
+    CANCELADO = "CANCELADO", _("Cancelado"),
 
 class Producto(models.Model):
     nombre = models.CharField(max_length=64)
@@ -61,3 +61,13 @@ class LineaPedido(models.Model):
 
     class Meta:
         app_label="shop"
+
+class StockProducto(models.Model):
+    nombre = models.CharField(max_length=64)
+    cantidad = models.IntegerField()
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label="shop"
+        unique_together = ('nombre', 'producto')
