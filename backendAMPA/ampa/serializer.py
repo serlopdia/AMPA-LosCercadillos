@@ -67,7 +67,7 @@ class EventoSerializer(serializers.ModelSerializer):
 
     def validate_fin_inscripcion(self, value):
         # Verificar que la fecha_fin_inscripcion no sea anterior a la fecha actual
-        if value <= timezone.now():
+        if value <= datetime.today():
             raise serializers.ValidationError("La fecha del evento debe ser futura a la fecha actual")
         return value
 
@@ -245,7 +245,7 @@ class HijoSerializer(serializers.ModelSerializer):
         }
 
     def validate_fecha_nacimiento(self, value):
-        if value >= timezone.now().date():
+        if value >= datetime.today().date():
             raise serializers.ValidationError("La fecha de nacimiento debe ser anterior a la fecha actual")
         return value
 
@@ -336,7 +336,7 @@ class CitaSerializer(serializers.ModelSerializer):
         }
 
     def validate_fecha(self, value):
-        if value < timezone.now().date():
+        if value < datetime.today().date():
             raise serializers.ValidationError('La fecha de la cita debe ser posterior a la actual')
         return value
 
