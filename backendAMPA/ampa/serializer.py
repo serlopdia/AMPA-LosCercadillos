@@ -282,12 +282,12 @@ class AsuntoSerializer(serializers.ModelSerializer):
         if data['fecha_fin'] <= data['fecha_inicio']:
             raise serializers.ValidationError('La fecha de finalización debe ser posterior a la fecha de inicio')
         
-        # Valida que la hora de fin sea posterior a la hora de inicio
-        if data['hora_fin'] <= data['hora_inicio']:
-            raise serializers.ValidationError('La hora de finalización debe ser posterior a la hora de inicio')
+        # Combina la fecha y hora de inicio y fin en objetos datetime.datetime
+        fecha_hora_inicio = datetime.combine(data['fecha_inicio'], data['hora_inicio'])
+        fecha_hora_fin = datetime.combine(data['fecha_fin'], data['hora_fin'])
 
         # Valida que la diferencia en minutos entre hora_inicio y hora_fin no sea menor a minutos_frecuencia
-        minutos_diferencia = (data['hora_fin'] - data['hora_inicio']).total_seconds() // 60
+        minutos_diferencia = (fecha_hora_fin - fecha_hora_inicio).total_seconds() // 60
         if minutos_diferencia < data['minutos_frecuencia']:
             raise serializers.ValidationError('La diferencia en minutos entre hora de inicio y fin no puede ser menor al valor del atributo minutos_frecuencia')
 
