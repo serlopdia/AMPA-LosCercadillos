@@ -18,11 +18,13 @@ export class DashboardComponent implements OnInit {
     const menuBtn = document.querySelector("#menu-btn");
     const sidebar = document.querySelector("#sidebar");
     const container = document.querySelector(".my-container");
+    const navcontainer = document.querySelector(".nav-container");
   
     if (menuBtn) {
       menuBtn.addEventListener("click", () => {
         sidebar?.classList.toggle("active-nav");
         container?.classList.toggle("active-cont");
+        navcontainer?.classList.toggle("active-cont");
       });
     }
   }

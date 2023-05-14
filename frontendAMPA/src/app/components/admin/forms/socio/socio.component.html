@@ -1,0 +1,157 @@
+<app-dashboard></app-dashboard>
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <form *ngIf= "!isSuccessful" name="form" (ngSubmit)="f.form.valid && modificarSocio()" #f="ngForm" novalidate>
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="fs-4 card-title fw-bold mb-4">DATOS DEL SOCIO</h1>
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="first_name">Nombre</label>
+                            <input [(ngModel)]="form.first_name" id="first_name" type="text" class="form-control" name="first_name" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un nombre
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="last_name">Apellidos</label>
+                            <input [(ngModel)]="form.last_name" id="last_name" type="text" class="form-control" name="last_name" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir unos apellidos
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="email">Email</label>
+                            <input [(ngModel)]="form.email" id="email" type="email" class="form-control" name="email" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un email
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="username">Usuario</label>
+                            <input [(ngModel)]="form.username" id="username" type="text" class="form-control" name="username" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un usuario
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="password">
+                            Contraseña cifrada &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            <input (change)="togglePasswordVisibility($event)" type="checkbox"/> Editar contraseña
+                            </label>
+                            <input [(ngModel)]="form.password" id="password" [type]="showPassword ? 'text' : 'password'" [readonly]="!showPassword" class="form-control" name="password" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                            <div>
+                                Debe introducir una contraseña
+                            </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="tel">Teléfono</label>
+                            <input [(ngModel)]="form.tel" id="tel" type="text" class="form-control" name="tel" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un número de teléfono
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="dni">DNI</label>
+                            <input [(ngModel)]="form.dni" id="dni" type="text" class="form-control" name="dni" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un DNI
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="address">Dirección</label>
+                            <input [(ngModel)]="form.address" id="address" type="text" class="form-control" name="address" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una dirección
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="hr hr-blurry" style="margin: 3vh 0;"/>
+                    
+                    <h5 class="card-subtitle mb-2">HIJOS ASOCIADOS</h5>
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-2">
+                            <label class="mb-2 text-muted" for="nombre">Nombre</label>
+                            <input id="nombre" type="text" class="form-control" name="nombre" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un nombre
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-sm-2">
+                            <label class="mb-2 text-muted" for="apellidos">Apellidos</label>
+                            <input id="apellidos" type="text" class="form-control" name="apellidos" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir unos apellidos
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-3">
+                            <label class="mb-2 text-muted" for="fecha_nacimiento">Fecha de nacimiento</label>
+                            <input id="fecha_nacimiento" type="date" class="form-control" name="fecha_nacimiento" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una fecha de nacimiento
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-3">
+                            <label class="mb-2 text-muted" for="clase">Clase</label>
+                            <input id="clase" type="text" class="form-control" name="clase" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una clase
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer py-3 border-0">
+                    <div class="align-items-center d-flex">
+                        <button type="submit" class="btn btn-success ms-auto">
+                            Actualizar datos
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    
+    </div>

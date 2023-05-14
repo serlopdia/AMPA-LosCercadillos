@@ -39,7 +39,7 @@ export class BuzonComponent implements OnInit {
       minute: "2-digit",
     });
     const date = new Date(sugerencia.created_at);
-    sugerencia.created_at = formatter.format(date).replace(",", " -");
+    sugerencia.created_at = formatter.format(date);
     return sugerencia;
   }
 

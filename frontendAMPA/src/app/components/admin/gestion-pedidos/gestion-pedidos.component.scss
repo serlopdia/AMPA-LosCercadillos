@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* for main section */
+  .active-cont {
+    margin-left: 300px;
+  }
+  
+  #menu-btn {
+    background-color: rgb(21, 30, 83);
+    color: #fff;
+  }
+  
+  .my-container {
+    transition: 0.4s;
+  }
+  
+  .my-container input {
+    border-radius: 2rem;
+    padding: 2px 20px;
+  }
+  
+  .table-container {
+    display: flex;
+    margin: 2vh 50px;
+    overflow: auto; /* Agrega scroll horizontal */
+    white-space: nowrap; /* Evita que el contenido se ajuste */
+  }
+
+  .buscador {
+    display: flex;
+    margin: 1vh 50px;
+  }

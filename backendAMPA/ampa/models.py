@@ -176,18 +176,20 @@ class Asunto(models.Model):
     class Meta:
         app_label="ampa"
     
-    def clean(self):        
+    def clean(self):
         if self.fecha_fin < datetime.today().date():
             raise ValidationError('La fecha de finalización debe ser posterior a la fecha actual')
-        
+
         if self.fecha_fin <= self.fecha_inicio:
             raise ValidationError("La fecha de finalización debe ser posterior a la fecha de inicio")
 
-        tiempo_transcurrido = (self.fecha_fin - self.fecha_inicio).days * 24 * 60 + \
-                              (self.hora_fin.hour - self.hora_inicio.hour) * 60 + \
-                              (self.hora_fin.minute - self.hora_inicio.minute)
+        fecha_hora_inicio = datetime.combine(self.fecha_inicio, self.hora_inicio)
+        fecha_hora_fin = datetime.combine(self.fecha_fin, self.hora_fin)
 
-        if tiempo_transcurrido < self.minutos_frecuencia:
+        tiempo_transcurrido = fecha_hora_fin - fecha_hora_inicio
+        minutos_transcurridos = tiempo_transcurrido.total_seconds() / 60
+
+        if minutos_transcurridos < self.minutos_frecuencia:
             raise ValidationError("La duración de cada cita debe ser mayor o igual al valor de minutos_frecuencia")
 
         dias_semana_validos = [dia[0] for dia in DiasSemana.choices]

@@ -19,6 +19,10 @@ import { GestionEventosComponent } from './components/admin/gestion-eventos/gest
 import { GestionNoticiasComponent } from './components/admin/gestion-noticias/gestion-noticias.component';
 import { GestionCitasComponent } from './components/admin/gestion-citas/gestion-citas.component';
 import { GestionVistasComponent } from './components/admin/gestion-vistas/gestion-vistas.component';
+import { SocioComponent } from './components/admin/forms/socio/socio.component';
+import { ProductoComponent } from './components/admin/forms/producto/producto.component';
+import { EventoComponent } from './components/admin/forms/evento/evento.component';
+import { NoticiaComponent } from './components/admin/forms/noticia/noticia.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -33,13 +37,18 @@ const routes: Routes = [
   { path: 'dashboard/productos', component: GestionProductosComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/pedidos', component: GestionPedidosComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/pagos', component: GestionPagosComponent, canActivate: [AdminGuard] },
-  { path: 'dashboard/balance', component: GestionBalanceComponent, canActivate: [AdminGuard] },
-  { path: 'dashboard/buzon', component: BuzonComponent, canActivate: [AdminGuard] },
-  
-  { path: 'dashboard/eventos', component: GestionEventosComponent, canActivate: [AdminGuard] },
-  { path: 'dashboard/noticias', component: GestionNoticiasComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/citas', component: GestionCitasComponent, canActivate: [AdminGuard] },
-  { path: 'dashboard/vistas', component: GestionVistasComponent, canActivate: [AdminGuard] },
+  { path: 'dashboard/eventos', component: GestionEventosComponent, canActivate: [AdminGuard] },
+  
+  { path: 'gestion/buzon', component: BuzonComponent, canActivate: [AdminGuard] },
+  { path: 'gestion/noticias', component: GestionNoticiasComponent, canActivate: [AdminGuard] },
+  { path: 'gestion/balance', component: GestionBalanceComponent, canActivate: [AdminGuard] },
+  { path: 'gestion/vistas', component: GestionVistasComponent, canActivate: [AdminGuard] },
+  
+  { path: 'dashboard/socios/form/:id', component: SocioComponent, canActivate: [AdminGuard] },
+  { path: 'dashboard/productos/form', component: ProductoComponent, canActivate: [AdminGuard] },
+  { path: 'dashboard/eventos/form', component: EventoComponent, canActivate: [AdminGuard] },
+  { path: 'dashboard/noticias/form', component: NoticiaComponent, canActivate: [AdminGuard] },
 ];
 
 @NgModule({

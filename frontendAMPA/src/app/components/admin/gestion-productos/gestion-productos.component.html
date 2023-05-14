@@ -1,3 +1,38 @@
 <app-dashboard></app-dashboard>
 
-<p>gestion-productos works!</p>
+  <!-- Main Wrapper -->
+  <div class="p-1 my-container active-cont">
+
+    <nav class="navbar navbar-blank bg-blank">
+      <form class="form-inline buscador">
+        <input class="form-control mr-sm-2" type="search" placeholder="Buscar producto" style="margin-right: 20px;">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+      </form>
+    </nav>
+
+    <div class="table-container">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Imagen</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Precio socio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let producto of listaProductos" 
+          id="{{ producto.id }}" 
+          class="socio">
+            <th scope="row">{{ producto.imagen }}</th>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.descripcion }}</td>
+            <td>{{ producto.precio_general }} €</td>
+            <td>{{ producto.precio_socio }} €</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
