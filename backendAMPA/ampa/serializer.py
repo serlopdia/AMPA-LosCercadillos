@@ -66,8 +66,10 @@ class EventoSerializer(serializers.ModelSerializer):
         }
 
     def validate_fin_inscripcion(self, value):
-        # Verificar que la fecha_fin_inscripcion no sea anterior a la fecha actual
-        if value <= datetime.today():
+        # Obtener la fecha y hora actual sin información de zona horaria
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        # Verificar que value no sea anterior a la fecha actual
+        if value <= now:
             raise serializers.ValidationError("La fecha del evento debe ser futura a la fecha actual")
         return value
 
@@ -341,18 +343,25 @@ class CitaSerializer(serializers.ModelSerializer):
         return value
 
     def validate_hora(self, value):
-        cita = self.instance
-        hora_fin = cita.asunto.hora_fin
-        minutos_frecuencia = cita.asunto.minutos_frecuencia
+        asunto = self.initial_data.get('asunto')  # Obtener el ID del asunto desde los datos iniciales
+        if asunto:
+            try:
+                asunto_obj = Asunto.objects.get(id=asunto)
+                hora_fin = asunto_obj.hora_fin
+                minutos_frecuencia = asunto_obj.minutos_frecuencia
 
-        hora_inicio = cita.asunto.hora_inicio
-        minutos = (value - hora_inicio).total_seconds() / 60
-        if (minutos % minutos_frecuencia) != 0:
-            raise serializers.ValidationError(f"La hora de la cita debe estar separada por {minutos_frecuencia} minutos")
-        if value < hora_inicio:
-            raise serializers.ValidationError(f"La hora de la cita debe ser después de la hora de inicio del asunto ({hora_inicio})")
-        if value >= hora_fin:
-            raise serializers.ValidationError(f"La hora de la cita debe ser antes de la hora de fin del asunto ({hora_fin})")
+                hora_inicio = asunto_obj.hora_inicio
+                minutos = (value - hora_inicio).total_seconds() / 60
+                if (minutos % minutos_frecuencia) != 0:
+                    raise serializers.ValidationError(f"La hora de la cita debe estar separada por {minutos_frecuencia} minutos")
+                if value < hora_inicio:
+                    raise serializers.ValidationError(f"La hora de la cita debe ser después de la hora de inicio del asunto ({hora_inicio})")
+                if value >= hora_fin:
+                    raise serializers.ValidationError(f"La hora de la cita debe ser antes de la hora de fin del asunto ({hora_fin})")
+            except Asunto.DoesNotExist:
+                raise serializers.ValidationError("El asunto asociado no existe")
+        else:
+            raise serializers.ValidationError("No se ha proporcionado un asunto válido")
         return value
 
     def validate(self, data):
@@ -367,7 +376,6 @@ class CitaSerializer(serializers.ModelSerializer):
                 ).exclude(id=cita.id).exists()
                 if citas_exist:
                     raise serializers.ValidationError(f"Ya existe una cita para el socio '{cita.socio}' en esa fecha y hora")
-
         return data
 
     def create(self, validated_data):
