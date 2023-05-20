@@ -91,7 +91,7 @@ class EventoSerializer(serializers.ModelSerializer):
 class ColaboradorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Colaborador
-        fields = ('id', 'nombre', 'ventaja', 'descripcion', 'created_at')
+        fields = ('id', 'nombre', 'ventaja', 'descripcion', 'imagen', 'created_at')
         read_only_fields = ('id', 'created_at')
         extra_kwargs = {
             'nombre': {'required': True},
@@ -107,6 +107,7 @@ class ColaboradorSerializer(serializers.ModelSerializer):
         instance.nombre = validated_data.get('nombre', instance.nombre)
         instance.ventaja = validated_data.get('ventaja', instance.ventaja)
         instance.descripcion = validated_data.get('descripcion', instance.descripcion)
+        instance.imagen = validated_data.get('imagen', instance.imagen)
         instance.save()
         return instance
 
