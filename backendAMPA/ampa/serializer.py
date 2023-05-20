@@ -293,6 +293,11 @@ class AsuntoSerializer(serializers.ModelSerializer):
         if minutos_diferencia < data['minutos_frecuencia']:
             raise serializers.ValidationError('La diferencia en minutos entre hora de inicio y fin no puede ser menor al valor del atributo minutos_frecuencia')
 
+        # Valida que la diferencia en minutos entre hora_inicio y hora_fin sea divisible por minutos_frecuencia
+        minutos_diferencia = (fecha_hora_fin - fecha_hora_inicio).total_seconds() // 60
+        if minutos_diferencia % data['minutos_frecuencia'] != 0:
+            raise serializers.ValidationError('La diferencia en minutos entre hora de inicio y fin debe ser un múltiplo entero del valor del atributo minutos_frecuencia')
+        
         return data
 
     # Valida que todos los valores de la lista de días de la semana de un asunto se encuentren entre los valores permitidos
@@ -343,21 +348,28 @@ class CitaSerializer(serializers.ModelSerializer):
         return value
 
     def validate_hora(self, value):
-        asunto = self.initial_data.get('asunto')  # Obtener el ID del asunto desde los datos iniciales
+        asunto = self.initial_data.get('asunto')
         if asunto:
             try:
                 asunto_obj = Asunto.objects.get(id=asunto)
+                hora_inicio = asunto_obj.hora_inicio
                 hora_fin = asunto_obj.hora_fin
                 minutos_frecuencia = asunto_obj.minutos_frecuencia
 
-                hora_inicio = asunto_obj.hora_inicio
-                minutos = (value - hora_inicio).total_seconds() / 60
-                if (minutos % minutos_frecuencia) != 0:
-                    raise serializers.ValidationError(f"La hora de la cita debe estar separada por {minutos_frecuencia} minutos")
-                if value < hora_inicio:
-                    raise serializers.ValidationError(f"La hora de la cita debe ser después de la hora de inicio del asunto ({hora_inicio})")
-                if value >= hora_fin:
-                    raise serializers.ValidationError(f"La hora de la cita debe ser antes de la hora de fin del asunto ({hora_fin})")
+                fecha_cita = datetime.strptime(self.initial_data.get('fecha'), '%Y-%m-%d').date()
+                hora_cita = time.fromisoformat(str(value))
+
+                # Combina la fecha y hora de la cita en un objeto datetime para realizar comparaciones
+                fecha_hora_cita = datetime.combine(fecha_cita, hora_cita)
+
+                # Valida que la hora de la cita esté dentro del rango del asunto
+                if not hora_inicio <= hora_cita <= hora_fin:
+                    raise serializers.ValidationError('La hora de la cita debe estar dentro de los límites del asunto')
+
+                # Valida que la diferencia en minutos entre la hora de inicio del asunto y la hora de la cita sea un múltiplo entero de minutos_frecuencia
+                minutos_diferencia = (fecha_hora_cita - datetime.combine(fecha_cita, hora_inicio)).total_seconds() // 60
+                if minutos_diferencia % minutos_frecuencia != 0:
+                    raise serializers.ValidationError(f'La hora de la cita debe ser un múltiplo entero de {minutos_frecuencia} minutos')
             except Asunto.DoesNotExist:
                 raise serializers.ValidationError("El asunto asociado no existe")
         else:
@@ -369,6 +381,12 @@ class CitaSerializer(serializers.ModelSerializer):
         if cita:
             if data.get('fecha', cita.fecha) != cita.fecha or data.get('hora', cita.hora) != cita.hora:
                 asunto = cita.asunto
+                fecha_fin_asunto = asunto.fecha_fin
+
+                fecha_cita = datetime.strptime(data.get('fecha', cita.fecha), '%Y-%m-%d').date()
+                if fecha_cita > fecha_fin_asunto:
+                    raise serializers.ValidationError('La fecha de la cita no puede ser posterior a la fecha fin del asunto')
+
                 citas_exist = Cita.objects.filter(
                     asunto=asunto,
                     fecha=data.get('fecha', cita.fecha),

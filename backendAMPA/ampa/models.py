@@ -174,8 +174,8 @@ class Asunto(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label="ampa"
-    
+        app_label = "ampa"
+
     def clean(self):
         if self.fecha_fin < datetime.today().date():
             raise ValidationError('La fecha de finalización debe ser posterior a la fecha actual')
@@ -192,6 +192,9 @@ class Asunto(models.Model):
         if minutos_transcurridos < self.minutos_frecuencia:
             raise ValidationError("La duración de cada cita debe ser mayor o igual al valor de minutos_frecuencia")
 
+        if minutos_transcurridos % self.minutos_frecuencia != 0:
+            raise ValidationError("El valor de minutos_frecuencia no es válido para la duración del intervalo de tiempo")
+
         dias_semana_validos = [dia[0] for dia in DiasSemana.choices]
         for dia in self.dias_semana.split(','):
             if dia.strip() not in dias_semana_validos:
@@ -199,7 +202,7 @@ class Asunto(models.Model):
 
 class Cita(models.Model):
     fecha = models.DateField()
-    hora = models.TimeField()
+    hora = models.TimeField(['%H:%M'])
     socio = models.ForeignKey(Socio, on_delete=models.CASCADE)
     asunto = models.ForeignKey(Asunto, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
