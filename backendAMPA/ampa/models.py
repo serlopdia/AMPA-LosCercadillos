@@ -76,7 +76,7 @@ class Colaborador(models.Model):
     nombre = models.CharField(max_length=64)
     ventaja = models.CharField(max_length=64)
     descripcion = models.CharField(max_length=256)
-    imagen = models.CharField(max_length=2048)
+    imagen = models.CharField(max_length=2048, default="", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
