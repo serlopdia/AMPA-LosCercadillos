@@ -8,24 +8,24 @@
         <input class="form-control mr-sm-2" type="search" placeholder="Buscar producto" style="margin-right: 20px;">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
       </form>
+      <button class="btn btn-primary creador my-2 my-sm-0" routerLink="/dashboard/productos/form">Crear producto</button>
     </nav>
 
     <div class="table-container">
       <table class="table table-bordered table-hover">
         <thead>
           <tr>
-            <th scope="col">Imagen</th>
+            <th scope="col">Id</th>
             <th scope="col">Nombre</th>
             <th scope="col">Descripción</th>
-            <th scope="col">Precio</th>
+            <th scope="col">Precio general</th>
             <th scope="col">Precio socio</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let producto of listaProductos" 
-          id="{{ producto.id }}" 
-          class="socio">
-            <th scope="row">{{ producto.imagen }}</th>
+          id="{{ producto.id }}" [routerLink]="['/dashboard/productos/show/'+producto.id]">
+            <th scope="row">{{ producto.id }}</th>
             <td>{{ producto.nombre }}</td>
             <td>{{ producto.descripcion }}</td>
             <td>{{ producto.precio_general }} €</td>

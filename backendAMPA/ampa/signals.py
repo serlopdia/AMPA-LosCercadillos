@@ -6,8 +6,7 @@ from users.models import Socio
 from datetime import datetime, date, time
 import pytz
 
-codigo_markdown = """
-# Título del documento
+codigo_markdown = """# Título del documento
 
 Este es un párrafo de texto regular. **Negrita** y *cursiva* son formatos comunes en Markdown.
 
@@ -42,6 +41,8 @@ def create_ampa(sender, **kwargs):
             vista_colegio.save()
             vista_comedor = Vista.objects.create(tipo="COMEDOR", markdown=codigo_markdown)
             vista_comedor.save()
+            vista_comedor = Vista.objects.create(tipo="CONTACTO", markdown=codigo_markdown)
+            vista_comedor.save()
             
         if not Noticia.objects.exists():
             noticia_sample_uno = Noticia.objects.create(titulo="Título de la noticia", cuerpo="Cuerpo de la noticia", imagen="https://media.istockphoto.com/id/469182248/es/foto/titular-de-peri%C3%B3dico-con-el-comunicado-de-prensa.jpg?s=612x612&w=0&k=20&c=3n5aqYwqSBkDUK2T7PxeY5T2L08uM0TXVhfr9QZKknc=")
@@ -56,9 +57,9 @@ def create_ampa(sender, **kwargs):
             evento_sample_dos.save()
 
         if not Colaborador.objects.exists():
-            colaborador_sample_uno = Colaborador.objects.create(nombre="CarKey", ventaja="20% de descuento en la primera compra", descripcion="Llaves de coche y asistencia en automóviles.")
+            colaborador_sample_uno = Colaborador.objects.create(nombre="CarKey", ventaja="20% de descuento en la primera compra", descripcion="Llaves de coche y asistencia en automóviles.", imagen="https://www.carkeysystem.com/wp-content/uploads/2020/06/carkey-sevilla.jpg")
             colaborador_sample_uno.save()
-            colaborador_sample_dos = Colaborador.objects.create(nombre="Cafetería La Estación", ventaja="2€ de churros gratis en una cuenta de 20€", descripcion="Expertos en desayunos y almuerzos.")
+            colaborador_sample_dos = Colaborador.objects.create(nombre="Cafetería La Estación", ventaja="2€ de churros gratis en una cuenta de 20€", descripcion="Expertos en desayunos y almuerzos.", imagen="https://img.restaurantguru.com/c016-La-Toscana-Cafeteria-Alcala-de-Guadaira-burger.jpg?@m@t@s@d")
             colaborador_sample_dos.save()
 
         if not Sugerencia.objects.exists():

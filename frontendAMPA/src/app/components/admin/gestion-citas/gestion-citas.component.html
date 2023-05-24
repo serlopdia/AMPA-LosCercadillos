@@ -1,3 +1,173 @@
 <app-dashboard></app-dashboard>
 
-<p>gestion-citas works!</p>
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <form *ngIf= "!isSuccessful" name="form" (ngSubmit)="f.form.valid && crearAsunto()" #f="ngForm" novalidate>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <div class="card shadow-lg mb-4">
+                            <div class="card-body p-5">
+                                <h1 class="fs-4 card-title fw-bold mb-4">CREAR ASUNTO</h1>
+                                <div class="form-group row">
+                                    <div class="mb-3 col-sm-12">
+                                        <label class="mb-2 text-muted" for="asunto">Asunto</label>
+                                        <input [(ngModel)]="form.nombre" id="asunto" type="text" class="form-control" name="asunto" value="" required autofocus>
+                                        <div class="invalid-feedback error">
+                                            <div>
+                                                Debe introducir un nombre de asunto
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="fecha_inicio">Fecha inicio</label>
+                                        <input [(ngModel)]="form.fecha_inicio" id="fecha_inicio" type="date" class="form-control" name="fecha_inicio" value="" required autofocus>
+                                        <div class="invalid-feedback error">
+                                            <div>
+                                                Debe introducir una fecha de inicio
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="hora_inicio">Hora inicio</label>
+                                        <input [(ngModel)]="form.hora_inicio" id="hora_inicio" type="time" class="form-control" name="hora_inicio" value="" required autofocus>
+                                        <div class="invalid-feedback error">
+                                            <div>
+                                                Debe introducir una hora de inicio
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="fecha_fin">Fecha fin</label>
+                                        <input [(ngModel)]="form.fecha_fin" id="fecha_fin" type="date" class="form-control" name="fecha_fin" value="" required autofocus>
+                                        <div class="invalid-feedback error">
+                                            <div>
+                                                Debe introducir una fecha de inicio
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="hora_fin">Hora fin</label>
+                                        <input [(ngModel)]="form.hora_fin" id="hora_fin" type="time" class="form-control" name="hora_fin" value="" required autofocus>
+                                        <div class="invalid-feedback error">
+                                            <div>
+                                                Debe introducir una hora de finalización
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="minutos_frecuencia">Minutos frecuencia</label>
+                                        <input [(ngModel)]="form.minutos_frecuencia" id="minutos_frecuencia" type="number" min="1" step="1" class="form-control" name="minutos_frecuencia" value="" required autofocus>
+                                        <div class="invalid-feedback error">
+                                            <div>
+                                                Debe introducir unos minutos de frecuencia
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="mb-2 text-muted">Frecuencia semanal</label>
+                                    <div class="mb-3 col-sm-12">
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label" for="lunes_checked" style="margin-left: 5px;">L</label>
+                                            <input [(ngModel)]="form.lunes_checked" class="form-check-input" type="checkbox" id="lunes_checked" name="lunes_checked" value="LUNES">
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label" for="martes_checked" style="margin-left: 5px;">M</label>
+                                            <input [(ngModel)]="form.martes_checked" class="form-check-input" type="checkbox" id="martes_checked" name="martes_checked" value="MARTES">
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label" for="miercoles_checked" style="margin-left: 5px;">X</label>
+                                            <input [(ngModel)]="form.miercoles_checked" class="form-check-input" type="checkbox" id="miercoles_checked" name="miercoles_checked" value="MIERCOLES">
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label" for="jueves_checked" style="margin-left: 5px;">J</label>
+                                            <input [(ngModel)]="form.jueves_checked" class="form-check-input" type="checkbox" id="jueves_checked" name="jueves_checked" value="JUEVES">
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label" for="viernes_checked" style="margin-left: 5px;">V</label>
+                                            <input [(ngModel)]="form.viernes_checked" class="form-check-input" type="checkbox" id="viernes_checked" name="viernes_checked" value="VIERNES">
+                                        </div>
+                                    </div>
+                                </div>
+            
+                            </div>
+            
+                            <div class="card-footer py-3 border-0">
+                                <div class="align-items-center d-flex">
+                                    <button type="submit" class="btn btn-success ms-auto">
+                                        Crear asunto
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-sm-6">
+                            <div class="card shadow-lg mb-4"><div class="card-body p-5">
+                                <form *ngIf="listaAsuntos.length > 0">
+                                    <input [ngModel]="form.id" type="hidden" name="id" value="" required autofocus>
+                                    <div class="d-flex align-items-start">
+                                        <h1 class="fs-4 card-title fw-bold mb-4" style="margin-right: 2vw;">ASUNTO:</h1>
+                                        <select [ngModel]="idAsuntoSeleccionado" (change)="onAsuntoChange($any($event.target).value)" class="form-select" style="width: 15vw;" name="tipo">
+                                            <option *ngFor="let asunto of listaAsuntos" [value]="asunto.id">{{ asunto.nombre }}</option>
+                                        </select>
+                                    </div>
+                                      
+                                    <div *ngIf="asuntoSeleccionado" class="table-container">
+                                        <table class="table table-bordered table-hover">
+                                          <thead>
+                                            <tr>
+                                              <th scope="col">Fecha y hora</th>
+                                              <th scope="col">Socio</th>
+                                              <th scope="col"></th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr *ngFor="let cita of citasAsunto" id="{{ cita.id }}">
+                                              <td>{{ formatDate(cita.fecha) }} <b>-</b> {{ formatTime(cita.hora) }}</td>
+                                              <td>{{ nombresSocios[cita.socio] }}</td>
+                                              <td style="display: flex; justify-content: center;">
+                                                  <button class="btn btn-danger btn-icon btn-sm" (click)="confirmarEliminacionCita(cita.id)">
+                                                      <i class="fa-solid fa-trash-can fa-inverse"></i>
+                                                  </button>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                    </div>
+                                </form>
+                            </div>
+                    
+                            <div *ngIf="asuntoSeleccionado" class="card-footer py-3 border-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button *ngIf="asuntoSeleccionado.visible == true" type="submit" class="btn btn-warning" (click)="finalizarAsunto(asuntoSeleccionado)">
+                                        Finalizar
+                                    </button>
+                                    <button *ngIf="asuntoSeleccionado.visible == false" type="submit" class="btn btn-success" (click)="reanudarAsunto(asuntoSeleccionado)">
+                                        Reanudar
+                                    </button>
+                                    <button type="button" class="btn btn-primary"[routerLink]="['/dashboard/citas/show/asunto/', asuntoSeleccionado.id]">
+                                        Visualizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </form>
+    
+    </div>

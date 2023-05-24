@@ -3,7 +3,7 @@
     <!-- Main Wrapper -->
     <div class="p-1 my-container active-cont">
 
-        <h1>Actualmente el AMPA cuenta con: &nbsp;&nbsp;&nbsp;&nbsp;<b><span class="{{ calcularBalance() < 0 ? 'text-danger' : 'text-success' }}">{{ calcularBalance() }} €</span></b></h1>
+        <h1>Actualmente el AMPA cuenta con: &nbsp;&nbsp;<b><span class="{{ calcularBalance() < 0 ? 'text-danger' : (calcularBalance() == 0 ? 'text-primary' : 'text-success') }}">{{ calcularBalance() }} €</span></b></h1>
 
         <h2>Ingresos</h2>
         <div class="table-container">
@@ -24,13 +24,13 @@
                     <td>{{ ingreso.cantidad }}</td>
                     <td>{{ ingreso.asunto }}</td>
                     <td style="display: flex; justify-content: center; gap: 10px;">
-                        <button class="btn btn-primary btn-icon">
-                            <i class="fa-solid fa-pen fa-inverse"></i>
+                        <button class="btn btn-primary btn-icon" [routerLink]="['/gestion/balances/show/'+ingreso.id]">
+                            <i class="fa-solid fa-pen"></i>
                         </button>
-                        <button class="btn btn-danger btn-icon" (click)="eliminarRegistro(ingreso.id)">
-                            <i class="fa-solid fa-trash-can fa-inverse"></i>
+                        <button class="btn btn-danger btn-icon" (click)="confirmarEliminacion(ingreso.id)">
+                            <i class="fa-solid fa-trash-can"></i>
                         </button>
-                    </td>                      
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -39,7 +39,7 @@
             <div class="form-container d-flex justify-content-end">
                 <div class="form-group row align-items-center">
                     <div class="mb-3 col-sm-3">
-                        <input [(ngModel)]="formIngreso.cantidad" #cantidad="ngModel" name="cantidad" id="cantidad" type="email" class="form-control" placeholder="Cantidad" required>
+                        <input [(ngModel)]="formIngreso.cantidad" #cantidad="ngModel" name="cantidad" id="cantidad" type="number" min="0" class="form-control" placeholder="Cantidad" required>
                         <div class="invalid-feedback error" *ngIf="cantidad.errors && fi.submitted">
                             <div *ngIf="cantidad.errors['required']">
                                 Debe introducir una cantidad
@@ -83,11 +83,11 @@
                 <td>{{ gasto.cantidad }}</td>
                 <td>{{ gasto.asunto }}</td>
                 <td style="display: flex; justify-content: center; gap: 10px;">
-                    <button class="btn btn-primary btn-icon">
-                        <i class="fa-solid fa-pen fa-inverse"></i>
+                    <button class="btn btn-primary btn-icon" [routerLink]="['/gestion/balances/show/'+gasto.id]">
+                        <i class="fa-solid fa-pen"></i>
                     </button>
-                    <button class="btn btn-danger btn-icon" (click)="eliminarRegistro(gasto.id)">
-                        <i class="fa-solid fa-trash-can fa-inverse"></i>
+                    <button class="btn btn-danger btn-icon" (click)="confirmarEliminacion(gasto.id)">
+                        <i class="fa-solid fa-trash-can"></i>
                     </button>
                 </td>
                 </tr>
@@ -98,7 +98,7 @@
             <div class="form-container d-flex justify-content-end">
                 <div class="form-group row align-items-center">
                     <div class="mb-3 col-sm-3">
-                        <input [(ngModel)]="formGasto.cantidad" #cantidad="ngModel" name="cantidad" id="cantidad" type="email" class="form-control" placeholder="Cantidad" required>
+                        <input [(ngModel)]="formGasto.cantidad" #cantidad="ngModel" name="cantidad" id="cantidad" type="number" min="0" class="form-control" placeholder="Cantidad" required>
                         <div class="invalid-feedback error" *ngIf="cantidad.errors && fg.submitted">
                             <div *ngIf="cantidad.errors['required']">
                                 Debe introducir una cantidad

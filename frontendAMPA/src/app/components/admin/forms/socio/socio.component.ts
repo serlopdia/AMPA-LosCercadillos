@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { HijoService } from 'src/app/services/hijo.service';
 import { UsersService } from 'src/app/services/users.service';
 
 interface Socio {
@@ -12,6 +13,16 @@ interface Socio {
   address: string;
   username: string;
   password: string;
+  created_at: string;
+}
+
+interface Hijo {
+  id: number;
+  nombre: string;
+  apellidos: string;
+  fecha_nacimiento: string;
+  socio: number;
+  clase: number;
   created_at: string;
 }
 
@@ -37,18 +48,20 @@ export class SocioComponent implements OnInit {
   errorMessage = '';
 
   socio!:Socio;
+  hijosSocio: Hijo[] = [];
 
-  constructor(private route: ActivatedRoute, private usersService: UsersService) { }
+  constructor(private route: ActivatedRoute, private usersService: UsersService, private hijoService: HijoService) { }
 
   ngOnInit(): void {
     this.getSocioData();
+    this.getHijosSocio();
   }
 
   togglePasswordVisibility(values:any):void {
   this.showPassword = values.currentTarget.checked;
   }
 
-  getSocioData() {
+  async getSocioData() {
     let idSocio = this.route.snapshot.paramMap.get('id');
     if (idSocio !== null) {
       let id = parseInt(idSocio);
@@ -82,6 +95,29 @@ export class SocioComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  async getHijosSocio() {
+    let idSocio = Number(this.route.snapshot.paramMap.get('id'));
+    let listaHijos: Hijo[] = [];
+    this.hijoService.getAllHijos().subscribe({
+      next: (res: Hijo[]) => {
+        listaHijos = res.filter(hijo => hijo.socio === idSocio);
+        this.hijosSocio = listaHijos;
+        console.log(this.hijosSocio);
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+  }
+
+  tieneHijosAsociados = () =>{
+    if (this.hijosSocio){
+      return this.hijosSocio.length>0;
+    } else{
+      return false;
+    }
   }
 
 }

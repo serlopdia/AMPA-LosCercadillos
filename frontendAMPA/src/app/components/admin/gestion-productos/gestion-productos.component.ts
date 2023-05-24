@@ -8,7 +8,7 @@ interface Producto {
   descripcion: string;
   precio_general: number;
   precio_socio: number;
-  imagen: number;
+  imagen: string;
   created_at: string;
 }
 

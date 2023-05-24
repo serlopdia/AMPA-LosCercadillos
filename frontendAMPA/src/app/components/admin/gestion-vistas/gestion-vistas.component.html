@@ -1,1 +1,39 @@
 <app-navbar-gestion></app-navbar-gestion>
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <form *ngIf= "!isSuccessful" name="form" (ngSubmit)="f.form.valid && modificarVista()" #f="ngForm" novalidate>
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <input [ngModel]="form.id" type="hidden" name="id" value="" required autofocus>
+                    <div class="d-flex align-items-start">
+                        <h1 class="fs-4 card-title fw-bold mb-4" style="margin-right: 2vw;">VISTA </h1>
+                        <select [ngModel]="form.tipo" (change)="onTipoVistaChange($any($event.target).value)" class="form-select" style="width: 40vw;" name="tipo">
+                            <option *ngFor="let tipo of tiposVista" [value]="tipo">{{ tipo }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-12">
+                            <label class="mb-2 text-muted" for="markdown">Markdown</label>
+                            <textarea [ngModel]="form.markdown" (ngModelChange)="actualizarMarkdown($event)" id="markdown" class="form-control" style="min-height: 25vh;" name="markdown" value="" required autofocus></textarea>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un texto markdown
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer py-3 border-0">
+                    <div class="align-items-center d-flex">
+                        <button type="submit" class="btn btn-success ms-auto">
+                            Actualizar vista
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    
+    </div>

@@ -94,49 +94,49 @@
                         </div>
                     </div>
 
-                    <hr class="hr hr-blurry" style="margin: 3vh 0;"/>
-                    
-                    <h5 class="card-subtitle mb-2">HIJOS ASOCIADOS</h5>
-                    <div class="form-group row">
-                        <div class="mb-3 col-sm-2">
-                            <label class="mb-2 text-muted" for="nombre">Nombre</label>
-                            <input id="nombre" type="text" class="form-control" name="nombre" value="" required autofocus>
-                            <div class="invalid-feedback error">
-                                <div>
-                                    Debe introducir un nombre
+                    <div *ngIf="hijosSocio.length > 0">
+                        <hr class="hr hr-blurry" style="margin: 3vh 0;"/>
+                        <h5 class="card-subtitle mb-2">NIÑOS ASOCIADOS</h5>
+                        <div class="row">
+                            <div class="col" *ngFor="let hijo of hijosSocio">
+                                <div class="form-group pt-3">
+                                    <label class="mb-2 text-muted" for="nombre">Nombre</label>
+                                    <input id="nombre" type="text" class="form-control" name="nombre" value="{{ hijo.nombre }}" required autofocus>
+                                    <div class="invalid-feedback error">
+                                        <div>
+                                            Debe introducir un nombre
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="mb-3 col-sm-2">
-                            <label class="mb-2 text-muted" for="apellidos">Apellidos</label>
-                            <input id="apellidos" type="text" class="form-control" name="apellidos" value="" required autofocus>
-                            <div class="invalid-feedback error">
-                                <div>
-                                    Debe introducir unos apellidos
+                            
+                                <div class="form-group pt-3">
+                                    <label class="mb-2 text-muted" for="apellidos">Apellidos</label>
+                                    <input id="apellidos" type="text" class="form-control" name="apellidos" value="{{ hijo.apellidos }}" required autofocus>
+                                    <div class="invalid-feedback error">
+                                        <div>
+                                            Debe introducir unos apellidos
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="mb-3 col-sm-3">
-                            <label class="mb-2 text-muted" for="fecha_nacimiento">Fecha de nacimiento</label>
-                            <input id="fecha_nacimiento" type="date" class="form-control" name="fecha_nacimiento" value="" required autofocus>
-                            <div class="invalid-feedback error">
-                                <div>
-                                    Debe introducir una fecha de nacimiento
+                            
+                                <div class="form-group pt-3">
+                                    <label class="mb-2 text-muted" for="fecha_nacimiento">Fecha de nacimiento</label>
+                                    <input id="fecha_nacimiento" type="date" class="form-control" name="fecha_nacimiento" value="{{ hijo.fecha_nacimiento }}" required autofocus>
+                                    <div class="invalid-feedback error">
+                                        <div>
+                                            Debe introducir una fecha de nacimiento
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="mb-3 col-sm-3">
-                            <label class="mb-2 text-muted" for="clase">Clase</label>
-                            <input id="clase" type="text" class="form-control" name="clase" value="" required autofocus>
-                            <div class="invalid-feedback error">
-                                <div>
-                                    Debe introducir una clase
+                            
+                                <div class="form-group pt-3">
+                                    <label class="mb-2 text-muted" for="clase">Clase</label>
+                                    <input id="clase" type="text" class="form-control" name="clase" value="{{ hijo.clase }}" required autofocus>
+                                    <div class="invalid-feedback error">
+                                        <div>
+                                            Debe introducir una clase
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

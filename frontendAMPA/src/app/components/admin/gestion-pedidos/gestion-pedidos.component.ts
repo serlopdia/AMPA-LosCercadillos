@@ -26,9 +26,10 @@ export class GestionPedidosComponent implements OnInit {
   ngOnInit(): void {
     this.getPedidosList();
     this.formatearPedidos();
+    this.nombresSocios = this.usersService.getNombresSocios();
   }
 
-  getPedidosList() {
+  async getPedidosList() {
     this.pedidoService.getPedidosList().subscribe({
       next: res => {
         this.listaPedidos = res;
@@ -54,29 +55,14 @@ export class GestionPedidosComponent implements OnInit {
     }
     return pedido;
   }
-  
-  getNombresPedidos(){
-    this.listaPedidos.forEach((pedido: Pedido) => {
-      this.usersService.getSocioById(pedido.socio).subscribe({
-        next: data => {
-          let nombre = data.first_name + ' ' + data.last_name + ' #' + data.id;
-          this.nombresSocios[pedido.socio] = nombre;
-        },
-        error: err => {
-          console.log(err);
-        }
-      })
-    })
-  }
 
-  formatearPedidos() {
+  async formatearPedidos() {
     this.pedidoService.getPedidosList().subscribe({
       next: res => {
         res.forEach((pedido: Pedido) => {
           pedido.created_at = this.formatearFecha(pedido).created_at;
         });
         this.pedidosFormateados = res;
-        this.getNombresPedidos();
       },error: err => {
         console.log(err);
       }
