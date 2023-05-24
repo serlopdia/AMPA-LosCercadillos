@@ -30,6 +30,10 @@
     white-space: nowrap; /* Evita que el contenido se ajuste */
   }
 
+  th, td {
+    vertical-align: middle;
+  }
+
   .buscador {
     display: flex;
     margin: 1vh 50px;

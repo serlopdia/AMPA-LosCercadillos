@@ -18,7 +18,7 @@ export class BuzonService {
   constructor(private http: HttpClient, private usersService: UsersService) { }
   
   getSugerencias(): Observable<any>{
-    if(this.usersService.isLoggedIn()){
+    if(this.usersService.isLogAdmin()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);

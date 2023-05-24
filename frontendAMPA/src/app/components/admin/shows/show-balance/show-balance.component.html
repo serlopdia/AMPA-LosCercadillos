@@ -1,0 +1,62 @@
+<app-navbar-gestion></app-navbar-gestion>
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && actualizarBalance()" #f="ngForm" novalidate>
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="fs-4 card-title fw-bold mb-4">DETALLES BALANCE</h1>
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-12">
+                            <label class="mb-2 text-muted" for="tipo">Tipo</label>
+                            <select [(ngModel)]="form.tipo" id="tipo" class="form-select" name="tipo" aria-label="Default select example">
+                                <option value="INGRESO">Ingreso</option>
+                                <option value="GASTO">Gasto</option>
+                            </select>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe seleccionar un tipo
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-12">
+                            <label class="mb-2 text-muted" for="asunto">Asunto</label>
+                            <input [(ngModel)]="form.asunto" id="asunto" class="form-control" name="asunto" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un asunto
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-12">
+                            <label class="mb-2 text-muted" for="cantidad">Cantidad</label>
+                            <input [(ngModel)]="form.cantidad" id="cantidad" type="number" min="0" class="form-control" name="cantidad" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una cantidad
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer py-3 border-0">
+                    <div class="align-items-center d-flex">
+                        <button type="submit" class="btn btn-success ms-auto">
+                            Modificar datos
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+        </form>
+    
+    </div>

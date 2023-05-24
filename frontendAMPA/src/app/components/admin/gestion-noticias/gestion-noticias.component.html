@@ -1,2 +1,31 @@
 <app-navbar-gestion></app-navbar-gestion>
-    
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <nav class="navbar navbar-blank bg-blank">
+          <form class="form-inline buscador">
+            <input class="form-control mr-sm-2" type="search" placeholder="Buscar noticia" style="margin-right: 20px;">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+          </form>
+          <button class="btn btn-primary creador my-2 my-sm-0" routerLink="/gestion/noticias/form">Crear noticia</button>
+        </nav>
+
+        <div class="card-container">
+            <div *ngFor="let noticia of noticiasFormateadas" class="card" [routerLink]="['/gestion/noticias/show/'+noticia.id]">
+                <img src="{{ noticia.imagen }}" class="card-img-top" alt="Imagen no disponible">
+                <div class="card-body">
+                    <h5 class="card-title">{{ noticia.titulo }}</h5>
+                    <p class="card-text card-text-limitado" [ngClass]="{'card-text-extendido': mapMostrarCuerpoCompleto.get(noticia.id) || noticia.cuerpo.length <= 350}">
+                        {{ noticia.cuerpo }}
+                    </p>
+                    <div style="text-align: right;">
+                        <button *ngIf="noticia.cuerpo.length > 350" class="btn btn-link p-0 m-0 ml-auto" (click)="mapMostrarCuerpoCompleto.set(noticia.id, !mapMostrarCuerpoCompleto.get(noticia.id))">
+                            {{ mapMostrarCuerpoCompleto.get(noticia.id) ? 'Ver menos' : 'Ver más' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>

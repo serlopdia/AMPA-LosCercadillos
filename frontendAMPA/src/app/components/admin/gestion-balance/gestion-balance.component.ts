@@ -59,8 +59,8 @@ export class GestionBalanceComponent implements OnInit {
   nuevoIngreso(): void{    
     this.balanceService.postEntry(this.formIngreso).subscribe({
       next: data => {
-        document.location.href = "/gestion/balance"
-        window.location.href = "/gestion/balance"
+        document.location.href = "/gestion/balances"
+        window.location.href = "/gestion/balances"
       },
       error: err => {
         this.errorMessage = err.error.message;
@@ -72,8 +72,8 @@ export class GestionBalanceComponent implements OnInit {
   nuevoGasto(): void{    
     this.balanceService.postEntry(this.formGasto).subscribe({
       next: data => {
-        document.location.href = "/gestion/balance"
-        window.location.href = "/gestion/balance"
+        document.location.href = "/gestion/balances"
+        window.location.href = "/gestion/balances"
       },
       error: err => {
         this.errorMessage = err.error.message;
@@ -111,15 +111,21 @@ export class GestionBalanceComponent implements OnInit {
     return total;
   }
   
-  eliminarRegistro(idEntrada: any) {
-    this.balanceService.deleteEntry(idEntrada).subscribe({
+  eliminarBalance(idEntrada: any) {
+    this.balanceService.deleteBalance(idEntrada).subscribe({
       next: res => {
-        document.location.href = "/gestion/balance"
-        window.location.href = "/gestion/balance"
+        document.location.href = "/gestion/balances"
+        window.location.href = "/gestion/balances"
       },error: err => {
         console.log(err)
       }
     })
+  }
+
+  confirmarEliminacion(idEntrada: any): void {
+    if (confirm('¿Estás seguro de que deseas eliminar este balance?')) {
+      this.eliminarBalance(idEntrada);
+    }
   }
 
 }

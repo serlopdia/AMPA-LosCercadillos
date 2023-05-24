@@ -1,1 +1,67 @@
-<p>evento works!</p>
+<app-dashboard></app-dashboard>
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <form *ngIf= "!isSuccessful" name="form" (ngSubmit)="f.form.valid && crearEvento()" #f="ngForm" novalidate>
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="fs-4 card-title fw-bold mb-4">CREAR UN NUEVO EVENTO</h1>
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-12">
+                            <label class="mb-2 text-muted" for="titulo">Título</label>
+                            <input [(ngModel)]="form.titulo" id="titulo" type="text" class="form-control" name="titulo" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un título
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-12">
+                            <label class="mb-2 text-muted" for="descripcion">Descripción</label>
+                            <textarea [(ngModel)]="form.descripcion" id="descripcion" class="form-control" name="descripcion" value="" required autofocus style="min-height: 15vh;"></textarea>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una descripción
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="capacidad">Capacidad</label>
+                            <input [(ngModel)]="form.capacidad" id="capacidad" type="number" min="1" class="form-control" name="capacidad" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una capacidad
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="fin_inscripcion">Fecha fin de inscripción</label>
+                            <input [(ngModel)]="form.fin_inscripcion" id="fin_inscripcion" type="datetime-local" class="form-control" name="fin_inscripcion" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una fecha y hora de finalización
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer py-3 border-0">
+                    <div class="align-items-center d-flex">
+                        <button type="submit" class="btn btn-primary ms-auto">
+                            Crear evento
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    
+    </div>

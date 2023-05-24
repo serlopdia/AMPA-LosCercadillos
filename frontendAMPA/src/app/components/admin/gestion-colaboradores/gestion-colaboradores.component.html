@@ -1,0 +1,29 @@
+<app-navbar-gestion></app-navbar-gestion>
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <nav class="navbar navbar-blank bg-blank">
+          <form class="form-inline buscador">
+            <input class="form-control mr-sm-2" type="search" placeholder="Buscar colaborador" style="margin-right: 20px;">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+          </form>
+          <button class="btn btn-primary creador my-2 my-sm-0" routerLink="/gestion/colaboradores/form">Crear colaborador</button>
+        </nav>
+
+        <div class="card-container">
+            <div *ngFor="let colaborador of colaboradoresFormateados" class="card" [routerLink]="['/gestion/colaboradores/show/'+colaborador.id]">
+                <img src="{{ colaborador.imagen }}" class="card-img-top" alt="Imagen no disponible">
+                <div class="card-body">
+                    <h5 class="card-title">{{ colaborador.nombre }}</h5>
+                    <p class="card-text" style="color: green;">
+                        <b>{{ colaborador.ventaja }}</b>
+                    </p>
+                    <p class="card-text">
+                        {{ colaborador.descripcion }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+    </div>

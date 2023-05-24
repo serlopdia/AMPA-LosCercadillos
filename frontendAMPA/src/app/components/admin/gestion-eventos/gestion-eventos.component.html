@@ -1,3 +1,30 @@
 <app-dashboard></app-dashboard>
 
-<p>gestion-eventos works!</p>
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <nav class="navbar navbar-blank bg-blank">
+          <form class="form-inline buscador">
+            <input class="form-control mr-sm-2" type="search" placeholder="Buscar producto" style="margin-right: 20px;">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+          </form>
+          <button class="btn btn-primary creador my-2 my-sm-0" routerLink="/dashboard/eventos/form">Crear evento</button>
+        </nav>
+
+        <div *ngFor="let evento of eventosFormateados" id="{{ evento.id }}" class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ evento.titulo }}</h5>
+                <p class="card-text card-text-limitado" [ngClass]="{'card-text-extendido': mapMostrarDescripcionCompleta.get(evento.id) || evento.descripcion.length <= 350}">
+                    {{ evento.descripcion }}
+                </p>
+                <div style="text-align: right;">
+                    <button *ngIf="evento.descripcion.length > 350" class="btn btn-link p-0 m-0 ml-auto" (click)="mapMostrarDescripcionCompleta.set(evento.id, !mapMostrarDescripcionCompleta.get(evento.id))">
+                        {{ mapMostrarDescripcionCompleta.get(evento.id) ? 'Ver menos' : 'Ver más' }}
+                    </button>
+                </div>
+            </div>
+            <div class="card-footer text-body-secondary">
+                {{ evento.created_at }}
+            </div>
+        </div>
+    </div>

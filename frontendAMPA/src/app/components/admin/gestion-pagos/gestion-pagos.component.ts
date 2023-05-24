@@ -27,6 +27,7 @@ export class GestionPagosComponent implements OnInit {
   ngOnInit(): void {
     this.getPagosList();
     this.formatearPagos();
+    this.nombresSocios = this.usersService.getNombresSocios();
   }
 
   getPagosList() {
@@ -55,20 +56,6 @@ export class GestionPagosComponent implements OnInit {
     }
     return pago;
   }
-  
-  getNombresPagos(){
-    this.listaPagos.forEach((pago: Pago) => {
-      this.usersService.getSocioById(pago.socio).subscribe({
-        next: data => {
-          let nombre = data.first_name + ' ' + data.last_name + ' #' + data.id;
-          this.nombresSocios[pago.socio] = nombre;
-        },
-        error: err => {
-          console.log(err);
-        }
-      })
-    })
-  }
 
   formatearPagos() {
     this.pagoService.getPagosList().subscribe({
@@ -77,7 +64,6 @@ export class GestionPagosComponent implements OnInit {
           pago.created_at = this.formatearFecha(pago).created_at;
         });
         this.pagosFormateados = res;
-        this.getNombresPagos();
       },error: err => {
         console.log(err);
       }

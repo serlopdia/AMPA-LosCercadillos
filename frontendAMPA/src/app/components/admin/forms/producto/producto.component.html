@@ -1,1 +1,95 @@
-<p>producto works!</p>
+<app-dashboard></app-dashboard>
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <form *ngIf= "!isSuccessful" name="form" (ngSubmit)="f.form.valid && crearProducto()" #f="ngForm" novalidate>
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="fs-4 card-title fw-bold mb-4">CREAR UN NUEVO PRODUCTO</h1>
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-12">
+                            <label class="mb-2 text-muted" for="first_name">Nombre</label>
+                            <input [(ngModel)]="form.nombre" id="first_name" type="text" class="form-control" name="first_name" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un nombre
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-12">
+                            <label class="mb-2 text-muted" for="descripcion">Descripción</label>
+                            <textarea [(ngModel)]="form.descripcion" id="descripcion" class="form-control" name="descripcion" value="" required autofocus style="min-height: 15vh;"></textarea>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una descripción
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="precio_general">Precio general</label>
+                            <input [(ngModel)]="form.precio_general" id="precio_general" type="number" min="0" class="form-control" name="precio_general" placeholder="€" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                            <div>
+                                Debe introducir un precio general
+                            </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="precio_socio">Precio socios</label>
+                            <input [(ngModel)]="form.precio_socio" id="precio_socio" type="number" min="0" class="form-control" name="precio_socio" placeholder="€" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                            <div>
+                                Debe introducir un precio para socios
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- <div class="form-group row">
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="stock">Cantidad stock</label>
+                            <input [(ngModel)]="form.stock" id="stock" type="number" min="0" class="form-control" name="stock" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un stock
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="nombre_stock">Nombre stock</label>
+                            <input [(ngModel)]="form.nombre_stock" id="nombre_stock" type="text" class="form-control" name="nombre_stock" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un nombre de stock, p.ej: Taza azul
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-12">
+                            <label class="mb-2 text-muted" for="imagen">URL de imagen</label>
+                            <input [(ngModel)]="form.imagen" id="imagen" type="text" class="form-control" name="imagen" value="" required autofocus>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer py-3 border-0">
+                    <div class="align-items-center d-flex">
+                        <button type="submit" class="btn btn-primary ms-auto">
+                            Crear producto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    
+    </div>

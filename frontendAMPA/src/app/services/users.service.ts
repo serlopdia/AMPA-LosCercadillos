@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { API_url } from '../global';
-import { map } from 'rxjs';
 
 interface Socio {
   id: number;
@@ -118,6 +117,30 @@ export class UsersService {
     }
     return res;
   }
+  
+  getNombresSocios(): { [id: number]: string } {
+    let nombresSocios: { [id: number]: string } = {};
+    const sociosList = this.getSociosList();
+    sociosList.subscribe({
+      next: (socios: any[]) => {
+        socios.forEach((socio: Socio) => {
+          this.getSocioById(socio.id).subscribe({
+            next: (data: any) => {
+              let nombre = data.first_name + ' ' + data.last_name + ' #' + data.id;
+              nombresSocios[socio.id] = nombre;
+            },
+            error: (err: any) => {
+              console.log(err);
+            }
+          });
+        });
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+    return nombresSocios;
+  }  
   
   // DEVUELVE UNA LISTA DE TODOS LOS SOCIOS
   getSociosList(): Observable<any>{

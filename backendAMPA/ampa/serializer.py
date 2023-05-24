@@ -16,8 +16,8 @@ class VistaSerializer(serializers.ModelSerializer):
         }
 
     def validate_tipo(self, value):
-        if value not in ['PRINCIPAL', 'COLEGIO', 'COMEDOR']:
-            raise serializers.ValidationError("El valor del campo 'tipo' debe ser uno de los siguientes: 'PRINCIPAL', 'COLEGIO', 'COMEDOR'")
+        if value not in ['PRINCIPAL', 'COLEGIO', 'COMEDOR', 'CONTACTO']:
+            raise serializers.ValidationError("El valor del campo 'tipo' debe ser uno de los siguientes: 'PRINCIPAL', 'COLEGIO', 'COMEDOR', 'CONTACTO'")
         return value
 
     def create(self, validated_data):
@@ -95,7 +95,6 @@ class ColaboradorSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created_at')
         extra_kwargs = {
             'nombre': {'required': True},
-            'ventaja': {'required': True},
             'descripcion': {'required': True},
         }
 

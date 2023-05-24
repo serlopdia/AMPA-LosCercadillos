@@ -12,6 +12,7 @@ class TipoVista(models.TextChoices):
     PRINCIPAL = "PRINCIPAL", _("Principal"),
     COLEGIO = "COLEGIO", _("Colegio"),
     COMEDOR = "COMEDOR", _("Comedor"),
+    CONTACTO = "CONTACTO", _("Contacto"),
 
 class TipoBalance(models.TextChoices):
     INGRESO = "INGRESO", _("Ingreso"),
@@ -42,8 +43,8 @@ class Vista(models.Model):
         app_label="ampa"
 
     def clean(self):
-        if self.tipo not in ["PRINCIPAL", "COLEGIO", "COMEDOR"]:
-            raise ValidationError("El valor del campo 'tipo' debe ser uno de los siguientes: 'PRINCIPAL', 'COLEGIO', 'COMEDOR'")
+        if self.tipo not in ["PRINCIPAL", "COLEGIO", "COMEDOR", "CONTACTO"]:
+            raise ValidationError("El valor del campo 'tipo' debe ser uno de los siguientes: 'PRINCIPAL', 'COLEGIO', 'COMEDOR', 'CONTACTO'")
 
 class Noticia(models.Model):
     titulo = models.CharField(max_length=64)
@@ -74,7 +75,7 @@ class Evento(models.Model):
 
 class Colaborador(models.Model):
     nombre = models.CharField(max_length=64)
-    ventaja = models.CharField(max_length=64)
+    ventaja = models.CharField(max_length=64, default="", blank=True)
     descripcion = models.CharField(max_length=256)
     imagen = models.CharField(max_length=2048, default="", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
