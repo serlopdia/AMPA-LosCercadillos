@@ -114,11 +114,11 @@ class StockProductoSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        linea_pedido = StockProducto.objects.create(**validated_data)
-        return linea_pedido
+        stock_producto = StockProducto.objects.create(**validated_data)
+        return stock_producto
 
     def update(self, instance, validated_data):
-        instance.nombre = validated_data.get('nombre', instance.pedido)
+        instance.nombre = validated_data.get('nombre', instance.nombre)
         instance.cantidad = validated_data.get('cantidad', instance.cantidad)
         instance.producto = validated_data.get('producto', instance.producto)
         instance.save()
