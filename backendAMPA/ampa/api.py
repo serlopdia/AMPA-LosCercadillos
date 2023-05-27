@@ -13,8 +13,14 @@ class IsOwnerOrAdmin(permissions.BasePermission):
 
 class VistaViewSet(viewsets.ModelViewSet):
     queryset = Vista.objects.all()
-    permission_classes = [permissions.IsAdminUser]
     serializer_class = VistaSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
 
 class NoticiaViewSet(viewsets.ModelViewSet):
     queryset = Noticia.objects.all()
