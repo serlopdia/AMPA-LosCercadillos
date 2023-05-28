@@ -66,8 +66,8 @@ class EventoSerializer(serializers.ModelSerializer):
         }
 
     def validate_fin_inscripcion(self, value):
-        # Obtener la fecha y hora actual sin información de zona horaria
-        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        # Obtener la fecha y hora actual con información de zona horaria
+        now = timezone.now()
         # Verificar que value no sea anterior a la fecha actual
         if value <= now:
             raise serializers.ValidationError("La fecha del evento debe ser futura a la fecha actual")
@@ -201,7 +201,6 @@ class ClaseSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created_at')
         extra_kwargs = {
             'curso': {'required': True},
-            'letra': {'required': True},
             'tipo_clase': {'required': True},
             'curso_escolar': {'required': True},
         }
