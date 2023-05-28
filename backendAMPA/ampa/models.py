@@ -107,9 +107,9 @@ class Balance(models.Model):
 class CursoEscolar(models.Model):
     nombre = models.CharField(max_length=64)
     precio_cuota = models.FloatField(max_length=64)
-    fecha_inicio = models.DateTimeField()
-    fecha_fin = models.DateTimeField()
-    actual = models.BooleanField(default=True)
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField()
+    actual = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
