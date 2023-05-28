@@ -24,8 +24,14 @@ class VistaViewSet(viewsets.ModelViewSet):
 
 class NoticiaViewSet(viewsets.ModelViewSet):
     queryset = Noticia.objects.all()
-    permission_classes = [permissions.IsAdminUser]
     serializer_class = NoticiaSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
 
 class EventoViewSet(viewsets.ModelViewSet):
     queryset = Evento.objects.all()
@@ -51,8 +57,14 @@ class SugerenciaViewSet(viewsets.ModelViewSet):
 
 class ColaboradorViewSet(viewsets.ModelViewSet):
     queryset = Colaborador.objects.all()
-    permission_classes = [permissions.IsAdminUser]
     serializer_class = ColaboradorSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
 
 class CitaViewSet(viewsets.ModelViewSet):
     queryset = Cita.objects.all()

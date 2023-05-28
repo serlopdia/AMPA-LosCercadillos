@@ -43,8 +43,8 @@ class Vista(models.Model):
         app_label="ampa"
 
     def clean(self):
-        if self.tipo not in ["PRINCIPAL", "COLEGIO", "COMEDOR", "CONTACTO"]:
-            raise ValidationError("El valor del campo 'tipo' debe ser uno de los siguientes: 'PRINCIPAL', 'COLEGIO', 'COMEDOR', 'CONTACTO'")
+        if self.tipo not in ["PRINCIPAL", "COLEGIO", "COMEDOR", "VENTAJAS"]:
+            raise ValidationError("El valor del campo 'tipo' debe ser uno de los siguientes: 'PRINCIPAL', 'COLEGIO', 'COMEDOR', 'VENTAJAS'")
 
 class Noticia(models.Model):
     titulo = models.CharField(max_length=64)

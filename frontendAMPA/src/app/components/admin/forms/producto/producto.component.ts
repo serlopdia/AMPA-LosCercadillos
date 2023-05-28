@@ -35,6 +35,11 @@ export class ProductoComponent implements OnInit {
     nombre_stock: null,
     imagen: null,
   }
+  stockNuevo:any ={
+    cantidad: null,
+    nombre: null,
+  };
+  listaStocks: any[] = [];
   isSuccessful = false;
   errorMessage = '';
 
@@ -42,8 +47,31 @@ export class ProductoComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  agregarStock(): void {
+    if (
+      this.stockNuevo.cantidad !== null &&
+      this.stockNuevo.cantidad !== undefined &&
+      this.stockNuevo.nombre &&
+      this.stockNuevo.nombre.trim() !== ''
+    ) {
+      const stockExistente = this.listaStocks.find(
+        (stock) => stock.nombre === this.stockNuevo.nombre
+      );
+      if (stockExistente) {
+        stockExistente.cantidad = this.stockNuevo.cantidad;
+      } else {
+        this.listaStocks.push(this.stockNuevo);
+      }
+      this.stockNuevo = { cantidad: null, nombre: '' };
+    }
+  }
+
+  eliminarStock(index: number): void {
+    this.listaStocks.splice(index, 1);
+  }
   
-  crearProducto(): void{
+  crearProducto(): void {
     let producto = {
       nombre: this.form.nombre,
       descripcion: this.form.descripcion,
@@ -51,30 +79,32 @@ export class ProductoComponent implements OnInit {
       precio_socio: this.form.precio_socio,
       imagen: this.form.imagen,
     }
-
+  
     this.productoService.createProducto(producto).subscribe({
       next: res => {
-        let stock = {
-          cantidad: this.form.stock,
-          nombre: this.form.nombre_stock,
-          producto: res.id,
-        }
-
-        /* this.stockService.createStock(stock).subscribe({
-          next: res => {
-            console.log("Stock" + res.id + "creado correctamente")
-          }, error: err => {
-            console.log(err);
+        for (let s of this.listaStocks) {
+          let stock = {
+            cantidad: s.cantidad,
+            nombre: s.nombre,
+            producto: res.id,
           }
-        }) */
-        document.location.href = "/dashboard/productos"
-        window.location.href = "/dashboard/productos"
+          this.stockService.createStock(stock).subscribe({
+            next: res => {
+              console.log("Stock " + res.id + " creado correctamente");
+            },
+            error: err => {
+              console.log(err);
+            }
+          });
+        }
+        document.location.href = "/dashboard/productos";
+        window.location.href = "/dashboard/productos";
       },
       error: err => {
-        this.errorMessage=err.error.message;
+        this.errorMessage = err.error.message;
         console.log(err);
       }
-    })
+    });
   }
 
 }

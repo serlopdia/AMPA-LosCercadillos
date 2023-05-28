@@ -32,6 +32,8 @@ import { ShowEventoComponent } from './components/admin/shows/show-evento/show-e
 import { ShowPedidoComponent } from './components/admin/shows/show-pedido/show-pedido.component';
 import { ShowBalanceComponent } from './components/admin/shows/show-balance/show-balance.component';
 import { ShowAsuntoComponent } from './components/admin/shows/show-asunto/show-asunto.component';
+import { ShowStocksComponent } from './components/admin/shows/show-stocks/show-stocks.component';
+import { ShowHijosComponent } from './components/admin/shows/show-hijos/show-hijos.component';
 
 import { InfoColegioComponent } from './components/public/info-colegio/info-colegio.component';
 import { InfoComedorComponent } from './components/public/info-comedor/info-comedor.component';
@@ -66,8 +68,10 @@ const routes: Routes = [
   { path: 'gestion/colaboradores', component: GestionColaboradoresComponent, canActivate: [AdminGuard] },
   
   { path: 'dashboard/socios/form/:id', component: SocioComponent, canActivate: [AdminGuard] },
+  { path: 'dashboard/socios/:id/hijos', component: ShowHijosComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/productos/form', component: ProductoComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/productos/show/:id', component: ShowProductoComponent, canActivate: [AdminGuard] },
+  { path: 'dashboard/productos/:id/stocks', component: ShowStocksComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/eventos/form', component: EventoComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/eventos/show/:id', component: ShowEventoComponent, canActivate: [AdminGuard] },
   { path: 'gestion/noticias/form', component: NoticiaComponent, canActivate: [AdminGuard] },

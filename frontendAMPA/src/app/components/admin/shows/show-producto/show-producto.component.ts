@@ -38,10 +38,12 @@ export class ShowProductoComponent implements OnInit {
   producto!:Producto;
   isSuccessful = false;
   errorMessage = '';
+  idProducto: any;
 
   constructor(private productoService: ProductoService, private route: ActivatedRoute, private usersService: UsersService) { }
 
   ngOnInit(): void {
+    this.idProducto = this.route.snapshot.paramMap.get('id');
     this.getDatosProducto();
   }
   

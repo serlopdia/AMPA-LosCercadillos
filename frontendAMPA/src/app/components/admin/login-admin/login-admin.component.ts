@@ -52,7 +52,7 @@ export class LoginAdminComponent implements OnInit {
 
   reloadPage():void{
     if(this.usersService.isLogAdmin()){
-      window.location.href="dashboard";
+      window.location.href="gestion/buzon";
     }
     else{
       window.location.href="";

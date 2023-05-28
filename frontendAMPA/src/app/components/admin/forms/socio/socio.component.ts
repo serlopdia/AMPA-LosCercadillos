@@ -16,16 +16,6 @@ interface Socio {
   created_at: string;
 }
 
-interface Hijo {
-  id: number;
-  nombre: string;
-  apellidos: string;
-  fecha_nacimiento: string;
-  socio: number;
-  clase: number;
-  created_at: string;
-}
-
 @Component({
   selector: 'app-socio',
   templateUrl: './socio.component.html',
@@ -46,15 +36,14 @@ export class SocioComponent implements OnInit {
   showPassword: boolean = false;
   isSuccessful = false;
   errorMessage = '';
+  idSocio = this.route.snapshot.paramMap.get('id');
 
   socio!:Socio;
-  hijosSocio: Hijo[] = [];
 
   constructor(private route: ActivatedRoute, private usersService: UsersService, private hijoService: HijoService) { }
 
   ngOnInit(): void {
     this.getSocioData();
-    this.getHijosSocio();
   }
 
   togglePasswordVisibility(values:any):void {
@@ -97,26 +86,12 @@ export class SocioComponent implements OnInit {
     })
   }
 
-  async getHijosSocio() {
-    let idSocio = Number(this.route.snapshot.paramMap.get('id'));
-    let listaHijos: Hijo[] = [];
-    this.hijoService.getAllHijos().subscribe({
-      next: (res: Hijo[]) => {
-        listaHijos = res.filter(hijo => hijo.socio === idSocio);
-        this.hijosSocio = listaHijos;
-        console.log(this.hijosSocio);
-      },
-      error: err => {
-        console.log(err);
-      }
-    });
+  eliminarStock(idStock: any): void {
   }
 
-  tieneHijosAsociados = () =>{
-    if (this.hijosSocio){
-      return this.hijosSocio.length>0;
-    } else{
-      return false;
+  confirmarEliminacion(idStock: any): void {
+    if (confirm('¿Estás seguro de que deseas eliminar este socio?')) {
+      this.eliminarStock(idStock);
     }
   }
 

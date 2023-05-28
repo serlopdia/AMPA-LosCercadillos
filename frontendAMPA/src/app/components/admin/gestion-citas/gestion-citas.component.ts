@@ -70,7 +70,7 @@ export class GestionCitasComponent implements OnInit {
         console.log(error);
       }
     );
-  }  
+  }
 
   async onAsuntoChange(asuntoId: string) {
     this.citaService.getAsuntoById(asuntoId).subscribe(

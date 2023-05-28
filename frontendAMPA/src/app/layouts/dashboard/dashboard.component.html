@@ -57,7 +57,9 @@
       </li>
       <li>
         <div class="text-center" style="margin-top: 3vh;">
-          <img class="logo-img" src="../../../assets/images/logo.png" routerLink="" alt="logo">
+          <a routerLink="">
+            <img class="logo-img" src="../../../assets/images/logo.png" alt="logo">
+          </a>
         </div>
       </li>
       <li>
@@ -67,9 +69,7 @@
             <strong>Administrador</strong>
           </a>
           <ul class="dropdown-menu dropdown-menu-dark text-small shadow dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Admin profile</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" (click)="logout()">Sign out</a></li>
+            <li><a class="dropdown-item" (click)="logout()">Cerrar sesión</a></li>
           </ul>
         </div>
       </li>
