@@ -67,7 +67,7 @@ class EventoSerializer(serializers.ModelSerializer):
 
     def validate_fin_inscripcion(self, value):
         # Obtener la fecha y hora actual con información de zona horaria
-        now = timezone.now()
+        now = datetime.now(timezone.utc)
         # Verificar que value no sea anterior a la fecha actual
         if value <= now:
             raise serializers.ValidationError("La fecha del evento debe ser futura a la fecha actual")
