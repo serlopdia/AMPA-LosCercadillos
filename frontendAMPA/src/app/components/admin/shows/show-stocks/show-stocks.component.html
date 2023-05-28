@@ -1,0 +1,73 @@
+<app-dashboard></app-dashboard>
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && guardarModificaciones()" #f="ngForm" novalidate>
+                        <h1 class="fs-4 card-title fw-bold mb-4">STOCKS DEL PRODUCTO</h1>
+                        <div *ngFor="let stock of stocksProducto; let i = index" class="form-group row">
+                            <div class="mb-3 col-sm-6">
+                              <label class="mb-2 text-muted" for="nombre{{stock.id}}">Nombre</label>
+                              <input [(ngModel)]="stocksProducto[i].nombre" [id]="'nombre' + stock.id" type="text" class="form-control" [name]="'nombre' + stock.id" required autofocus>
+                              <div class="invalid-feedback error">
+                                <div>
+                                  Debe introducir un nombre
+                                </div>
+                              </div>
+                            </div>
+                            <div class="mb-3 col-sm-4">
+                              <label class="mb-2 text-muted" for="cantidad{{stock.id}}">Cantidad</label>
+                              <input [(ngModel)]="stocksProducto[i].cantidad" [id]="'cantidad' + stock.id" type="number" min="0" class="form-control" [name]="'cantidad' + stock.id" required autofocus>
+                              <div class="invalid-feedback error">
+                                <div>
+                                  Debe introducir una cantidad
+                                </div>
+                              </div>
+                            </div>
+                            <div class="mb-3 col-sm-2">
+                                <br>
+                                <button type="button" class="btn">
+                                    <i class="fa-solid fa-circle-xmark fa-xl" (click)="confirmarEliminacion(stocksProducto[i].id)" style="color: #ff0000;"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <br>
+                    <div class="form-group row">
+                        <h5 class="fs-5 mb-2">CREAR NUEVO</h5>
+                        <div class="form-group row">
+                            <div class="mb-3 col-sm-6">
+                                <label class="mb-2 text-muted" for="nombre_stockNuevo">Nombre</label>
+                                <input [(ngModel)]="stockNuevo.nombre" id="nombre_stockNuevo" type="text" class="form-control" name="nombre_stock">
+                                <div class="invalid-feedback error">
+                                    <div>Debe introducir un nombre de stock, p.ej: Taza azul</div>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-sm-4">
+                                <label class="mb-2 text-muted" for="stockNuevo">Cantidad</label>
+                                <input [(ngModel)]="stockNuevo.cantidad" id="stockNuevo" type="number" min="0" class="form-control" name="stock">
+                                <div class="invalid-feedback error">
+                                    <div>Debe introducir una cantidad de stock</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="align-items-center">
+                        <button type="button" class="btn btn-outline-success ms-auto" (click)="crearStock()">
+                            Crear nuevo stock
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-footer py-3 border-0">
+                    <button type="button" class="btn btn-primary" (click)="guardarModificaciones()">
+                        Guardar modificaciones
+                    </button>
+                </div>
+
+            </div>
+    </div>

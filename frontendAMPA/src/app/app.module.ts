@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
+import { MarkdownModule } from 'ngx-markdown';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -42,6 +43,8 @@ import { TiendaComponent } from './components/public/tienda/tienda.component';
 import { NoticiasComponent } from './components/public/noticias/noticias.component';
 import { EventosComponent } from './components/public/eventos/eventos.component';
 import { ShowAsuntoComponent } from './components/admin/shows/show-asunto/show-asunto.component';
+import { ShowStocksComponent } from './components/admin/shows/show-stocks/show-stocks.component';
+import { ShowHijosComponent } from './components/admin/shows/show-hijos/show-hijos.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +86,8 @@ import { ShowAsuntoComponent } from './components/admin/shows/show-asunto/show-a
     NoticiasComponent,
     EventosComponent,
     ShowAsuntoComponent,
+    ShowStocksComponent,
+    ShowHijosComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,6 +95,7 @@ import { ShowAsuntoComponent } from './components/admin/shows/show-asunto/show-a
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    MarkdownModule.forRoot(),
   ],
   providers: [Title],
   bootstrap: [AppComponent]

@@ -35,4 +35,58 @@ export class HijoService {
     return new Observable<any>;
   }
 
+  createHijo(dataHijo:any): Observable<any>{
+    if(this.usersService.isLogAdmin()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck != null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+        headers = headers.set('Authorization', 'Token ' + res[0]);
+        
+        return this.http.post(`${API_url}/ampa/hijos/`, JSON.stringify(dataHijo), { 'headers': headers });
+      }
+    }
+    return new Observable<any>;
+  }
+
+  updateHijo(idEntry:any, dataEntry:any): Observable<any>{
+    if(this.usersService.isLogAdmin()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck != null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+        headers=headers.set('Authorization','Token '+res[0])
+        
+        return this.http.put(`${API_url}/ampa/hijos/${idEntry}/`, JSON.stringify(dataEntry), {'headers':headers});
+      }
+    }
+    return new Observable<any>;
+  }
+
+  deleteHijo(idEntry:any): Observable<any>{
+    if(this.usersService.isLogAdmin()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck != null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+        headers=headers.set('Authorization','Token '+res[0])
+        
+        return this.http.delete(`${API_url}/ampa/hijos/${idEntry}`, {'headers':headers});
+      }
+    }
+    return new Observable<any>;
+  }
+
 }

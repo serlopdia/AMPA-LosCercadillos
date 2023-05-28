@@ -16,8 +16,8 @@ class VistaSerializer(serializers.ModelSerializer):
         }
 
     def validate_tipo(self, value):
-        if value not in ['PRINCIPAL', 'COLEGIO', 'COMEDOR', 'CONTACTO']:
-            raise serializers.ValidationError("El valor del campo 'tipo' debe ser uno de los siguientes: 'PRINCIPAL', 'COLEGIO', 'COMEDOR', 'CONTACTO'")
+        if value not in ['PRINCIPAL', 'COLEGIO', 'COMEDOR', 'VENTAJAS']:
+            raise serializers.ValidationError("El valor del campo 'tipo' debe ser uno de los siguientes: 'PRINCIPAL', 'COLEGIO', 'COMEDOR', 'VENTAJAS'")
         return value
 
     def create(self, validated_data):

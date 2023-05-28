@@ -6,28 +6,68 @@ from users.models import Socio
 from datetime import datetime, date, time
 import pytz
 
-codigo_markdown = """# Título del documento
+markdown_principal = """# AMPA - [CEIP Los Cercadillos](https://ceiploscercadillos.es/), Alcalá de Guadaíra
 
-Este es un párrafo de texto regular. **Negrita** y *cursiva* son formatos comunes en Markdown.
+## ¿QUÉ HACEMOS?
 
-## Encabezado de nivel 2
+El **AMPA** lleva a cabo las siguientes funciones:
 
-### Encabezado de nivel 3
+ 1. Asistir a las familias en todo lo concerniente a la educación de  sus hijos/as.
+ 2. Colaborar en las actividades educativas de los centros.
+ 3. Promover la participación de los padres, madres y/o tutoras y tutores del alumnado en la gestión del centro.
+ 4. Asistir a los padres, madres y/o tutores y tutores del alumnado en el ejercicio de su derecho a intervenir en el control y gestión de los centros sostenidos con fondos públicos.
+ 5. Representar a las familias en los consejos escolares y en otros órganos colegiados.
+ 6. Cualesquiera otras que, en el marco de la normativa vigente, le asignen sus respectivos estatutos.
 
-#### Encabezado de nivel 4
-
-- Lista desordenada
-- Otro elemento de lista
-
-1. Lista numerada
-2. Otro elemento de lista numerada
-
-Puedes insertar enlaces [como este](https://www.ejemplo.com) y también imágenes ![descripción de la imagen](ruta/imagen.png).
-
-> Esto es un bloque de cita. 
-
-`Código en línea` se representa entre acentos graves, y bloques de código:
+**El objetivo es desarrollar actividades encaminadas a fomentar y promover la participación de las familias y colaborar con el colegio para entre todos mejorar la calidad de la educación de nuestros hijos e hijas.**
 """
+
+
+markdown_colegio = """# NUESTRO COLEGIO
+
+## Puedes conocer más acerca de nuestro cole en su web:
+  
+### [ceiploscercadillos.es](https://ceiploscercadillos.es/)
+
+![foto fachada](http://ceiploscercadillos.es/wp-content/uploads/2021/02/ceiploscercadillos_foto007-copia-scaled.jpg)
+
+![foto recreo](http://ceiploscercadillos.es/wp-content/uploads/2021/02/ceiploscercadillos_foto0061-scaled.jpg)
+
+![foto recreo aerea](http://ceiploscercadillos.es/wp-content/uploads/2021/02/ceiploscercadillos_foto0029-scaled.jpg)
+"""
+
+
+markdown_comedor = """# EL COMEDOR DEL COLE
+
+## Próximos menús del comedor:
+  
+### [Menú de comedor](https://ceiploscercadillos.es/menu-de-comedor/)
+
+## Página web del catering:
+  
+### [Micomedor.es](https://micomedor.es/)
+
+![mesas de comedor](http://ceiploscercadillos.es/wp-content/uploads/2021/02/2016-03-08-12.09.06.jpg)
+
+![foto recreo](http://ceiploscercadillos.es/wp-content/uploads/2021/02/ceiploscercadillos_foto0061-scaled.jpg)
+
+![cocina de comedor](http://ceiploscercadillos.es/wp-content/uploads/2021/02/20210909_164723-scaled.jpg)
+"""
+
+
+markdown_ventajas = """## - COLABORADORES
+Podrás obtener diversos descuentos y ofertas en los negocios colaboradores del AMPA.
+Solo enseñando el carnet en los negocios, tendrás alcance a las ventajas.
+
+## - EVENTOS
+Como socio/a del AMPA del colegio, podrás participar en la organización de eventos así como formar parte de ellos, como por ejemplo, siendo participe de la Casa del Terror de Halloween como actor.
+
+## - COMPRAS
+Podrás acceder a la compra de productos exclusivos para socios del AMPA, tales como:
+Calendarios, tazas, agendas, etc.
+
+## - MUCHO MÁS!!
+Muchas más opciones como reservar citas, etc."""
 
 @receiver(post_migrate, dispatch_uid="dependent_logic_signal")
 def create_ampa(sender, **kwargs):
@@ -35,13 +75,13 @@ def create_ampa(sender, **kwargs):
         timezone = pytz.timezone("Europe/Madrid")
         socio = Socio.objects.filter(id=1).first()
         if not Vista.objects.exists():
-            vista_principal = Vista.objects.create(tipo="PRINCIPAL", markdown=codigo_markdown)
+            vista_principal = Vista.objects.create(tipo="PRINCIPAL", markdown=markdown_principal)
             vista_principal.save()
-            vista_colegio = Vista.objects.create(tipo="COLEGIO", markdown=codigo_markdown)
+            vista_colegio = Vista.objects.create(tipo="COLEGIO", markdown=markdown_colegio)
             vista_colegio.save()
-            vista_comedor = Vista.objects.create(tipo="COMEDOR", markdown=codigo_markdown)
+            vista_comedor = Vista.objects.create(tipo="COMEDOR", markdown=markdown_comedor)
             vista_comedor.save()
-            vista_comedor = Vista.objects.create(tipo="CONTACTO", markdown=codigo_markdown)
+            vista_comedor = Vista.objects.create(tipo="VENTAJAS", markdown=markdown_ventajas)
             vista_comedor.save()
             
         if not Noticia.objects.exists():

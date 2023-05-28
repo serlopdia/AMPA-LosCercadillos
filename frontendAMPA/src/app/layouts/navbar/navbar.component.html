@@ -9,13 +9,16 @@
 
 <body>
 <nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand mb-0 h1" routerLink="">Menú</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <div class="container-fluid navbar-container">
+        <a class="navbar-brand mb-0 h1 align-items-center d-flex" routerLink="">
+            <img src="../../../assets/images/logo.png" class="d-inline-block align-top" style="width: 20%; height: auto;" alt="Logo">
+            <span style="margin-left: 1.5vw;">AMPA Los Cercadillos</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         Información
@@ -26,20 +29,20 @@
                         <li><a class="dropdown-item" routerLink="/contacto">Contacto</a></li>
                     </ul>
                 </li>
-                <li *ngIf="!isLoggedIn || isAdmin" class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link active" routerLink="/noticias">Noticias</a>
                 </li>
-                <li *ngIf="!isLoggedIn || isAdmin" class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link active" routerLink="/tienda">Tienda</a>
                 </li>
-                <li *ngIf="!isLoggedIn || isAdmin" class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link active" routerLink="/eventos">Eventos</a>
                 </li>
                 <li *ngIf="!isLoggedIn || isAdmin" class="nav-item">
                     <a class="nav-link active" routerLink="/login">Iniciar sesión</a>
                 </li>
                 <li *ngIf="!isLoggedIn || isAdmin" class="nav-item">
-                    <button class="btn btn-primary" routerLink="/register">Hazte socio</button>
+                    <button class="btn big-button" routerLink="/register"><b>HAZTE SOCIO</b></button>
                 </li>
                 <li *ngIf="isLoggedIn && !isAdmin" class="nav-item">
                     <button class="btn btn-warning" (click)="logout()">Cerrar sesión</button>

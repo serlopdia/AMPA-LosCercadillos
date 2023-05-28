@@ -52,31 +52,46 @@
                         </div>
                     </div>
                     
-                    <!-- <div class="form-group row">
-                        <div class="mb-3 col-sm-6">
-                            <label class="mb-2 text-muted" for="stock">Cantidad stock</label>
-                            <input [(ngModel)]="form.stock" id="stock" type="number" min="0" class="form-control" name="stock" value="" required autofocus>
-                            <div class="invalid-feedback error">
-                                <div>
-                                    Debe introducir un stock
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3 col-sm-6">
-                            <label class="mb-2 text-muted" for="nombre_stock">Nombre stock</label>
-                            <input [(ngModel)]="form.nombre_stock" id="nombre_stock" type="text" class="form-control" name="nombre_stock" value="" required autofocus>
-                            <div class="invalid-feedback error">
-                                <div>
-                                    Debe introducir un nombre de stock, p.ej: Taza azul
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-                    
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="imagen">URL de imagen</label>
                             <input [(ngModel)]="form.imagen" id="imagen" type="text" class="form-control" name="imagen" value="" required autofocus>
+                        </div>
+                    </div>
+                    
+                    <br>                    
+                    <div class="form-group row">
+                        <h5 class="fs-5 mb-2">STOCKS</h5>
+                        <div class="form-group row">
+                            <div class="mb-3 col-sm-6">
+                                <label class="mb-2 text-muted" for="nombre_stockNuevo">Nombre</label>
+                                <input [(ngModel)]="stockNuevo.nombre" id="nombre_stockNuevo" type="text" class="form-control" name="nombre_stock">
+                                <div class="invalid-feedback error">
+                                    <div>Debe introducir un nombre de stock, p.ej: Taza azul</div>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-sm-6">
+                                <label class="mb-2 text-muted" for="stockNuevo">Cantidad</label>
+                                <input [(ngModel)]="stockNuevo.cantidad" id="stockNuevo" type="number" min="0" class="form-control" name="stock">
+                                <div class="invalid-feedback error">
+                                    <div>Debe introducir un stock</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="align-items-center d-flex">
+                        <button type="button" class="btn btn-outline-success ms-auto" (click)="agregarStock()">
+                            Añadir stock
+                        </button>
+                    </div>
+
+                    <div class="mb-2" *ngFor="let stock of listaStocks; let i = index">
+                        <div class="d-flex align-items-center">
+                            <h6 class="fs-6" style="display: inline-block; margin-right: 5px;">{{ stock.nombre }} — {{ stock.cantidad }} uds.</h6>
+                            <button type="button" class="btn" style="display: inline-block;">
+                                <i class="fa-solid fa-circle-xmark" (click)="eliminarStock(i)" style="color: #ff0000;"></i>
+                            </button>
                         </div>
                     </div>
 
