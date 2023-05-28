@@ -19,8 +19,8 @@ class TipoBalance(models.TextChoices):
     GASTO = "GASTO", _("Gasto"),
 
 class TipoClase(models.TextChoices):
+    INFANTIL = "INFANTIL", _("Infantil"),
     PRIMARIA = "PRIMARIA", _("Primaria"),
-    PREESCOLAR = "PREESCOLAR", _("Preescolar"),
 
 class DiasSemana(models.TextChoices):
     LUNES = "LUNES", _("Lunes"),
@@ -139,6 +139,8 @@ class Clase(models.Model):
         app_label="ampa"
 
     def clean(self):
+        if self.tipo_clase not in ["INFANTIL", "PRIMARIA"]:
+            raise ValidationError("El valor del campo 'tipo_clase' debe ser uno de los siguientes: 'INFANTIL', 'PRIMARIA'")
         # Verificar si ya existe un registro con la misma combinación
         if Clase.objects.filter(
             curso=self.curso,

@@ -118,9 +118,9 @@ def create_ampa(sender, **kwargs):
 
         if not Clase.objects.exists():
             curso_escolar = CursoEscolar.objects.get(id=1)
-            clase_sample_uno = Clase.objects.create(curso=3, letra="A", tipo_clase="Primaria", curso_escolar=curso_escolar)
+            clase_sample_uno = Clase.objects.create(curso=3, letra="A", tipo_clase="PRIMARIA", curso_escolar=curso_escolar)
             clase_sample_uno.save()
-            clase_sample_dos = Clase.objects.create(curso=1, letra="B", tipo_clase="Preescolar", curso_escolar=curso_escolar)
+            clase_sample_dos = Clase.objects.create(curso=1, letra="B", tipo_clase="INFANTIL", curso_escolar=curso_escolar)
             clase_sample_dos.save()
 
         if socio and not Hijo.objects.filter(socio=socio).exists():
