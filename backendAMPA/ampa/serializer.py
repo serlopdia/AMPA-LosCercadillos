@@ -206,6 +206,11 @@ class ClaseSerializer(serializers.ModelSerializer):
             'curso_escolar': {'required': True},
         }
 
+    def validate_tipo_clase(self, value):
+        if value not in ['INFANTIL', 'PRIMARIA']:
+            raise serializers.ValidationError("El valor del campo 'tipo_clase' debe ser uno de los siguientes: 'INFANTIL', 'PRIMARIA'")
+        return value
+
     def validate(self, data):
         # Verifica que no exista otra instancia de Clase con la misma combinación
         # de curso, letra, tipo_clase y curso_escolar.
