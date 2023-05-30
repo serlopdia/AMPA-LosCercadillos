@@ -80,28 +80,6 @@ class PedidoSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
-class LineaPedidoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LineaPedido
-        fields = ('id', 'producto', 'cantidad', 'pedido', 'created_at')
-        read_only_fields = ('id', 'created_at')
-        extra_kwargs = {
-            'producto': {'required': True},
-            'cantidad': {'required': True},
-            'pedido': {'required': True},
-        }
-
-    def create(self, validated_data):
-        linea_pedido = LineaPedido.objects.create(**validated_data)
-        return linea_pedido
-
-    def update(self, instance, validated_data):
-        instance.producto = validated_data.get('producto', instance.producto)
-        instance.cantidad = validated_data.get('cantidad', instance.cantidad)
-        instance.pedido = validated_data.get('pedido', instance.pedido)
-        instance.save()
-        return instance
-    
 class StockProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockProducto
@@ -121,5 +99,29 @@ class StockProductoSerializer(serializers.ModelSerializer):
         instance.nombre = validated_data.get('nombre', instance.nombre)
         instance.cantidad = validated_data.get('cantidad', instance.cantidad)
         instance.producto = validated_data.get('producto', instance.producto)
+        instance.save()
+        return instance
+    
+class LineaPedidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LineaPedido
+        fields = ('id', 'producto', 'stock', 'cantidad', 'pedido', 'created_at')
+        read_only_fields = ('id', 'created_at')
+        extra_kwargs = {
+            'producto': {'required': True},
+            'stock': {'required': True},
+            'cantidad': {'required': True},
+            'pedido': {'required': True},
+        }
+
+    def create(self, validated_data):
+        linea_pedido = LineaPedido.objects.create(**validated_data)
+        return linea_pedido
+
+    def update(self, instance, validated_data):
+        instance.producto = validated_data.get('producto', instance.producto)
+        instance.stock = validated_data.get('stock', instance.stock)
+        instance.cantidad = validated_data.get('cantidad', instance.cantidad)
+        instance.pedido = validated_data.get('pedido', instance.pedido)
         instance.save()
         return instance

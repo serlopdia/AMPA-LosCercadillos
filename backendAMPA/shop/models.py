@@ -18,7 +18,7 @@ class EstadoPedido(models.TextChoices):
 
 class Producto(models.Model):
     nombre = models.CharField(max_length=64)
-    descripcion = models.CharField(max_length=256)
+    descripcion = models.CharField(max_length=1024)
     precio_general = models.FloatField()
     precio_socio = models.FloatField()
     imagen = models.CharField(max_length=2048)
@@ -53,15 +53,6 @@ class Pedido(models.Model):
         if self.estado not in ["ENTREGADO", "PREPARACION", "DEVUELTO"]:
             raise ValidationError("El valor del campo 'estado' debe ser uno de los siguientes: 'ENTREGADO', 'PREPARACION', 'DEVUELTO'")
 
-class LineaPedido(models.Model):
-    producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True)
-    cantidad = models.IntegerField()
-    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        app_label="shop"
-
 class StockProducto(models.Model):
     nombre = models.CharField(max_length=64)
     cantidad = models.IntegerField()
@@ -71,3 +62,13 @@ class StockProducto(models.Model):
     class Meta:
         app_label="shop"
         unique_together = ('nombre', 'producto')
+
+class LineaPedido(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True)
+    stock = models.ForeignKey(StockProducto, on_delete=models.SET_NULL, null=True)
+    cantidad = models.IntegerField()
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label="shop"

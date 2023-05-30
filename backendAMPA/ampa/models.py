@@ -48,8 +48,8 @@ class Vista(models.Model):
 
 class Noticia(models.Model):
     titulo = models.CharField(max_length=64)
-    cuerpo = models.TextField(max_length=1024)
-    imagen = models.CharField(max_length=512, default="", blank=True)
+    cuerpo = models.TextField(max_length=2048)
+    imagen = models.CharField(max_length=2048, default="", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -57,7 +57,7 @@ class Noticia(models.Model):
 
 class Evento(models.Model):
     titulo = models.CharField(max_length=64)
-    descripcion = models.CharField(max_length=512)
+    descripcion = models.CharField(max_length=2048)
     capacidad = models.IntegerField()
     visible = models.BooleanField(default=True)
     fin_inscripcion = models.DateTimeField()
@@ -76,7 +76,7 @@ class Evento(models.Model):
 class Colaborador(models.Model):
     nombre = models.CharField(max_length=64)
     ventaja = models.CharField(max_length=64, default="", blank=True)
-    descripcion = models.CharField(max_length=256)
+    descripcion = models.CharField(max_length=2048)
     imagen = models.CharField(max_length=2048, default="", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -85,7 +85,7 @@ class Colaborador(models.Model):
 
 class Sugerencia(models.Model):
     titulo = models.CharField(max_length=64)
-    descripcion = models.TextField(max_length=1024)
+    descripcion = models.TextField(max_length=2048)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
