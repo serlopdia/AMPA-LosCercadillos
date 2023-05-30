@@ -84,6 +84,8 @@ class Colaborador(models.Model):
         app_label="ampa"
 
 class Sugerencia(models.Model):
+    nombre = models.CharField(max_length=64)
+    email = models.CharField(max_length=128)
     titulo = models.CharField(max_length=64)
     descripcion = models.TextField(max_length=2048)
     created_at = models.DateTimeField(auto_now_add=True)
