@@ -1,13 +1,23 @@
-from rest_framework.authentication import TokenAuthentication
+from rest_framework import permissions, authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from .models import Evento
+from django.shortcuts import get_object_or_404
+from .models import *
+from .serializer import *
+
+class IsSocioOrAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        pk = view.kwargs.get('pk')
+        if request.user.is_staff:
+            return True
+        if pk and request.user.socio.id == int(pk):
+            return True
+        return False
 
 # Create your views here.
 class JoinEventoView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk=None):
         try:
@@ -27,3 +37,36 @@ class JoinEventoView(APIView):
 
         evento.socios.add(socio)
         return Response({'status': 'El socio se ha apuntado correctamente al evento'})
+    
+class CitasSocioList(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated, IsSocioOrAdmin]
+
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        socio = get_object_or_404(Socio, id=pk)
+        citas = Cita.objects.filter(socio = socio)
+        serializer = CitaSerializer(citas, many=True)
+        return Response(serializer.data)
+
+class HijosSocioList(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated, IsSocioOrAdmin]
+
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        socio = get_object_or_404(Socio, id=pk)
+        hijos = Hijo.objects.filter(socio = socio)
+        serializer = HijoSerializer(hijos, many=True)
+        return Response(serializer.data)
+    
+class PagosCursoSocioList(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated, IsSocioOrAdmin]
+
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        socio = get_object_or_404(Socio, id=pk)
+        pagos_curso = PagoCurso.objects.filter(socio = socio)
+        serializer = PagoCursoSerializer(pagos_curso, many=True)
+        return Response(serializer.data)
