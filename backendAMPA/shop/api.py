@@ -20,11 +20,12 @@ class IsOwnerOrAdmin(permissions.BasePermission):
     
     def _is_owner_or_admin(self, request, view):
         # Verificar si el usuario es propietario del objeto o un administrador
-        if view.action == 'retrieve':
-            obj = self._get_object(view)
-            return request.user.is_authenticated and (request.user.is_staff or obj.socio.id == request.user.id)
-        return request.user.is_authenticated and request.user.is_staff
-    
+        obj = self._get_object(view)
+        return request.user.is_authenticated and (
+            request.user.is_staff or
+            (hasattr(request.user, 'socio') and request.user.socio.id == obj.socio.id)
+        )
+
     def _get_object(self, view):
         # Obtener el objeto específico de la solicitud
         return view.get_object()

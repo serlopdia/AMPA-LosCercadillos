@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions
 from .models import Asunto, Balance, Cita, Clase, Colaborador, CursoEscolar, Evento, Hijo, Noticia, PagoCurso, Sugerencia, Vista
 from .serializer import AsuntoSerializer, BalanceSerializer, CitaSerializer, ClaseSerializer, ColaboradorSerializer, CursoEscolarSerializer, EventoSerializer, HijoSerializer, NoticiaSerializer, PagoCursoSerializer, SugerenciaSerializer, VistaSerializer
 
+
 class IsOwnerOrAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_staff:
@@ -17,6 +18,18 @@ class IsOwnerOrAdmin(permissions.BasePermission):
                 return True
         else:
             return False
+    
+    def _is_owner_or_admin(self, request, view):
+        # Verificar si el usuario es propietario del objeto o un administrador
+        obj = self._get_object(view)
+        return request.user.is_authenticated and (
+            request.user.is_staff or
+            (hasattr(request.user, 'socio') and request.user.socio.id == obj.socio.id)
+        )
+
+    def _get_object(self, view):
+        # Obtener el objeto específico de la solicitud
+        return view.get_object()
 
 class VistaViewSet(viewsets.ModelViewSet):
     queryset = Vista.objects.all()
