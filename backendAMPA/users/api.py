@@ -17,6 +17,18 @@ class IsOwnerOrAdmin(permissions.BasePermission):
                 return True
         else:
             return False
+    
+    def _is_owner_or_admin(self, request, view):
+        # Verificar si el usuario es propietario del objeto o un administrador
+        obj = self._get_object(view)
+        return request.user.is_authenticated and (
+            request.user.is_staff or
+            (hasattr(request.user, 'socio') and request.user.socio.id == obj.id)
+        )
+
+    def _get_object(self, view):
+        # Obtener el objeto específico de la solicitud
+        return view.get_object()
 
 class SocioViewSet(viewsets.ModelViewSet):
     queryset = Socio.objects.all()
