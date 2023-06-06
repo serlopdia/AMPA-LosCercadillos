@@ -1,6 +1,6 @@
 <app-navbar></app-navbar>
 
-<div id="carousel" class="carousel slide">
+<div *ngIf="listaNoticias.length > 0" id="carousel" class="carousel slide">
   <div class="carousel-indicators">
     <button *ngFor="let noticia of listaNoticias; let i = index" type="button" data-bs-target="#carousel" [attr.data-bs-slide-to]="i" [class.active]="i === 0"></button>
   </div>
@@ -31,3 +31,5 @@
   <markdown [data]="markdown"></markdown>
 
 </div>
+
+<app-footer></app-footer>

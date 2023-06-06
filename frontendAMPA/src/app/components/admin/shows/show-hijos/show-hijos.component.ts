@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClaseService } from 'src/app/services/clase.service';
+import { CursoService } from 'src/app/services/curso.service';
 import { HijoService } from 'src/app/services/hijo.service';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -43,7 +43,7 @@ export class ShowHijosComponent implements OnInit {
   idSocio: any;
   listaClases: Clase[] = [];
 
-  constructor(private hijoService: HijoService, private claseService: ClaseService, private route: ActivatedRoute, private usersService: UsersService) { }
+  constructor(private hijoService: HijoService, private cursoService: CursoService, private route: ActivatedRoute, private usersService: UsersService) { }
 
   ngOnInit(): void {
     this.idSocio = this.route.snapshot.paramMap.get('id');
@@ -131,7 +131,7 @@ export class ShowHijosComponent implements OnInit {
   }
 
   async getClasesList() {
-    this.claseService.getClases().subscribe(
+    this.cursoService.getClases().subscribe(
       (clases: any[]) => {
         this.listaClases = clases;
       },

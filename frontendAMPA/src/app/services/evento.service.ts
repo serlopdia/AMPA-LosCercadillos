@@ -18,21 +18,8 @@ export class EventoService {
   constructor(private http: HttpClient, private usersService: UsersService) { }
   
   getEventos(): Observable<any>{
-    if(this.usersService.isLoggedIn()){
-      var ck = localStorage.getItem('auth-user')
-      if(ck != null){
-        var tk = JSON.parse(ck);
-        var res = [];
-        for(var i in tk){
-          res.push(tk[i]);
-        }
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
-        headers=headers.set('Authorization','Token '+res[0])
-
-        return this.http.get(`${API_url}/ampa/eventos/`, {'headers':headers});
-      }
-    }
-    return new Observable<any>;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+    return this.http.get(`${API_url}/ampa/eventos/`, {'headers':headers});
   }
 
   createEvento(dataEvento:any): Observable<any>{
@@ -51,6 +38,47 @@ export class EventoService {
       }
     }
     return new Observable<any>;
+  }
+
+  updateEvento(idEntry:any, dataEntry:any): Observable<any>{
+    if(this.usersService.isLogAdmin()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck != null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+        headers=headers.set('Authorization','Token '+res[0])
+        
+        return this.http.put(`${API_url}/ampa/eventos/${idEntry}/`, JSON.stringify(dataEntry), {'headers':headers});
+      }
+    }
+    return new Observable<any>;
+  }
+
+  deleteEvento(idEntry:any): Observable<any>{
+    if(this.usersService.isLogAdmin()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck != null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+        headers=headers.set('Authorization','Token '+res[0])
+        
+        return this.http.delete(`${API_url}/ampa/eventos/${idEntry}`, {'headers':headers});
+      }
+    }
+    return new Observable<any>;
+  }
+
+  getEvento(idEvento:any):Observable<any>{
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+    return this.http.get(`${API_url}/ampa/eventos/${idEvento}`,{'headers':headers})
   }
   
 }

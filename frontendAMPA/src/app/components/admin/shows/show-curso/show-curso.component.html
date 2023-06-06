@@ -1,0 +1,69 @@
+<app-navbar-gestion></app-navbar-gestion>
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <form *ngIf= "!isSuccessful" name="form" (ngSubmit)="f.form.valid && actualizarCurso()" #f="ngForm" novalidate>
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="fs-4 card-title fw-bold mb-4">DATOS DEL CURSO</h1>
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-12">
+                            <label class="mb-2 text-muted" for="nombre">Nombre del curso</label>
+                            <input [(ngModel)]="form.nombre" id="nombre" type="text" class="form-control" name="nombre" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un nombre de curso
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="fecha_inicio">Fecha inicio</label>
+                            <input [(ngModel)]="form.fecha_inicio" id="fecha_inicio" type="date" class="form-control" name="fecha_inicio" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una fecha de inicio
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="fecha_fin">Fecha fin</label>
+                            <input [(ngModel)]="form.fecha_fin" id="fecha_fin" type="date" class="form-control" name="fecha_fin" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una fecha de finalización
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="precio_cuota">Precio de cuota</label>
+                            <input [(ngModel)]="form.precio_cuota" id="precio_cuota" type="number" min="0" placeholder="€" class="form-control" name="precio_cuota" value="" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un precio de cuota para socio
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer py-3 border-0">
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-danger" (click)="confirmarEliminacion()">
+                            Eliminar
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            Modificar datos
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    
+    </div>

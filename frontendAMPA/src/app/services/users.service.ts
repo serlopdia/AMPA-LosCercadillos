@@ -50,7 +50,7 @@ export class UsersService {
         var res = [];
         let isAdmin = false;
         for(var i in tk){
-          if(i==='is_staff' && tk[i]){
+          if (i==='administrador id'){
             isAdmin = true;
           }
           res.push(tk[i]);
@@ -58,9 +58,9 @@ export class UsersService {
         let headers = new HttpHeaders()
         headers = headers.set('Authorization', 'Token '+ res[0])
         if(isAdmin){
-          return this.http.get(API_url + `/users/socios/${res[1]}/`, {'headers':headers})
-        }else{
           return this.http.get(API_url + `/users/administradores/${res[1]}/`, {'headers':headers})
+        }else{
+          return this.http.get(API_url + `/users/socios/${res[1]}/`, {'headers':headers})
         }
       }
     }

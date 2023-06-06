@@ -1,0 +1,25 @@
+.main-container {
+    padding: 30px 5vw;
+}
+
+.main-container input {
+    border-radius: 10px;
+    padding: 2px 20px;
+}
+
+.title-container {
+    color: white;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    padding: 25px 5vw;
+    height: 18vh;
+    background-image: url("../../../../assets/images/cuaderno-taza.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center 67%;
+}
+
+.card:hover{
+  border-color: gray;
+}

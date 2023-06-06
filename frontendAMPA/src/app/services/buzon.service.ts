@@ -34,5 +34,10 @@ export class BuzonService {
     }
     return new Observable<any>;
   }
+
+  createSugerencia(dataSugerencia:any): Observable<any>{
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+    return this.http.post(`${API_url}/ampa/sugerencias/`, JSON.stringify(dataSugerencia), { 'headers': headers });
+  }
   
 }

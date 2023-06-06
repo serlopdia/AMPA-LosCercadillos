@@ -1,0 +1,78 @@
+<app-navbar></app-navbar>
+
+<div class="title-container">
+    <h1><b>Tienda del AMPA</b></h1>
+</div>
+
+<section class="bg-light">
+    <div class="container pb-5">
+        <div *ngIf="producto" class="row">
+            <div class="col-lg-5 mt-5">
+                <div class="card mb-3">
+                    <img class="card-img img-fluid" src="{{ producto.imagen }}" alt="Card image cap" id="product-detail">
+                </div>
+            </div>
+            <!-- col end -->
+            <div class="col-lg-7 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="h1">{{ producto.nombre }}</h1>
+                        <p class="h3 py-2">Precio para socios: {{ producto.precio_socio }} €</p>
+                        <p class="h3 py-2">Precio para no socios: {{ producto.precio_general }} €</p>
+
+                        <h6>Descripción :</h6>
+                        <p>{{ producto.descripcion }}</p>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <h6>Opciones disponibles :</h6>
+                            </li>
+                            <li *ngFor="let opcion of opcionesProducto" class="list-inline-item">
+                                <p class="text-muted"><strong>{{ opcion }}, </strong></p>
+                            </li>
+                        </ul>
+
+                        <form>
+                            <input type="hidden" name="product-title">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <ul class="list-inline pb-3">
+                                        <li class="list-inline-item text-right">
+                                            Opción
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <select (change)="actualizarOpcionSeleccionada($any($event.target).value)" class="form-select" name="opcion">
+                                                <option *ngFor="let opcion of opcionesProducto" [value]="opcion">{{ opcion }}</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-auto">
+                                    <ul class="list-inline pb-3 align-items-center">
+                                        <li class="list-inline-item text-right">
+                                            Cantidad
+                                            <input type="hidden" name="product-quanity" id="product-quanity" value="1">
+                                        </li>
+                                        <li class="list-inline-item"><span class="btn btn-success" id="btn-minus" (click)="decrementarCantidad()">-</span></li>
+                                        <li class="list-inline-item"><span class="badge bg-secondary" id="var-value" style="font-size: 13px;">{{ cantidadUnidades }}</span></li>
+                                        <li class="list-inline-item"><span class="btn btn-success" id="btn-plus" (click)="incrementarCantidad()">+</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row pb-3">
+                                <div class="col d-grid">
+                                    <button type="button" class="btn btn-success btn-lg" name="comprar-btn">Comprar</button>
+                                </div>
+                                <div class="col d-grid">
+                                    <button type="button" class="btn btn-success btn-lg" name="addtocard" (click)="agregarAlCarrito()">Añadir al carrito</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<app-footer></app-footer>

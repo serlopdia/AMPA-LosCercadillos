@@ -19,6 +19,7 @@ import { GestionEventosComponent } from './components/admin/gestion-eventos/gest
 import { GestionNoticiasComponent } from './components/admin/gestion-noticias/gestion-noticias.component';
 import { GestionCitasComponent } from './components/admin/gestion-citas/gestion-citas.component';
 import { GestionVistasComponent } from './components/admin/gestion-vistas/gestion-vistas.component';
+import { GestionCursosComponent } from './components/admin/gestion-cursos/gestion-cursos.component';
 import { SocioComponent } from './components/admin/forms/socio/socio.component';
 import { ProductoComponent } from './components/admin/forms/producto/producto.component';
 import { EventoComponent } from './components/admin/forms/evento/evento.component';
@@ -31,6 +32,7 @@ import { ShowProductoComponent } from './components/admin/shows/show-producto/sh
 import { ShowEventoComponent } from './components/admin/shows/show-evento/show-evento.component';
 import { ShowPedidoComponent } from './components/admin/shows/show-pedido/show-pedido.component';
 import { ShowBalanceComponent } from './components/admin/shows/show-balance/show-balance.component';
+import { ShowCursoComponent } from './components/admin/shows/show-curso/show-curso.component';
 import { ShowAsuntoComponent } from './components/admin/shows/show-asunto/show-asunto.component';
 import { ShowStocksComponent } from './components/admin/shows/show-stocks/show-stocks.component';
 import { ShowHijosComponent } from './components/admin/shows/show-hijos/show-hijos.component';
@@ -41,6 +43,19 @@ import { InfoContactoComponent } from './components/public/info-contacto/info-co
 import { NoticiasComponent } from './components/public/noticias/noticias.component';
 import { EventosComponent } from './components/public/eventos/eventos.component';
 import { TiendaComponent } from './components/public/tienda/tienda.component';
+import { CarritoComponent } from './components/public/carrito/carrito.component';
+import { VistaProductoComponent } from './components/public/vista-producto/vista-producto.component';
+import { VentajasComponent } from './components/public/ventajas/ventajas.component';
+import { DetallesNoticiaComponent } from './components/public/detalles-noticia/detalles-noticia.component';
+
+import { DatosPersonalesComponent } from './components/miperfil/datos-personales/datos-personales.component';
+import { EditarDatosPersonalesComponent } from './components/miperfil/editar-datos-personales/editar-datos-personales.component';
+import { CitasSocioComponent } from './components/miperfil/citas-socio/citas-socio.component';
+import { PagosSocioComponent } from './components/miperfil/pagos-socio/pagos-socio.component';
+import { BalanceAmpaComponent } from './components/miperfil/balance-ampa/balance-ampa.component';
+import { VistaColaboradoresComponent } from './components/miperfil/vista-colaboradores/vista-colaboradores.component';
+import { HijosSocioComponent } from './components/miperfil/hijos-socio/hijos-socio.component';
+import { CarnetVirtualComponent } from './components/miperfil/carnet-virtual/carnet-virtual.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -64,6 +79,8 @@ const routes: Routes = [
   { path: 'gestion/noticias', component: GestionNoticiasComponent, canActivate: [AdminGuard] },
   { path: 'gestion/balances', component: GestionBalanceComponent, canActivate: [AdminGuard] },
   { path: 'gestion/balances/show/:id', component: ShowBalanceComponent, canActivate: [AdminGuard] },
+  { path: 'gestion/cursos', component: GestionCursosComponent, canActivate: [AdminGuard] },
+  { path: 'gestion/cursos/show/:id', component: ShowCursoComponent, canActivate: [AdminGuard] },
   { path: 'gestion/vistas', component: GestionVistasComponent, canActivate: [AdminGuard] },
   { path: 'gestion/colaboradores', component: GestionColaboradoresComponent, canActivate: [AdminGuard] },
   
@@ -83,8 +100,21 @@ const routes: Routes = [
   { path: 'comedor', component: InfoComedorComponent, canActivate: [] },
   { path: 'contacto', component: InfoContactoComponent, canActivate: [] },
   { path: 'noticias', component: NoticiasComponent, canActivate: [] },
+  { path: 'noticias/:id', component: DetallesNoticiaComponent, canActivate: [] },
   { path: 'tienda', component: TiendaComponent, canActivate: [] },
+  { path: 'tienda/producto/:id', component: VistaProductoComponent, canActivate: [] },
+  { path: 'carrito', component: CarritoComponent, canActivate: [] },
   { path: 'eventos', component: EventosComponent, canActivate: [] },
+  { path: 'ventajas', component: VentajasComponent, canActivate: [] },
+  
+  { path: 'miperfil/datos', component: DatosPersonalesComponent, canActivate: [SocioGuard] },
+  { path: 'miperfil/datos/editar', component: EditarDatosPersonalesComponent, canActivate: [SocioGuard] },
+  { path: 'miperfil/hijos', component: HijosSocioComponent, canActivate: [SocioGuard] },
+  { path: 'miperfil/citas', component: CitasSocioComponent, canActivate: [SocioGuard] },
+  { path: 'miperfil/pagos', component: PagosSocioComponent, canActivate: [SocioGuard] },
+  { path: 'miperfil/balance-ampa', component: BalanceAmpaComponent, canActivate: [SocioGuard] },
+  { path: 'miperfil/colaboradores', component: VistaColaboradoresComponent, canActivate: [SocioGuard] },
+  { path: 'miperfil/carnet', component: CarnetVirtualComponent, canActivate: [SocioGuard] },
 ];
 
 @NgModule({

@@ -1,0 +1,167 @@
+<app-navbar-gestion></app-navbar-gestion>
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <div class="container-fluid">
+            <div class="row">
+                
+                <div class="col-md-6 col-sm-6">
+                    <div class="card shadow-lg mb-4">
+                        <div class="card-body p-5">
+                            <div *ngIf="listaCursos.length > 0">
+                                <div class="d-flex align-items-start">
+                                    <h1 class="fs-4 card-title fw-bold mb-4" style="margin-right: 2vw;">CURSO:</h1>
+                                    <select [ngModel]="idCursoSeleccionado" (change)="onCursoChange($any($event.target).value)" class="form-select" style="width: 15vw;" name="tipo">
+                                        <option *ngFor="let curso of listaCursos" [value]="curso.id">{{ curso.nombre }}</option>
+                                    </select>
+                                </div>
+                                    
+                                <div *ngIf="cursoSeleccionado" class="table-container">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Estudios</th>
+                                            <th scope="col">Curso</th>
+                                            <th scope="col">Letra</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let clase of clasesCurso" id="{{ clase.id }}">
+                                            <td>{{ clase.tipo_clase}}</td>
+                                            <td>{{ clase.curso}}º</td>
+                                            <td>{{ clase.letra}}</td>
+                                            <td style="display: flex; justify-content: center;">
+                                                <button class="btn btn-danger btn-icon btn-sm" (click)="confirmarEliminacionClase(clase.id)">
+                                                    <i class="fa-solid fa-trash-can fa-inverse"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <form *ngIf="!isSuccessfulClase" name="form" (ngSubmit)="f.form.valid && crearClase()" #f="ngForm" novalidate>
+                                    <br>
+                                    <h2 class="fs-5 mb-2">CREAR CLASE</h2>
+                                    <div class="form-group row">
+                                        <div class="mb-3 col-sm-12">
+                                            <label class="mb-2 text-muted" for="tipo_clase">Estudios</label>
+                                            <select [(ngModel)]="formClase.tipo_clase" class="form-select" name="tipo">
+                                                <option value="INFANTIL" selected>Infantil</option>
+                                                <option value="PRIMARIA">Primaria</option>
+                                            </select>
+                                            <div class="invalid-feedback error">
+                                                <div>
+                                                    Debe introducir unos estudios de la clase
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <div class="mb-3 col-sm-6">
+                                            <label class="mb-2 text-muted" for="curso">Curso</label>
+                                            <input [(ngModel)]="formClase.curso" id="curso" type="text" class="form-control" name="curso" value="" required autofocus>
+                                            <div class="invalid-feedback error">
+                                                <div>
+                                                    Debe introducir el curso de la clase
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 col-sm-6">
+                                            <label class="mb-2 text-muted" for="letra">Letra</label>
+                                            <input [(ngModel)]="formClase.letra" id="letra" type="text" class="form-control" name="letra" value="" autofocus>
+                                        </div>
+                                    </div>
+
+                                    <div class="align-items-center">
+                                        <button type="submit" class="btn btn-outline-success ms-auto">
+                                            Crear nueva clase
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                
+                        <div *ngIf="cursoSeleccionado" class="card-footer py-3 border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button *ngIf="cursoSeleccionado.actual == false" type="submit" class="btn btn-warning" (click)="activarCurso(cursoSeleccionado)">
+                                    Activar curso
+                                </button>
+                                <button type="button" class="btn btn-primary"[routerLink]="['/gestion/cursos/show/', cursoSeleccionado.id]">
+                                    Visualizar
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                    <form *ngIf= "!isSuccessfulCurso" name="form" (ngSubmit)="f.form.valid && crearCurso()" #f="ngForm" novalidate>
+                        <div class="card shadow-lg mb-4">
+                            <div class="card-body p-5">
+                                <h1 class="fs-4 card-title fw-bold mb-4">CREAR CURSO</h1>
+                                <div class="form-group row">
+                                    <div class="mb-3 col-sm-12">
+                                        <label class="mb-2 text-muted" for="nombre">Nombre del curso</label>
+                                        <input [(ngModel)]="formCurso.nombre" id="nombre" type="text" class="form-control" name="nombre" value="" required autofocus>
+                                        <div class="invalid-feedback error">
+                                            <div>
+                                                Debe introducir un nombre de curso
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="fecha_inicio">Fecha inicio</label>
+                                        <input [(ngModel)]="formCurso.fecha_inicio" id="fecha_inicio" type="date" class="form-control" name="fecha_inicio" value="" required autofocus>
+                                        <div class="invalid-feedback error">
+                                            <div>
+                                                Debe introducir una fecha de inicio
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="fecha_fin">Fecha fin</label>
+                                        <input [(ngModel)]="formCurso.fecha_fin" id="fecha_fin" type="date" class="form-control" name="fecha_fin" value="" required autofocus>
+                                        <div class="invalid-feedback error">
+                                            <div>
+                                                Debe introducir una fecha de fin
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <div class="mb-3 col-sm-6">
+                                        <label class="mb-2 text-muted" for="precio_cuota">Precio de cuota</label>
+                                        <input [(ngModel)]="formCurso.precio_cuota" id="precio_cuota" type="number" min="0" placeholder="€" class="form-control" name="precio_cuota" value="" required autofocus>
+                                        <div class="invalid-feedback error">
+                                            <div>
+                                                Debe introducir un precio de cuota para socio
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <div class="card-footer py-3 border-0">
+                                <div class="align-items-center d-flex">
+                                    <button type="submit" class="btn btn-success ms-auto">
+                                        Crear curso
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    
+    </div>

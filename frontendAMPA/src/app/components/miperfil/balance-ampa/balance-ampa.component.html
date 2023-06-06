@@ -1,0 +1,51 @@
+<app-navbar></app-navbar>
+
+<div class="title-container">
+    <h1><b>Mi Perfil</b></h1>
+</div>
+
+<app-sidebar-socios></app-sidebar-socios>
+
+<div class="personal-container">
+    <h1 class="text-primary">Actualmente el AMPA cuenta con: &nbsp;&nbsp;<b><span class="{{ calcularBalance() < 0 ? 'text-danger' : (calcularBalance() == 0 ? 'text-primary' : 'text-success') }}">{{ calcularBalance() }} €</span></b></h1>
+
+    <h2>Ingresos del último mes:</h2>
+    <div class="table-container">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Fecha</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Asunto</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let ingreso of getListaCuentasIngreso()" id="{{ ingreso.id }}">
+                <td>{{ ingreso.created_at }}</td>
+                <td>{{ ingreso.cantidad }} €</td>
+                <td>{{ ingreso.asunto }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Gastos del último mes:</h2>
+    <div class="table-container">
+        <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+            <th scope="col">Fecha</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Asunto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let gasto of getListaCuentasGasto()" id="{{ gasto.id }}">
+            <td>{{ gasto.created_at }}</td>
+            <td>{{ gasto.cantidad }} €</td>
+            <td>{{ gasto.asunto }}</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+</div>

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, forkJoin, switchMap, of } from 'rxjs';
 import { PagoService } from 'src/app/services/pago.service';
 import { UsersService } from 'src/app/services/users.service';
 

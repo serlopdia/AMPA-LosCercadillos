@@ -36,7 +36,7 @@ export class HijoService {
   }
 
   createHijo(dataHijo:any): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    if(this.usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -54,7 +54,7 @@ export class HijoService {
   }
 
   updateHijo(idEntry:any, dataEntry:any): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    if(this.usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -72,7 +72,7 @@ export class HijoService {
   }
 
   deleteHijo(idEntry:any): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    if(this.usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -84,6 +84,25 @@ export class HijoService {
         headers=headers.set('Authorization','Token '+res[0])
         
         return this.http.delete(`${API_url}/ampa/hijos/${idEntry}`, {'headers':headers});
+      }
+    }
+    return new Observable<any>;
+  }
+
+  // DEVUELVE UNA LISTA DE TODOS LOS PAGOS DEL SOCIO LOGUEADO
+  getHijosSocioList(): Observable<any>{
+    if(this.usersService.isLoggedIn()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck != null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders()
+        headers = headers.set('Authorization', 'Token '+ res[0])
+
+        return this.http.get(`${API_url}/ampa/hijos/socio/`+res[1], { headers: headers });
       }
     }
     return new Observable<any>;

@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { MarkdownModule } from 'ngx-markdown';
+import { DatePipe } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -45,6 +46,22 @@ import { EventosComponent } from './components/public/eventos/eventos.component'
 import { ShowAsuntoComponent } from './components/admin/shows/show-asunto/show-asunto.component';
 import { ShowStocksComponent } from './components/admin/shows/show-stocks/show-stocks.component';
 import { ShowHijosComponent } from './components/admin/shows/show-hijos/show-hijos.component';
+import { GestionCursosComponent } from './components/admin/gestion-cursos/gestion-cursos.component';
+import { ShowCursoComponent } from './components/admin/shows/show-curso/show-curso.component';
+import { VentajasComponent } from './components/public/ventajas/ventajas.component';
+import { VistaProductoComponent } from './components/public/vista-producto/vista-producto.component';
+import { FooterComponent } from './layouts/footer/footer.component';
+import { CarritoComponent } from './components/public/carrito/carrito.component';
+import { DatosPersonalesComponent } from './components/miperfil/datos-personales/datos-personales.component';
+import { CitasSocioComponent } from './components/miperfil/citas-socio/citas-socio.component';
+import { PagosSocioComponent } from './components/miperfil/pagos-socio/pagos-socio.component';
+import { BalanceAmpaComponent } from './components/miperfil/balance-ampa/balance-ampa.component';
+import { VistaColaboradoresComponent } from './components/miperfil/vista-colaboradores/vista-colaboradores.component';
+import { HijosSocioComponent } from './components/miperfil/hijos-socio/hijos-socio.component';
+import { SidebarSociosComponent } from './layouts/sidebar-socios/sidebar-socios.component';
+import { EditarDatosPersonalesComponent } from './components/miperfil/editar-datos-personales/editar-datos-personales.component';
+import { CarnetVirtualComponent } from './components/miperfil/carnet-virtual/carnet-virtual.component';
+import { DetallesNoticiaComponent } from './components/public/detalles-noticia/detalles-noticia.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +105,22 @@ import { ShowHijosComponent } from './components/admin/shows/show-hijos/show-hij
     ShowAsuntoComponent,
     ShowStocksComponent,
     ShowHijosComponent,
+    GestionCursosComponent,
+    ShowCursoComponent,
+    VentajasComponent,
+    VistaProductoComponent,
+    FooterComponent,
+    CarritoComponent,
+    DatosPersonalesComponent,
+    CitasSocioComponent,
+    PagosSocioComponent,
+    BalanceAmpaComponent,
+    VistaColaboradoresComponent,
+    HijosSocioComponent,
+    SidebarSociosComponent,
+    EditarDatosPersonalesComponent,
+    CarnetVirtualComponent,
+    DetallesNoticiaComponent,
   ],
   imports: [
     BrowserModule,
@@ -97,7 +130,11 @@ import { ShowHijosComponent } from './components/admin/shows/show-hijos/show-hij
     HttpClientModule,
     MarkdownModule.forRoot(),
   ],
-  providers: [Title],
+  providers: [
+    Title,
+    DatePipe,
+    { provide: LOCALE_ID, useValue: 'es' }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

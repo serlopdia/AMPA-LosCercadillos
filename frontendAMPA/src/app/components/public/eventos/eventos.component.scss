@@ -1,0 +1,61 @@
+.main-container {
+  padding: 30px 5vw;
+}
+
+.main-container input {
+border-radius: 10px;
+padding: 2px 20px;
+}
+
+.title-container {
+  color: white;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  padding: 25px 5vw;
+  height: 18vh;
+  background-image: url("../../../../assets/images/foto_carrera.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 55%;
+}
+
+.card {
+  display: flex;
+  flex: 0 0 20rem;
+  margin: 2vh 25px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-text-limitado {
+  max-height: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.card:hover{
+  border-color: gray;
+}
+
+.card-footer {
+  text-align: right;
+}
+
+.card-text-extendido {
+  max-height: none;
+  overflow: visible;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.big-button {
+    font-size: 18px;
+    padding: 10px 25px;
+    border-radius: 100px;
+    background-color: rgb(72, 0, 206);
+    color: white;
+}
