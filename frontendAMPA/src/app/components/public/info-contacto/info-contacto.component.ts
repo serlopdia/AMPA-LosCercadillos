@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BuzonService } from 'src/app/services/buzon.service';
 import { UsersService } from 'src/app/services/users.service';
 import { VistaService } from 'src/app/services/vista.service';
 
@@ -9,29 +10,29 @@ import { VistaService } from 'src/app/services/vista.service';
 })
 export class InfoContactoComponent implements OnInit {
 
+  form:any ={
+    titulo: null,
+    descripcion: null,
+  }
+  isSuccessful = false;
   errorMessage = '';
-  markdown = '';
 
-  constructor(private vistaService: VistaService, private usersService: UsersService) { }
+  constructor(private buzonService: BuzonService, private usersService: UsersService) { }
 
   ngOnInit(): void {
-    this.getMarkdownContacto();
   }
-
-  getMarkdownContacto(): void {
-    this.vistaService.getVistas().subscribe(
-      vistas => {
-        const vistaContacto = vistas.find((vista: { tipo: string; }) => vista.tipo === 'CONTACTO');
-        if (vistaContacto) {
-          this.markdown = vistaContacto.markdown;
-        } else {
-          console.log("No se encontró ninguna vista de 'CONTACTO'.")
-        }
+  
+  crearSugerencia(): void{
+    this.buzonService.createSugerencia(this.form).subscribe({
+      next: res => {
+        document.location.href = ""
+        window.location.href = ""
       },
-      error => {
-        console.error(error);
+      error: err => {
+        this.errorMessage=err.error.message;
+        console.log(err);
       }
-    );
+    })
   }
 
 }

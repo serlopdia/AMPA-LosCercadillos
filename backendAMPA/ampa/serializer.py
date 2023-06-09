@@ -379,25 +379,47 @@ class CitaSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError("No se ha proporcionado un asunto válido")
         return value
-
+    
     def validate(self, data):
         cita = self.instance
-        if cita:
-            if data.get('fecha', cita.fecha) != cita.fecha or data.get('hora', cita.hora) != cita.hora:
-                asunto = cita.asunto
-                fecha_fin_asunto = asunto.fecha_fin
+        if cita is None or (
+            data.get('fecha', cita.fecha) != cita.fecha or data.get('hora', cita.hora) != cita.hora
+        ):
+            # Obtiene los parámetros de fecha, hora y asunto de la nueva cita
+            fecha_cita = datetime.strptime(data['fecha'].strftime('%Y-%m-%d'), '%Y-%m-%d').date()
+            hora_cita = time.fromisoformat(str(data['hora']))
+            asunto = data['asunto']
 
-                fecha_cita = datetime.strptime(data.get('fecha', cita.fecha), '%Y-%m-%d').date()
-                if fecha_cita > fecha_fin_asunto:
-                    raise serializers.ValidationError('La fecha de la cita no puede ser posterior a la fecha fin del asunto')
+            # Verifica si ya existe una cita con los mismos parámetros
+            citas_existentes = Cita.objects.filter(
+                fecha=fecha_cita,
+                hora=hora_cita,
+                asunto=asunto
+            ).exists()
 
-                citas_exist = Cita.objects.filter(
-                    asunto=asunto,
-                    fecha=data.get('fecha', cita.fecha),
-                    socio=cita.socio
-                ).exclude(id=cita.id).exists()
-                if citas_exist:
-                    raise serializers.ValidationError(f"Ya existe una cita para el socio '{cita.socio}' en esa fecha y hora")
+            if citas_existentes:
+                raise serializers.ValidationError('Ya existe una cita para el mismo día, misma hora y mismo asunto')
+
+            # Obtiene el día de la semana de la cita en inglés
+            dia_semana_cita = fecha_cita.strftime('%A')
+
+            # Mapeo de nombres de días de la semana en inglés a español
+            dias_semana_map = {
+                'Monday': 'LUNES',
+                'Tuesday': 'MARTES',
+                'Wednesday': 'MIERCOLES',
+                'Thursday': 'JUEVES',
+                'Friday': 'VIERNES'
+            }
+
+            # Obtiene el día de la semana correspondiente en español
+            dia_semana_cita_es = dias_semana_map.get(dia_semana_cita)
+
+            # Valida que el día de la semana de la cita esté en la lista de días permitidos
+            dias_semana_asunto = [dia.strip().upper() for dia in asunto.dias_semana.split(",")]
+            if dia_semana_cita_es not in dias_semana_asunto:
+                raise serializers.ValidationError('La fecha no corresponde a un día de semana entre los del asunto')
+
         return data
 
     def create(self, validated_data):
@@ -415,7 +437,7 @@ class CitaSerializer(serializers.ModelSerializer):
 class PagoCursoSerializer(serializers.ModelSerializer):
     class Meta:
         model = PagoCurso
-        fields = ('id', 'cantidad', 'estado', 'socio', 'curso', 'created_at')
+        fields = ('id', 'cantidad', 'estado', 'socio', 'curso_escolar', 'created_at')
         read_only_fields = ('id', 'created_at')
         extra_kwargs = {
             'cantidad': {'required': True},
@@ -426,17 +448,17 @@ class PagoCursoSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         # Obtener el curso del pago
-        curso = data['curso']
+        curso_escolar = data['curso_escolar']
 
         # Verificar que no exista otro PagoCurso con el mismo socio y curso en estado "PAGADO" o "PENDIENTE"
-        pagos = PagoCurso.objects.filter(socio=data['socio'], curso=curso, estado__in=[EstadoPago.PAGADO, EstadoPago.PENDIENTE])
+        pagos = PagoCurso.objects.filter(socio=data['socio'], curso_escolar=curso_escolar, estado__in=[EstadoPago.PAGADO, EstadoPago.PENDIENTE])
         if self.instance:
             pagos = pagos.exclude(pk=self.instance.pk)
         if pagos.exists():
             raise serializers.ValidationError("Actualmente existe un pagoCurso asociado a este curso y socio en estado PAGADO o PENDIENTE")
 
         # Verificar que la cantidad es igual al precio_cuota del curso
-        if data['cantidad'] != curso.precio_cuota:
+        if data['cantidad'] != curso_escolar.precio_cuota:
             raise serializers.ValidationError("La cantidad del pago debe ser la misma que la del precio de la cuota del curso")
 
         return data

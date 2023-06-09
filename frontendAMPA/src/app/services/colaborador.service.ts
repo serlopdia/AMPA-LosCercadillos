@@ -18,7 +18,7 @@ export class ColaboradorService {
   constructor(private http: HttpClient, private usersService: UsersService) { }
   
   getColaboradores(): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    if(this.usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);

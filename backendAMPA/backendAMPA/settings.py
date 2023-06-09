@@ -151,3 +151,13 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_HEADERS = True
+
+CSP_SCRIPT_SRC = ("'self'", "https://m.stripe.network")
+
+#stripe
+STRIPE_SECRET_KEY = "sk_test_51NG3dqGi3VNo97d4BDp8auQnV8DEIfImx0vHx1WYzUsaJ58uVRGxkAYqsOQ1gZX51zC0wIReyNjGvfBuV0zz7OX700bq0DfGCN"
+STRIPE_WEBHOOK_SECRET = 'whsec_a3a28ac74c55f278dfc5d7a894eaab776014be1cc2801665103cdfb2676dc83e'
+
+#front-end URL's
+CHECKOUT_SUCCESS_URL = 'http://localhost:4200/success/'
+CHECKOUT_FAILED_URL = 'http://localhost:4200/failed/'

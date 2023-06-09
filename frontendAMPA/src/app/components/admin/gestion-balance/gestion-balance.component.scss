@@ -28,6 +28,8 @@
     margin: 2vh 50px;
     overflow: auto; /* Agrega scroll horizontal */
     white-space: nowrap; /* Evita que el contenido se ajuste */
+    max-height: 200px; 
+    overflow: auto;
   }
 
   th, td {

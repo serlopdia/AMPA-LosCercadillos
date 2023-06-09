@@ -1,0 +1,84 @@
+<app-navbar></app-navbar>
+
+<div class="title-container">
+    <h1><b>Mi Perfil</b></h1>
+</div>
+
+<app-sidebar-socios></app-sidebar-socios>
+
+<div class="personal-container">
+
+    <div *ngIf="socio" class="card shadow-lg">
+        <div class="card-body p-5">
+            <h1 class="fs-4 card-title fw-bold mb-4">DATOS PERSONALES</h1>
+            <div class="form-group row">
+                <div class="mb-4 col-sm-12">
+                    <h4 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Nombre: </h4>
+                    <h4 class="d-inline">{{ socio.first_name }}</h4>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="mb-4 col-sm-12">
+                    <h4 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Apellidos: </h4>
+                    <h4 class="d-inline">{{ socio.last_name }}</h4>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="mb-4 col-sm-12">
+                    <h4 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Email: </h4>
+                    <h4 class="d-inline">{{ socio.email }}</h4>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="mb-4 col-sm-12">
+                    <h4 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Usuario: </h4>
+                    <h4 class="d-inline">{{ socio.username }}</h4>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <div class="mb-4 col-sm-12">
+                    <h4 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Teléfono: </h4>
+                    <h4 class="d-inline">{{ socio.tel }}</h4>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <div class="mb-4 col-sm-12">
+                    <h4 class="mb-2 text-muted d-inline" style="margin-right: 15px;">DNI: </h4>
+                    <h4 class="d-inline">{{ socio.dni }}</h4>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <div class="mb-4 col-sm-12">
+                    <h4 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Dirección: </h4>
+                    <h4 class="d-inline">{{ socio.address }}</h4>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <div class="mb-4 col-sm-12">
+                    <h4 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Hijos asociados: </h4>
+                    <h4 class="d-inline">{{ socio.email }}</h4>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card-footer py-3 border-0">
+            <div class="d-flex justify-content-between">
+                <button class="btn big-button" routerLink="/miperfil/carnet">
+                    <b>CARNET VIRTUAL</b>
+                </button>
+                <button type="submit" class="btn btn-primary" routerLink="/miperfil/datos/editar">
+                    Modificar datos
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

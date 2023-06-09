@@ -1,0 +1,57 @@
+.main-container {
+    padding: 30px 5vw;
+}
+
+.main-container input {
+    border-radius: 10px;
+    padding: 2px 20px;
+}
+
+.title-container {
+    color: white;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    padding: 25px 5vw;
+    height: 18vh;
+    background-image: url("../../../../assets/images/cuaderno-taza.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center 67%;
+}
+
+.personal-container {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    margin-right: 5vw;
+    margin-left: 35vw;
+}
+
+/* On screens that are less than 400px, display the bar vertically, instead of horizontally */
+@media screen and (max-width: 700px) {
+    .personal-container {
+        margin: 5vh 5vw;
+    }
+}
+
+.table-container {
+  display: flex;
+  margin: 2vh 50px;
+  overflow: auto; /* Agrega scroll horizontal */
+  white-space: nowrap; /* Evita que el contenido se ajuste */
+  max-height: 170px; 
+  overflow: auto;
+}
+
+th, td {
+  vertical-align: middle;
+}
+
+h1,
+h2 {
+  margin: 2vh 50px;
+}
+
+.form-container {
+  margin: 2vh 50px;
+}

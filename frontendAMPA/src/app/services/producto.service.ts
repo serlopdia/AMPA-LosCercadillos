@@ -19,21 +19,8 @@ export class ProductoService {
   
   // DEVUELVE UNA LISTA DE TODOS LOS PRODUCTOS
   getProductosList(): Observable<any>{
-    if(this.usersService.isLogAdmin()){
-      var ck = localStorage.getItem('auth-user')
-      if(ck != null){
-        var tk = JSON.parse(ck);
-        var res = [];
-        for(var i in tk){
-          res.push(tk[i]);
-        }
-        let headers = new HttpHeaders()
-        headers = headers.set('Authorization', 'Token '+ res[0])
-
-        return this.http.get(`${API_url}/shop/productos/`, { headers: headers });
-      }
-    }
-    return new Observable<any>;
+    let headers = new HttpHeaders()
+    return this.http.get(`${API_url}/shop/productos/`, { headers: headers });
   }
 
   createProducto(dataProducto:any): Observable<any>{
@@ -91,21 +78,8 @@ export class ProductoService {
   }
 
   getProducto(idProducto:any):Observable<any>{
-    if(this.usersService.isLoggedIn()){
-      var ck = localStorage.getItem('auth-user')
-      if(ck!=null){
-        var tk = JSON.parse(ck);
-        var res = [];
-        for(var i in tk){
-          res.push(tk[i]);
-        }
-        let headers = new HttpHeaders()
-        headers = headers.set('Authorization', 'Token '+res[0])
-
-        return this.http.get(`${API_url}/shop/productos/${idProducto}`, { 'headers': headers })
-      }
-    }
-    return new Observable<any>;
+    let headers = new HttpHeaders()
+    return this.http.get(`${API_url}/shop/productos/${idProducto}`, { 'headers': headers })
   }
 
 }

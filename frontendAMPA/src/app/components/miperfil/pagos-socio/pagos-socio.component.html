@@ -1,0 +1,39 @@
+<app-navbar></app-navbar>
+
+<div class="title-container">
+    <h1><b>Mi Perfil</b></h1>
+</div>
+
+<app-sidebar-socios></app-sidebar-socios>
+
+<div class="personal-container">
+    <h1>Pagos</h1>
+
+    <div *ngIf="pagosFormateados.length > 0">
+      <h2>Historial de pagos:</h2>
+      <div class="table-container">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">Asunto</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pago of pagosFormateados" 
+            id="{{ pago.id }}" 
+            class="socio">
+              <td>{{ pago.created_at }}</td>
+              <td>Compra</td>
+              <td>{{ pago.cantidad }} €</td>
+              <td [ngClass]="{
+                'text-danger': pago.estado === 'RECHAZADO',
+                'text-primary': pago.estado === 'PENDIENTE',
+                'text-success': pago.estado === 'PAGADO'}"><b>{{ pago.estado }}</b></td>
+            </tr>
+          </tbody>
+      </table>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 import { UsersService } from './users.service';
 import { API_url } from '../global';
 
@@ -31,6 +31,25 @@ export class PagoService {
         headers = headers.set('Authorization', 'Token '+ res[0])
 
         return this.http.get(`${API_url}/shop/pagos/`, { headers: headers });
+      }
+    }
+    return new Observable<any>;
+  }
+
+  // DEVUELVE UNA LISTA DE TODOS LOS PAGOS DEL SOCIO LOGUEADO
+  getPagosSocioList(): Observable<any>{
+    if(this.usersService.isLoggedIn()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck != null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders()
+        headers = headers.set('Authorization', 'Token '+ res[0])
+
+        return this.http.get(`${API_url}/shop/pagos/socio/`+res[1], { headers: headers });
       }
     }
     return new Observable<any>;

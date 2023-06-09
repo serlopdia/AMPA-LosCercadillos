@@ -47,7 +47,7 @@ export class SocioComponent implements OnInit {
   }
 
   togglePasswordVisibility(values:any):void {
-  this.showPassword = values.currentTarget.checked;
+    this.showPassword = values.currentTarget.checked;
   }
 
   async getSocioData() {

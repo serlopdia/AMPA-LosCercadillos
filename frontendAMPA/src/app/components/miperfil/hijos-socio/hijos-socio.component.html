@@ -1,0 +1,122 @@
+<app-navbar></app-navbar>
+
+<div class="title-container">
+    <h1><b>Mi Perfil</b></h1>
+</div>
+
+<app-sidebar-socios></app-sidebar-socios>
+
+<div class="personal-container">
+    <div *ngIf="hijosSocio.length > 0" class="card shadow-lg">
+        <div class="card-body p-5">
+            <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && guardarModificaciones()" #f="ngForm" novalidate>
+                <h1 class="fs-4 card-title fw-bold mb-4">NIÑOS ASOCIADOS</h1>
+                <div class="row">
+                    <div class="col" *ngFor="let hijo of hijosSocio; let i = index">
+                        <div class="form-group pt-3">
+                            <label class="mb-2 text-muted" for="nombre{{hijo.id}}">Nombre</label>
+                            <input [(ngModel)]="hijosSocio[i].nombre" [id]="'nombre' + hijo.id" [name]="'nombre' + hijo.id" type="text" class="form-control" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir un nombre
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="form-group pt-3">
+                            <label class="mb-2 text-muted" for="apellidos{{hijo.id}}">Apellidos</label>
+                            <input [(ngModel)]="hijosSocio[i].apellidos" [id]="'apellidos' + hijo.id" [name]="'apellidos' + hijo.id" type="text" class="form-control" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir unos apellidos
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="form-group pt-3">
+                            <label class="mb-2 text-muted" for="fecha_nacimiento{{hijo.id}}">Fecha de nacimiento</label>
+                            <input [(ngModel)]="hijosSocio[i].fecha_nacimiento" [id]="'fecha_nacimiento' + hijo.id" [name]="'fecha_nacimiento' + hijo.id" type="date" class="form-control" required autofocus>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una fecha de nacimiento
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="form-group pt-3">
+                            <label class="mb-2 text-muted" for="clase{{hijo.id}}">Clase</label>
+                            <select [(ngModel)]="hijosSocio[i].clase" [id]="'clase' + hijo.id" [name]="'clase' + hijo.id" class="form-select" required autofocus>
+                                <option *ngFor="let clase of listaClases" [value]="clase.id">{{ clase.curso }}º {{ clase.tipo_clase }} {{ clase.letra }}</option>
+                            </select>
+                            <div class="invalid-feedback error">
+                                <div>
+                                    Debe introducir una clase
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="form-group pt-3">
+                            <button type="button" class="btn btn-danger" (click)="confirmarEliminacion(hijo.id)">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="card-footer py-3 border-0">
+            <button type="button" class="btn btn-primary" (click)="guardarModificaciones()">
+                Guardar modificaciones
+            </button>
+        </div>
+    </div>
+    
+    <div class="card shadow-lg" style="margin-top: 5vh;">
+        <div class="card-body p-5">
+            <div class="form-group row">
+                <h5 class="fs-5 mb-2">CREAR NUEVO</h5>
+                <div class="form-group row">
+                    <div class="mb-3 col-sm-6">
+                        <label class="mb-2 text-muted" for="nombre">Nombre</label>
+                        <input [(ngModel)]="hijoNuevo.nombre" id="nombre" type="text" class="form-control" name="nombre">
+                        <div class="invalid-feedback error">
+                            <div>Debe introducir un nombre</div>
+                        </div>
+                    </div>
+                    <div class="mb-3 col-sm-6">
+                        <label class="mb-2 text-muted" for="apellidos">Apellidos</label>
+                        <input [(ngModel)]="hijoNuevo.apellidos" id="apellidos" type="text" class="form-control" name="apellidos">
+                        <div class="invalid-feedback error">
+                            <div>Debe introducir unos apellidos</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="mb-3 col-sm-6">
+                        <label class="mb-2 text-muted" for="fecha_nacimiento">Fecha de nacimiento</label>
+                        <input [(ngModel)]="hijoNuevo.fecha_nacimiento" id="fecha_nacimiento" type="date" class="form-control" name="fecha_nacimiento">
+                        <div class="invalid-feedback error">
+                            <div>Debe introducir una fecha de nacimiento</div>
+                        </div>
+                    </div>
+                    <div class="mb-3 col-sm-6">
+                        <label class="mb-2 text-muted" for="clase">Clase</label>
+                        <select [(ngModel)]="hijoNuevo.clase" class="form-select" name="clase">
+                            <option *ngFor="let clase of listaClases" [value]="clase.id">{{ clase.curso }}º {{ clase.tipo_clase }} {{ clase.letra }}</option>
+                        </select>
+                        <div class="invalid-feedback error">
+                            <div>Debe introducir una clase</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer py-3 border-0">
+            <button type="button" class="btn btn-success ms-auto" (click)="crearHijo()">
+                Crear nuevo
+            </button>
+        </div>
+    </div>
+</div>

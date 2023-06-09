@@ -1,0 +1,36 @@
+.main-container {
+    padding: 25px 5vw;
+}
+  
+.main-container input {
+  border-radius: 10px;
+  padding: 2px 20px;
+}
+
+.title-container {
+    color: white;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    padding: 25px 5vw;
+    height: 22vh;
+    background-image: url("../../../../assets/images/fachada_colegio.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center 65%;
+}
+
+.button-container {
+    margin: 4vh 0;
+    display: flex;
+    justify-content: center;
+}
+
+.big-button {
+    font-size: 27px;
+    width: 250px;
+    height: 70px;
+    border-radius: 100px;
+    background-color: rgb(72, 0, 206);
+    color: white;
+}

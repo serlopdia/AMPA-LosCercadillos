@@ -1,0 +1,27 @@
+<app-navbar></app-navbar>
+
+<div class="title-container">
+    <h1><b>Mi Perfil</b></h1>
+</div>
+
+<app-sidebar-socios></app-sidebar-socios>
+
+<div class="personal-container">
+    <h1>Colaboradores</h1>
+
+    <div class="card-container">
+        <div *ngFor="let colaborador of listaColaboradores" class="card">
+            <img src="{{ colaborador.imagen }}" class="card-img-top" alt="Imagen no disponible">
+            <div class="card-body">
+                <h5 class="card-title">{{ colaborador.nombre }}</h5>
+                <p class="card-text" style="color: green;">
+                    <b>{{ colaborador.ventaja }}</b>
+                </p>
+                <p class="card-text">
+                    {{ colaborador.descripcion }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UsersService } from './users.service';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { API_url } from '../global';
 
 const USER_KEY = 'auth-user';
@@ -36,7 +36,7 @@ export class CitaService {
   }
 
   createCita(dataCita:any): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    if(this.usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -54,8 +54,8 @@ export class CitaService {
   }
 
   deleteCita(idEntry:any): Observable<any>{
-    if(this.usersService.isLogAdmin()){
-      var ck = localStorage.getItem('auth-user')
+    if(this.usersService.isLoggedIn()){
+      var ck = localStorage.getItem('auth-user');
       if(ck != null){
         var tk = JSON.parse(ck);
         var res = [];
@@ -72,7 +72,7 @@ export class CitaService {
   }
   
   getAsuntos(): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    if(this.usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -125,6 +125,24 @@ export class CitaService {
     return new Observable<any>;
   }
 
+  getCitaById(idCita:any):Observable<any>{
+    if(this.usersService.isLoggedIn()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck!=null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders()
+        headers = headers.set('Authorization', 'Token '+res[0])
+
+        return this.http.get(`${API_url}/ampa/asuntos/${idCita}`, { 'headers': headers })
+      }
+    }
+    return new Observable<any>;
+  }
+
   updateAsunto(idEntry:any, dataEntry:any): Observable<any>{
     if(this.usersService.isLogAdmin()){
       var ck = localStorage.getItem('auth-user')
@@ -156,6 +174,25 @@ export class CitaService {
         headers=headers.set('Authorization','Token '+res[0])
         
         return this.http.delete(`${API_url}/ampa/asuntos/${idEntry}`, {'headers':headers});
+      }
+    }
+    return new Observable<any>;
+  }
+
+  // DEVUELVE UNA LISTA DE TODOS LAS CITAS DEL SOCIO LOGUEADO
+  getCitasSocioList(): Observable<any>{
+    if(this.usersService.isLoggedIn()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck != null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders()
+        headers = headers.set('Authorization', 'Token '+ res[0])
+
+        return this.http.get(`${API_url}/ampa/citas/socio/`+res[1], { headers: headers });
       }
     }
     return new Observable<any>;

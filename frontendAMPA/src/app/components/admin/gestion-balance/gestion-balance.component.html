@@ -21,7 +21,7 @@
                 <tr *ngFor="let ingreso of getListaCuentasIngreso()" id="{{ ingreso.id }}">
                     <th scope="row">{{ ingreso.id }}</th>
                     <td>{{ ingreso.created_at }}</td>
-                    <td>{{ ingreso.cantidad }}</td>
+                    <td>{{ ingreso.cantidad }} €</td>
                     <td>{{ ingreso.asunto }}</td>
                     <td style="display: flex; justify-content: center; gap: 10px;">
                         <button class="btn btn-primary btn-icon" [routerLink]="['/gestion/balances/show/'+ingreso.id]">
@@ -80,7 +80,7 @@
                 <tr *ngFor="let gasto of getListaCuentasGasto()" id="{{ gasto.id }}">
                 <th scope="row">{{ gasto.id }}</th>
                 <td>{{ gasto.created_at }}</td>
-                <td>{{ gasto.cantidad }}</td>
+                <td>{{ gasto.cantidad }} €</td>
                 <td>{{ gasto.asunto }}</td>
                 <td style="display: flex; justify-content: center; gap: 10px;">
                     <button class="btn btn-primary btn-icon" [routerLink]="['/gestion/balances/show/'+gasto.id]">

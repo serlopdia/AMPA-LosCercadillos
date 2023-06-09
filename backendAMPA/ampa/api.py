@@ -125,7 +125,7 @@ class CursoEscolarViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            permission_classes = [permissions.AllowAny]
+            permission_classes = [permissions.IsAuthenticated]
         else:
             permission_classes = [permissions.IsAdminUser]
         return [permission() for permission in permission_classes]

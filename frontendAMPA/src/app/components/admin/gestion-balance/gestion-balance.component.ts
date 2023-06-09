@@ -39,11 +39,21 @@ export class GestionBalanceComponent implements OnInit {
   getIngresosGastos() {
     this.balanceService.getIngresosGastos().subscribe({
       next: res => {
-        this.listaCuentas = res;
-      },error: err => {
+        // Ordenar por created_at de forma descendente
+        this.listaCuentas = res.sort((a: { created_at: number; }, b: { created_at: number; }) => {
+          if (a.created_at > b.created_at) {
+            return -1;
+          }
+          if (a.created_at < b.created_at) {
+            return 1;
+          }
+          return 0;
+        });
+      },
+      error: err => {
         console.log(err);
       }
-    })
+    });
   }
 
   getListaCuentasIngreso(): any[] {
@@ -87,6 +97,8 @@ export class GestionBalanceComponent implements OnInit {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
     });
     const createdAt = balance.created_at;
     if (createdAt) {

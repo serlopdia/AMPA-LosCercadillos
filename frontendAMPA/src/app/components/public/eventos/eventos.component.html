@@ -1,3 +1,29 @@
 <app-navbar></app-navbar>
 
-<p>eventos works!</p>
+<div class="title-container">
+    <h1><b>Eventos organizados por el AMPA</b></h1>
+</div>
+
+<div class="main-container">
+
+    <div *ngFor="let evento of eventosFormateados" id="{{ evento.id }}" class="card" [routerLink]="['/eventos/'+evento.id]">
+        <div class="card-body">
+            <h5 class="card-title">{{ evento.titulo }}</h5>
+            <p class="card-text card-text-limitado">
+                {{ evento.descripcion }}
+            </p>
+        </div>
+
+        <div class="card-footer text-body-secondary d-flex py-3 justify-content-between">
+            {{ evento.created_at }}
+            <div class="align-items-center d-flex">
+                <button type="submit" class="btn big-button ms-auto">
+                    Apuntarse<b></b>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<app-footer></app-footer>

@@ -1,3 +1,35 @@
 <app-navbar></app-navbar>
 
-<p>tienda works!</p>
+<div class="title-container">
+    <h1><b>Tienda del AMPA</b></h1>
+</div>
+
+<section class="py-5">
+
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 justify-content-left">
+            
+            <div *ngFor="let producto of listaProductos" class="col-xl-4 col-md-6" [routerLink]="['/tienda/producto/'+producto.id]" style="margin-bottom: 30px;">
+                <div class="card h-100">
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                    <img class="card-img-top" src="{{ producto.imagen }}" alt="..." />
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <h5 class="fw-bolder">{{ producto.nombre }}</h5>
+                            <p class="d-flex justify-content-center small mb-2">{{ producto.descripcion }}</p>
+                            <span class="text-danger text-decoration-line-through">{{ producto.precio_general }}€</span>
+                            <span class="text-success" style="margin-left: 10px;">{{ producto.precio_socio }}€</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" [routerLink]="['/tienda/producto/'+producto.id]">Ver más</a></div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+</section>
+
+<app-footer></app-footer>

@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework import routers
 
 from shop.api import LineaPedidoViewSet, PagoViewSet, PedidoViewSet, ProductoViewSet, StockProductoViewSet
-from shop.views import PagosSocioList, PedidosSocioList
+from shop.views import PagosSocioList, PedidosSocioList, CreateCheckoutSession, WebHook
 
 router = routers.DefaultRouter()
 
@@ -17,4 +17,6 @@ urlpatterns = router.urls
 urlpatterns.extend([
     path('pagos/socio/<int:pk>/', PagosSocioList.as_view(), name='pagos-socio'),
     path('pedidos/socio/<int:pk>/', PedidosSocioList.as_view(), name='pedidos-socio'),
+    path('checkout/', CreateCheckoutSession.as_view(), name='checkout'),
+    path('webhook-test/', WebHook.as_view(), name='webhook-test'),
 ])

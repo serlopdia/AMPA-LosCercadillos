@@ -5,13 +5,13 @@
 
         <nav class="navbar navbar-blank bg-blank">
           <form class="form-inline buscador">
-            <input class="form-control mr-sm-2" type="search" placeholder="Buscar producto" style="margin-right: 20px;">
+            <input class="form-control mr-sm-2" type="search" placeholder="Buscar evento" style="margin-right: 20px;">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
           </form>
           <button class="btn btn-primary creador my-2 my-sm-0" routerLink="/dashboard/eventos/form">Crear evento</button>
         </nav>
 
-        <div *ngFor="let evento of eventosFormateados" id="{{ evento.id }}" class="card">
+        <div *ngFor="let evento of eventosFormateados" id="{{ evento.id }}" class="card" [routerLink]="['/dashboard/eventos/show/'+evento.id]">
             <div class="card-body">
                 <h5 class="card-title">{{ evento.titulo }}</h5>
                 <p class="card-text card-text-limitado" [ngClass]="{'card-text-extendido': mapMostrarDescripcionCompleta.get(evento.id) || evento.descripcion.length <= 350}">

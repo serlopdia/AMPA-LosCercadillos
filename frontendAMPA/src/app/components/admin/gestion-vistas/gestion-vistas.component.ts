@@ -26,7 +26,6 @@ export class GestionVistasComponent implements OnInit {
   tiposVista: any[] = [];
   isSuccessful = false;
   errorMessage = '';
-  tipoSubscription: Subscription | null = null;
   markdownOriginal = ''; // Agregar esta línea
 
   vista!:Vista;

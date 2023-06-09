@@ -1,3 +1,26 @@
 <app-navbar></app-navbar>
 
-<p>noticias works!</p>
+<div class="title-container">
+    <h1><b>NOTICIAS</b></h1>
+</div>
+
+<div class="main-container">
+
+    <div class="card-container">
+        <div *ngFor="let noticia of noticiasFormateadas" class="card" [routerLink]="['/noticias/'+noticia.id]">
+            <img src="{{ noticia.imagen }}" class="card-img-top" alt="Imagen no disponible">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ noticia.titulo }}</h5>
+                <p class="card-text card-text-limitado">
+                    {{ noticia.cuerpo }}
+                </p>
+                <div class="mt-auto">
+                    <p class="card-text" style="text-align: right;"><small class="text-body-secondary">{{ noticia.created_at }}h</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<app-footer></app-footer>

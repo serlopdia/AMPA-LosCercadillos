@@ -1,3 +1,7 @@
+.custom-navbar {
+    background-color: #E3FDF8;
+}
+
 .navbar-container {
     padding: 2vh 7vw;
 }
@@ -9,10 +13,22 @@
 
 .big-button {
     font-size: 18px;
-    width: 175px;
-    height: 50px;
+    padding: 10px 25px;
     border-radius: 100px;
     background-color: rgb(72, 0, 206);
     color: white;
 }
-  
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand a {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    margin-right: 1.5vw;
+}

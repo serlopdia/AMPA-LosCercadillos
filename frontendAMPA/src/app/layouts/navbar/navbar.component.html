@@ -8,19 +8,31 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg bg-light">
+<nav class="navbar navbar-expand-lg bg-success">
     <div class="container-fluid navbar-container">
-        <a class="navbar-brand mb-0 h1 align-items-center d-flex" routerLink="">
-            <img src="../../../assets/images/logo.png" class="d-inline-block align-top" style="width: 20%; height: auto;" alt="Logo">
-            <span style="margin-left: 1.5vw;">AMPA Los Cercadillos</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="navbar-brand mb-0 h1 align-items-center d-flex">
+            <a class="navbar-brand mb-0 h1 align-items-center d-flex text-white" routerLink="">
+                <img src="../../../assets/images/logo.png" class="d-inline-block align-top" style="width: 20%; height: auto;" alt="Logo">
+                <span style="margin-left: 1.5vw; vertical-align: middle;">AMPA Los Cercadillos</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" style="vertical-align: middle;">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link text-white" routerLink="/noticias">Noticias</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" routerLink="/tienda">Tienda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" routerLink="/eventos">Eventos</a>
+                </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
                         Información
                     </a>
                     <ul class="dropdown-menu">
@@ -29,23 +41,29 @@
                         <li><a class="dropdown-item" routerLink="/contacto">Contacto</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" routerLink="/noticias">Noticias</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" routerLink="/tienda">Tienda</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" routerLink="/eventos">Eventos</a>
+                <li *ngIf="!isLoggedIn || isAdmin" class="nav-item">
+                    <a class="nav-link text-white" routerLink="/login">Iniciar sesión</a>
                 </li>
                 <li *ngIf="!isLoggedIn || isAdmin" class="nav-item">
-                    <a class="nav-link active" routerLink="/login">Iniciar sesión</a>
+                    <button class="btn big-button" routerLink="/register" style="white-space: nowrap;"><b>HAZTE SOCIO</b></button>
                 </li>
-                <li *ngIf="!isLoggedIn || isAdmin" class="nav-item">
-                    <button class="btn big-button" routerLink="/register"><b>HAZTE SOCIO</b></button>
+                <li *ngIf="isLoggedIn && !isAdmin && socio" class="nav-item dropdown">
+                    <a class="nav-link text-white" href="#" role="button" data-bs-toggle="dropdown" style="white-space: nowrap;">
+                        <i class="fa-solid fa-circle-user fa-xl px-3"></i><b>{{ socio.username }}#{{ socio.id }}</b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" routerLink="/miperfil/datos">Mi perfil</a></li>
+                        <li><a class="dropdown-item" (click)="logout()">Cerrar sesión</a></li>
+                    </ul>
                 </li>
-                <li *ngIf="isLoggedIn && !isAdmin" class="nav-item">
-                    <button class="btn btn-warning" (click)="logout()">Cerrar sesión</button>
+                <li class="nav-item">
+                    <form class="d-flex">
+                        <button class="btn btn-outline-light" type="button" [routerLink]="['/carrito']" style="white-space: nowrap;">
+                            <i class="bi-cart-fill me-1"></i>
+                            Cesta
+                            <span class="badge bg-white text-dark ms-1 rounded-pill">0</span>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>

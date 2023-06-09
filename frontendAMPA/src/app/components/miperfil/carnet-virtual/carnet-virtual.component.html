@@ -1,0 +1,51 @@
+<app-navbar></app-navbar>
+
+<body>
+    <div class="main-container">
+        <div *ngIf="socio" class="card shadow-lg">
+            <div class="card-body p-5 unselectable">
+    
+                <div class="image-row d-flex justify-content-center" style="margin-bottom: 40px;">
+                    <div class="image-container text-center">
+                        <div class="image-overlay">
+                            <img src="../../../assets/images/logo.png" class="d-inline-block align-top img-fluid" alt="Logo">
+                        </div>
+                    </div>
+                    <div class="image-container text-center">
+                        <div class="image-overlay">
+                            <img src="../../../assets/images/AMPA-sinfondo.png" class="d-inline-block align-top img-fluid" alt="Logo_dos">
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="form-group row">
+                    <div class="mb-3 col-sm-12">
+                        <h4 class="mb-2 text-muted d-inline" for="first_name">Socio Nº: &nbsp;</h4>
+                        <h4 class="d-inline">{{ socio.id }}</h4>
+                    </div>
+                </div>
+    
+                <div class="form-group row">
+                    <div class="mb-3 col-sm-12">
+                        <h4 class="mb-2 text-muted d-inline" for="first_name">Padre/Madre/Tutor: &nbsp;</h4>
+                        <h4 class="d-inline">{{ socio.first_name }} {{ socio.last_name }}</h4>
+                    </div>
+                </div>
+    
+                <div class="form-group row">
+                    <div class="mb-3 col-sm-12">
+                        <h4 class="mb-2 text-muted d-inline" for="first_name">Documento de identidad: &nbsp;</h4>
+                        <h4 class="d-inline">{{ socio.dni }}</h4>
+                    </div>
+                </div>
+            
+                <div class="d-flex justify-content-center align-items-center" style="text-align: center;">
+                    <h1 style="margin-top: 5vh;">{{ formattedDate }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-footer></app-footer>
+    
+</body>
