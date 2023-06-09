@@ -47,6 +47,7 @@ import { CarritoComponent } from './components/public/carrito/carrito.component'
 import { VistaProductoComponent } from './components/public/vista-producto/vista-producto.component';
 import { VentajasComponent } from './components/public/ventajas/ventajas.component';
 import { DetallesNoticiaComponent } from './components/public/detalles-noticia/detalles-noticia.component';
+import { DetallesEventoComponent } from './components/public/detalles-evento/detalles-evento.component';
 
 import { DatosPersonalesComponent } from './components/miperfil/datos-personales/datos-personales.component';
 import { EditarDatosPersonalesComponent } from './components/miperfil/editar-datos-personales/editar-datos-personales.component';
@@ -56,6 +57,10 @@ import { BalanceAmpaComponent } from './components/miperfil/balance-ampa/balance
 import { VistaColaboradoresComponent } from './components/miperfil/vista-colaboradores/vista-colaboradores.component';
 import { HijosSocioComponent } from './components/miperfil/hijos-socio/hijos-socio.component';
 import { CarnetVirtualComponent } from './components/miperfil/carnet-virtual/carnet-virtual.component';
+
+import { StripeComponent } from './components/stripe/stripe.component';
+import { CancelComponent } from './cancel/cancel.component';
+import { SuccessComponent } from './success/success.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -105,6 +110,7 @@ const routes: Routes = [
   { path: 'tienda/producto/:id', component: VistaProductoComponent, canActivate: [] },
   { path: 'carrito', component: CarritoComponent, canActivate: [] },
   { path: 'eventos', component: EventosComponent, canActivate: [] },
+  { path: 'eventos/:id', component: DetallesEventoComponent, canActivate: [] },
   { path: 'ventajas', component: VentajasComponent, canActivate: [] },
   
   { path: 'miperfil/datos', component: DatosPersonalesComponent, canActivate: [SocioGuard] },
@@ -115,6 +121,10 @@ const routes: Routes = [
   { path: 'miperfil/balance-ampa', component: BalanceAmpaComponent, canActivate: [SocioGuard] },
   { path: 'miperfil/colaboradores', component: VistaColaboradoresComponent, canActivate: [SocioGuard] },
   { path: 'miperfil/carnet', component: CarnetVirtualComponent, canActivate: [SocioGuard] },
+
+  { path: 'stripe', component: StripeComponent, canActivate: [] },
+  { path: 'cancel', component: CancelComponent, canActivate: [] },
+  { path: 'success', component: SuccessComponent, canActivate: [] },
 ];
 
 @NgModule({

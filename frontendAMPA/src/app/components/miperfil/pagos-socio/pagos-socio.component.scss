@@ -44,10 +44,26 @@
 }
 
 h1,
-h2 {
+h2,
+h3 {
   margin: 2vh 50px;
 }
 
 th, td {
     vertical-align: middle;
+}
+
+.button-container {
+    margin: 2vh 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.big-button {
+    font-size: 20px;
+    width: 180px;
+    height: 50px;
+    border-radius: 100px;
+    background-color: rgb(72, 0, 206);
+    color: white;
 }

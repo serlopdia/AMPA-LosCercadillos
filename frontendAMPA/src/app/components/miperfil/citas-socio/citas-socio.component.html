@@ -25,7 +25,7 @@
                     <tr *ngFor="let cita of citasSocio" id="{{ cita.id }}">
                         <td>{{ formatDate(cita.fecha) }}</td>
                         <td>{{ formatTime(cita.hora) }}h</td>
-                        <td>Sergiooo</td>
+                        <td>{{ cita.asunto }}</td>
                         <td style="display: flex; justify-content: center;">
                             <button class="btn btn-danger btn-icon btn-sm" (click)="confirmarEliminacionCita(cita.id)">
                                 <i class="fa-solid fa-trash-can fa-inverse"></i>
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && reservarCita()" #f="ngForm" novalidate>
+    <form *ngIf="!isSuccessful && asuntoSeleccionado" name="form" (ngSubmit)="f.form.valid && reservarCita()" #f="ngForm" novalidate>
         <div class="card shadow-lg">
             <div class="card-body p-5">
                 <h1 class="fs-4 card-title fw-bold mb-4">RESERVAR UNA CITA</h1>
@@ -53,13 +53,14 @@
                                 Debe introducir un asunto
                             </div>
                         </div>
+                        <p class="text-muted" style="margin-top: 2vh;">{{ asuntoSeleccionado.dias_semana }} de {{ formatTime(asuntoSeleccionado.hora_inicio) }}h a {{ formatTime(asuntoSeleccionado.hora_fin) }}h. <br> Hasta el {{ formatDate(asuntoSeleccionado.fecha_fin) }}.</p>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <div class="mb-3 col-sm-6">
                         <label class="mb-2 text-muted" for="fecha">Fecha</label>
-                        <input [(ngModel)]="form.fecha" id="fecha" type="date" class="form-control" name="fecha" value="" required autofocus>
+                        <input [(ngModel)]="form.fecha" id="fecha" type="date" class="form-control" name="fecha" [min]="fechaMinima" [max]="asuntoSeleccionado.fecha_fin" (ngModelChange)="actualizarHorasDisponibles()" required autofocus>
                         <div class="invalid-feedback error">
                             <div>
                                 Debe introducir una fecha
@@ -68,7 +69,9 @@
                     </div>
                     <div class="mb-3 col-sm-6">
                         <label class="mb-2 text-muted" for="hora">Hora</label>
-                        <input [(ngModel)]="form.hora" id="hora" type="time" class="form-control" name="hora" value="" required autofocus>
+                        <select [(ngModel)]="form.hora" class="form-select" name="tipo">
+                            <option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</option>
+                        </select>
                         <div class="invalid-feedback error">
                             <div>
                                 Debe introducir una hora

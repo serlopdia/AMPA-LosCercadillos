@@ -14,11 +14,19 @@
             </p>
         </div>
 
-        <div class="card-footer text-body-secondary d-flex py-3 justify-content-between">
-            {{ evento.created_at }}
+        <div class="card-footer text-body-secondary d-flex py-3 justify-content-between flex-wrap">
+            <div>
+                <p>{{ evento.created_at }}</p>
+            </div>
             <div class="align-items-center d-flex">
-                <button type="submit" class="btn big-button ms-auto">
-                    Apuntarse<b></b>
+                <button *ngIf="!isSocioInEvento(evento) && isLoggedIn" type="submit" class="btn big-button ms-auto" (click)="inscribirSocio(evento.id)">
+                    <b>Apuntarse</b>
+                </button>
+                <button *ngIf="!isLoggedIn || isAdmin" type="submit" class="btn big-button ms-auto" routerLink="/login">
+                    <b>Inicia sesión para apuntarte</b>
+                </button>
+                <button *ngIf="isSocioInEvento(evento)" type="button" class="btn big-button-apuntado bg-success ms-auto">
+                    <b>Estás apuntado</b>
                 </button>
             </div>
         </div>

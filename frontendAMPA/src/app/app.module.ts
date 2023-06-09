@@ -62,6 +62,10 @@ import { SidebarSociosComponent } from './layouts/sidebar-socios/sidebar-socios.
 import { EditarDatosPersonalesComponent } from './components/miperfil/editar-datos-personales/editar-datos-personales.component';
 import { CarnetVirtualComponent } from './components/miperfil/carnet-virtual/carnet-virtual.component';
 import { DetallesNoticiaComponent } from './components/public/detalles-noticia/detalles-noticia.component';
+import { StripeComponent } from './components/stripe/stripe.component';
+import { CancelComponent } from './cancel/cancel.component';
+import { SuccessComponent } from './success/success.component';
+import { DetallesEventoComponent } from './components/public/detalles-evento/detalles-evento.component';
 
 @NgModule({
   declarations: [
@@ -121,6 +125,10 @@ import { DetallesNoticiaComponent } from './components/public/detalles-noticia/d
     EditarDatosPersonalesComponent,
     CarnetVirtualComponent,
     DetallesNoticiaComponent,
+    StripeComponent,
+    CancelComponent,
+    SuccessComponent,
+    DetallesEventoComponent,
   ],
   imports: [
     BrowserModule,

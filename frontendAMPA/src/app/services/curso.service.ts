@@ -102,7 +102,7 @@ export class CursoService {
   }
   
   getCursos(): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    if(this.usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);

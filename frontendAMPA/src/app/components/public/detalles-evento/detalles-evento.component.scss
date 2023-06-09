@@ -1,10 +1,10 @@
 .main-container {
-  padding: 30px 5vw;
+    padding: 30px 5vw;
 }
 
 .main-container input {
-border-radius: 10px;
-padding: 2px 20px;
+    border-radius: 10px;
+    padding: 2px 20px;
 }
 
 .title-container {
@@ -22,20 +22,13 @@ padding: 2px 20px;
 
 .card {
   display: flex;
-  flex: 0 0 20rem;
-  margin: 2vh 25px;
+  flex: 10rem;
+  margin: 2vh 3vw;
 }
 
 .card-container {
   display: flex;
   flex-wrap: wrap;
-}
-
-.card-text-limitado {
-  max-height: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
 }
 
 .card:hover{
@@ -46,21 +39,7 @@ padding: 2px 20px;
   text-align: right;
 }
 
-.card-text-extendido {
-  max-height: none;
-  overflow: visible;
-  transition: max-height 0.3s ease-in-out;
-}
-
 .big-button {
-    font-size: 18px;
-    padding: 10px 25px;
-    border-radius: 100px;
-    background-color: rgb(72, 0, 206);
-    color: white;
-}
-
-.big-button-apuntado {
     font-size: 18px;
     padding: 10px 25px;
     border-radius: 100px;

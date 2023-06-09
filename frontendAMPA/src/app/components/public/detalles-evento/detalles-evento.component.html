@@ -1,0 +1,45 @@
+<app-navbar></app-navbar>
+
+<div class="title-container">
+    <h1><b>EVENTOS</b></h1>
+</div>
+
+<div *ngIf="evento" class="main-container">
+    <div class="card shadow-lg">
+        <div class="card-body" style="margin: 0 3vw;">
+            <div class="form-group row mt-4">
+                <div class="mb-3 col-sm-12">
+                    <h1 class="mb-2">{{ evento.titulo }}</h1>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="mb-3 col-sm-12">
+                    <p class="mb-2" [innerHTML]="evento.descripcion"></p>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="mb-3 col-sm-12">
+                    <h5 class="mb-2">La proceso de inscripción finalizará el {{ formatFechaFinalizacion(evento.fin_inscripcion) }}.</h5>
+                </div>
+            </div>
+
+            <div class="form-group row align-items-center">
+                <div class="mb-3 col-sm-6">
+                    <h5 class="mb-2">Actualmente, se han inscrito <span class="text-success">{{ evento.socios.length }} socios</span>. La capacidad es <span class="text-primary">{{ evento.socios.length }}/{{ evento.capacidad }}</span>.</h5>
+                </div>
+                <div class="mb-3 col-sm-6 d-flex justify-content-end">
+                    <button *ngIf="isSocioInEvento(evento)" type="submit" class="btn big-button bg-danger">
+                        <b>Borrar inscripción</b>
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="card-footer text-body-secondary d-flex justify-content-between">
+            <p style="margin: 1vh;">Creado por la <b>Administración del AMPA</b> a {{ evento.created_at }}h</p>
+        </div>        
+    </div>
+</div>

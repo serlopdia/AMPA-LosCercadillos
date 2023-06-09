@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CarritoService } from 'src/app/services/carrito.service';
 import { UsersService } from 'src/app/services/users.service';
 
 interface Socio {
@@ -13,6 +14,11 @@ interface Socio {
   password: string;
   created_at: string;
 }
+interface LineaPedidoTemporal {
+  producto: string;
+  stock: string;
+  cantidad: number;
+}
 
 @Component({
   selector: 'app-navbar',
@@ -24,13 +30,15 @@ export class NavbarComponent implements OnInit {
   isLoggedIn = false;
   isAdmin = false;
   socio!: Socio;
+  carrito: LineaPedidoTemporal[] = [];
 
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UsersService, private carritoService: CarritoService) { }
 
   ngOnInit(): void {
     this.isLoggedIn = this.usersService.isLoggedIn();
     this.isAdmin = this.usersService.isLogAdmin();
     this.getDatosSocio();
+    this.carrito = this.carritoService.obtenerCarrito();
   }
 
   getDatosSocio() {

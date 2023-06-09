@@ -13,21 +13,8 @@ export class StockService {
   
   // DEVUELVE UNA LISTA DE TODOS LOS STOCKS
   getStocksList(): Observable<any>{
-    if(this.usersService.isLoggedIn()){
-      var ck = localStorage.getItem('auth-user')
-      if(ck != null){
-        var tk = JSON.parse(ck);
-        var res = [];
-        for(var i in tk){
-          res.push(tk[i]);
-        }
-        let headers = new HttpHeaders()
-        headers = headers.set('Authorization', 'Token '+ res[0])
-
-        return this.http.get(`${API_url}/shop/stockproductos/`, { headers: headers });
-      }
-    }
-    return new Observable<any>;
+      let headers = new HttpHeaders()
+      return this.http.get(`${API_url}/shop/stockproductos/`, { headers: headers });
   }
 
   createStock(dataStock:any): Observable<any>{
@@ -82,6 +69,11 @@ export class StockService {
       }
     }
     return new Observable<any>;
+  }
+
+  getStock(idStock:any):Observable<any>{
+    let headers = new HttpHeaders()
+    return this.http.get(`${API_url}/shop/stockproductos/${idStock}`, { 'headers': headers })
   }
 
 }
