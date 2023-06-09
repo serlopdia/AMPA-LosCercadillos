@@ -1,6 +1,7 @@
 from datetime import *
 from django.db import models
-from django.forms import ValidationError
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 
@@ -228,6 +229,12 @@ class Cita(models.Model):
         if tiempo_transcurrido % self.asunto.minutos_frecuencia != 0:
             raise ValidationError("La hora de la cita debe estar dentro de los tiempos permitidos por minutos_frecuencia")
 
+        dias_semana_validos = [dia[0] for dia in Asunto.dias_semana.choices]
+        fecha_dia_semana = self.fecha.strftime('%A')  # Obtener el día de la semana de la fecha de la cita
+
+        if fecha_dia_semana not in dias_semana_validos:
+            raise ValidationError(f"El día de la semana de la fecha de la cita no es válido para este asunto")
+        
 class PagoCurso(models.Model):
     cantidad = models.FloatField(max_length=64)
     estado = models.CharField(choices=EstadoPago.choices, max_length=64)
