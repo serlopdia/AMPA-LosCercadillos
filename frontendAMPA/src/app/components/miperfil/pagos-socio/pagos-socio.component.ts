@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { loadStripe } from '@stripe/stripe-js';
 import { forkJoin } from 'rxjs';
+import { environment } from 'src/app/global';
 import { CursoService } from 'src/app/services/curso.service';
 import { PagoCursoService } from 'src/app/services/pago-curso.service';
 import { PagoService } from 'src/app/services/pago.service';
@@ -45,6 +47,11 @@ export class PagosSocioComponent implements OnInit {
   pagosFormateados: any[] = [];
   cursoActual!: Curso;
   cuotaActualPagada: boolean | undefined;
+  stripePromise = loadStripe(environment.stripe_key);
+  private paymentHandler: any = null;
+  public paymentMessageShown: boolean = false;
+  public paymentMessageSuccess: boolean = false;
+  public paymentMessageText: string = '';
 
   constructor(private pagoService: PagoService, private pagoCursoService: PagoCursoService, private cursoService: CursoService, private usersService: UsersService) { }
 

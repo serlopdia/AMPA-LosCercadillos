@@ -15,8 +15,8 @@ interface Socio {
   created_at: string;
 }
 interface LineaPedidoTemporal {
-  producto: string;
-  stock: string;
+  idProducto: string;
+  idStock: string;
   cantidad: number;
 }
 

@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework import routers
 
-from .views import JoinEventoView, CitasSocioList, HijosSocioList, PagosCursoSocioList, AsuntoDisponibilidadDia, LeaveEventoView, CreateCuotaCheckoutSession, StripeWebHook
+from .views import JoinEventoView, CitasSocioList, HijosSocioList, PagosCursoSocioList, AsuntoDisponibilidadDia, LeaveEventoView, CreateCuotaCheckoutSession, PagoCursoStripeWebhook
 from .api import AsuntoViewSet, BalanceViewSet, CitaViewSet, ClaseViewSet, ColaboradorViewSet, CursoEscolarViewSet, EventoViewSet, HijoViewSet, NoticiaViewSet, PagoCursoViewSet, SugerenciaViewSet, VistaViewSet
 
 router = routers.DefaultRouter()
@@ -30,5 +30,5 @@ urlpatterns.extend([
     path('pagos_curso/create-pago-stripe/', CreateCuotaCheckoutSession.as_view(), name='create-pago-stripe'),
     path('disponibilidad_asunto/', AsuntoDisponibilidadDia.as_view(), name='asunto-disponibilidad'),
     path('checkout_cuota/', CreateCuotaCheckoutSession.as_view(), name='checkout'),
-    path('stripe-webhook/', StripeWebHook.as_view(), name='stripe-webhook'),
+    path('stripe-webhook/', PagoCursoStripeWebhook.as_view(), name='stripe-webhook'),
 ])

@@ -29,12 +29,14 @@ class ProductoSerializer(serializers.ModelSerializer):
 class PagoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pago
-        fields = ('id', 'estado', 'cantidad', 'socio', 'created_at')
+        fields = ('id', 'nombre', 'email', 'telefono', 'estado', 'cantidad', 'socio', 'created_at')
         read_only_fields = ('id', 'created_at')
         extra_kwargs = {
+            'nombre': {'required': True},
+            'email': {'required': True},
+            'telefono': {'required': True},
             'estado': {'required': True},
             'cantidad': {'required': True},
-            'socio': {'required': True},
         }
 
     def validate_estado(self, value):
@@ -47,6 +49,9 @@ class PagoSerializer(serializers.ModelSerializer):
         return pago
 
     def update(self, instance, validated_data):
+        instance.nombre = validated_data.get('nombre', instance.nombre)
+        instance.email = validated_data.get('email', instance.email)
+        instance.telefono = validated_data.get('telefono', instance.telefono)
         instance.estado = validated_data.get('estado', instance.estado)
         instance.cantidad = validated_data.get('cantidad', instance.cantidad)
         instance.socio = validated_data.get('socio', instance.socio)
@@ -56,17 +61,19 @@ class PagoSerializer(serializers.ModelSerializer):
 class PedidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pedido
-        fields = ('id', 'estado', 'pago', 'socio', 'created_at')
+        fields = ('id', 'nombre', 'email', 'telefono', 'estado', 'observaciones', 'pago', 'socio', 'created_at')
         read_only_fields = ('id', 'created_at')
         extra_kwargs = {
+            'nombre': {'required': True},
+            'email': {'required': True},
+            'telefono': {'required': True},
             'estado': {'required': True},
             'pago': {'required': True},
-            'socio': {'required': True},
         }
 
     def validate_estado(self, value):
-        if value not in ['ENTREGADO', 'PREPARACION', 'CANCELADO']:
-            raise serializers.ValidationError("El valor del campo 'estado' debe ser uno de los siguientes: 'ENTREGADO', 'PREPARACION', 'CANCELADO'")
+        if value not in ['ENTREGADO', 'PREPARACION', 'DEVUELTO', 'CANCELADO', 'NO_PAGADO']:
+            raise serializers.ValidationError("El valor del campo 'estado' debe ser uno de los siguientes: 'ENTREGADO', 'PREPARACION', 'CANCELADO', 'NO_PAGADO'")
         return value
 
     def create(self, validated_data):
@@ -74,7 +81,11 @@ class PedidoSerializer(serializers.ModelSerializer):
         return pedido
 
     def update(self, instance, validated_data):
+        instance.nombre = validated_data.get('nombre', instance.nombre)
+        instance.email = validated_data.get('email', instance.email)
+        instance.telefono = validated_data.get('telefono', instance.telefono)
         instance.estado = validated_data.get('estado', instance.estado)
+        instance.observaciones = validated_data.get('observaciones', instance.observaciones)
         instance.pago = validated_data.get('pago', instance.pago)
         instance.socio = validated_data.get('socio', instance.socio)
         instance.save()

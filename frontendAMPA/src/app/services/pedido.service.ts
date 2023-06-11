@@ -35,5 +35,11 @@ export class PedidoService {
     }
     return new Observable<any>;
   }
+
+  createPedido(dataPedido:any): Observable<any>{
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+    
+    return this.http.post(`${API_url}/shop/pedidos/`, JSON.stringify(dataPedido), { 'headers': headers });
+  }
   
 }

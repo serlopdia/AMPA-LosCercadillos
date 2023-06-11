@@ -1,13 +1,26 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
 import { Observable, forkJoin, map } from 'rxjs';
-import { API_url, environment } from 'src/app/global';
+import { environment } from 'src/app/global';
 import { CarritoService } from 'src/app/services/carrito.service';
+import { LineaPedidoService } from 'src/app/services/linea-pedido.service';
+import { PedidoService } from 'src/app/services/pedido.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { StockService } from 'src/app/services/stock.service';
 import { UsersService } from 'src/app/services/users.service';
 
+interface Socio {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  tel: string;
+  dni: string;
+  address: string;
+  username: string;
+  password: string;
+  created_at: string;
+}
 interface Producto {
   id: number;
   nombre: string;
@@ -17,22 +30,15 @@ interface Producto {
   imagen: string;
   created_at: string;
 }
-interface Stock {
-  id: number;
-  cantidad: number;
-  nombre: string;
-  producto: number;
-  created_at: string;
-}
 interface LineaPedidoTemporal {
-  producto: string;
-  stock: string;
+  idProducto: string;
+  idStock: string;
   cantidad: number;
 }
 interface LineaFormateada {
   imagen: string;
   nombre: string;
-  precio: string;
+  precio: number;
   opcion: string;
   cantidad: number;
 }
@@ -44,13 +50,21 @@ interface LineaFormateada {
 })
 export class CarritoComponent implements OnInit {
 
+  form:any ={
+    nombre: null,
+    email: null,
+    telefono: null,
+    observaciones: null,
+  }
   carrito: LineaPedidoTemporal[] = [];
   carritoFormateado: LineaFormateada[] = [];
   precioTotalCarrito = 0;
   producto!:Producto;
-  stripePromise = loadStripe(environment.stripe);
+  errorMessage = '';
+  socio!: Socio;
+  stripePromise = loadStripe(environment.stripe_key);
 
-  constructor(private http: HttpClient, private carritoService: CarritoService, private productoService: ProductoService, private stockService: StockService, private usersService: UsersService) { }
+  constructor(private carritoService: CarritoService, private productoService: ProductoService, private stockService: StockService, private pedidoService: PedidoService, private lineaPedidoService: LineaPedidoService, private usersService: UsersService) { }
 
   ngOnInit(): void {
     this.carrito = this.carritoService.obtenerCarrito();
@@ -60,6 +74,17 @@ export class CarritoComponent implements OnInit {
         this.precioTotalCarrito = precioTotal;
       }
     );
+  }
+
+  getDatosSocio() {
+    this.usersService.getUserData().subscribe({
+      next: data => {
+        this.socio = data as Socio;
+      },
+      error: err => {
+        console.log(err);
+      }
+    })
   }
   
   async getDatosProducto(idProducto: string): Promise<Producto> {
@@ -78,15 +103,15 @@ export class CarritoComponent implements OnInit {
 
   async formatearCarrito() {
     for (const lineaPedido of this.carrito) {
-      const producto = await this.productoService.getProducto(lineaPedido.producto).toPromise();
-      const stock = await this.stockService.getStock(lineaPedido.stock).toPromise();
+      const producto = await this.productoService.getProducto(lineaPedido.idProducto).toPromise();
+      const stock = await this.stockService.getStock(lineaPedido.idStock).toPromise();
       let lineaFormateada: LineaFormateada;
 
       if(!this.usersService.isLoggedIn()) {
         lineaFormateada = {
           imagen: producto.imagen,
           nombre: producto.nombre,
-          precio: producto.precio_general,
+          precio: producto.precio_general.toString(),
           opcion: stock.nombre,
           cantidad: lineaPedido.cantidad
         }
@@ -94,7 +119,7 @@ export class CarritoComponent implements OnInit {
         lineaFormateada = {
           imagen: producto.imagen,
           nombre: producto.nombre,
-          precio: producto.precio_socio,
+          precio: producto.precio_socio.toString(),
           opcion: stock.nombre,
           cantidad: lineaPedido.cantidad
         }
@@ -108,7 +133,7 @@ export class CarritoComponent implements OnInit {
     const observables: Observable<Producto>[] = [];
   
     for (const lineaPedido of this.carrito) {
-      const observable = this.productoService.getProducto(lineaPedido.producto);
+      const observable = this.productoService.getProducto(lineaPedido.idProducto);
       observables.push(observable);
     }
   
@@ -144,19 +169,64 @@ export class CarritoComponent implements OnInit {
   }
 
   async pay(): Promise<void> {
-    const payment = {
-      product_name: 'Iphone',
-      price: 99900,
-      quantity: 1,
-      cancelUrl: '/cancel',
-      successUrl: '/success',
-    };
+    const url = window.location.href;
+    const segments = url.split('/');
+    const rootUrl = segments[0] + '//' + segments[2];
+
+    let dataPedido = {
+      nombre: this.form.nombre,
+      email: this.form.email,
+      telefono: this.form.telefono,
+      estado: 'NO_PAGADO',
+      observaciones: this.form.observaciones,
+      pago: null,
+      socio: this.socio ? this.socio.id : null,
+    }
+
+    this.pedidoService.createPedido(dataPedido).subscribe({
+      next: async res => {
+        for (let lp of this.carrito) {
+          let stock = {
+            producto: lp.idProducto,
+            stock: lp.idStock,
+            cantidad: lp.cantidad,
+            pedido: res.id,
+          }
+          this.lineaPedidoService.createLineaPedido(stock).subscribe({
+            next: res => {
+              console.log("Línea pedido " + res.id + " creada correctamente");
+            },
+            error: err => {
+              console.log(err);
+            }
+          });
+        }
+        
+        const payment = {
+          product_name: 'Compra en tienda',
+          price: this.precioTotalCarrito,
+          quantity: 1,
+          nombre: res.nombre,
+          email: res.email,
+          telefono: res.telefono,
+          idPedido: res.id,
+          idSocio: this.socio ? this.socio.id : null,
+          cancelUrl: rootUrl + '/cancel',
+          successUrl: rootUrl + '/success',
+        };
     
-    (await this.carritoService.createCheckoutSession(payment)).subscribe({
-      next: res => {
-        window.location.href = res.url;
+        (await this.carritoService.createCompraCheckoutSession(payment)).subscribe({
+          next: (res) => {
+            window.location.href = res.url;
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
+        
       },
       error: err => {
+        this.errorMessage = err.error.message;
         console.log(err);
       }
     });

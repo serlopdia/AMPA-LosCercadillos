@@ -6,8 +6,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Observable } from 'rxjs';
 
 interface LineaPedidoTemporal {
-  producto: string;
-  stock: string;
+  idProducto: string;
+  idStock: string;
   cantidad: number;
 }
 
@@ -17,7 +17,7 @@ interface LineaPedidoTemporal {
 export class CarritoService {
 
   carrito: LineaPedidoTemporal[] = [];
-  stripePromise = loadStripe(environment.stripe);
+  stripePromise = loadStripe(environment.stripe_key);
 
   constructor(private http: HttpClient, private usersService: UsersService) {
     const storedCarrito = localStorage.getItem('carrito');
@@ -28,8 +28,8 @@ export class CarritoService {
 
   agregarAlCarrito(idProducto: string, idStock: string, cantidadUnidades: number) {
     const lineaPedidoTemporal: LineaPedidoTemporal = {
-      producto: idProducto,
-      stock: idStock,
+      idProducto: idProducto,
+      idStock: idStock,
       cantidad: cantidadUnidades
     };
 
@@ -47,7 +47,7 @@ export class CarritoService {
     localStorage.setItem('carrito', JSON.stringify(this.carrito));
   }
 
-  async createCheckoutSession(payment:any): Promise<Observable<any>>{
+  async createCompraCheckoutSession(payment:any): Promise<Observable<any>>{
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
     const stripe = await this.stripePromise;
     

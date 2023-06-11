@@ -16,7 +16,7 @@ const httpOptions = {
 })
 export class PagoCursoService {
   
-  stripePromise = loadStripe(environment.stripe);
+  stripePromise = loadStripe(environment.stripe_key);
 
   constructor(private http: HttpClient, private usersService: UsersService) { }
   
@@ -53,6 +53,24 @@ export class PagoCursoService {
         headers = headers.set('Authorization', 'Token '+ res[0])
 
         return this.http.get(`${API_url}/ampa/pagos_curso/socio/`+res[1], { headers: headers });
+      }
+    }
+    return new Observable<any>;
+  }
+
+  createPagoCurso(dataPago:any): Observable<any>{
+    if(this.usersService.isLoggedIn()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck != null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+        headers = headers.set('Authorization', 'Token ' + res[0]);
+        
+        return this.http.post(`${API_url}/ampa/pagos_curso/`, JSON.stringify(dataPago), { 'headers': headers });
       }
     }
     return new Observable<any>;

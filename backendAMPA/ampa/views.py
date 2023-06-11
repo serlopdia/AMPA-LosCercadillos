@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from rest_framework import permissions, authentication, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -136,48 +136,14 @@ class AsuntoDisponibilidadDia(APIView):
 
         return Response(horas_disponibles)
 
-def stripe_webhook(request):
-    # Verificar la autenticidad del evento de Stripe utilizando tu clave secreta de Stripe
-    payload = request.body
-    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
-    event = None
-
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, webhook_secret
-        )
-    except ValueError as e:
-        # La firma del evento no es válida
-        return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        # No se pudo verificar la firma del evento
-        return HttpResponse(status=400)
-
-    # Procesar el evento payment_intent.succeeded
-    if event['type'] == 'payment_intent.succeeded':
-        payment_intent = event['data']['object']
-        # Obtener los datos necesarios del payment_intent
-        payment_amount = payment_intent['amount']
-        payment_currency = payment_intent['currency']
-        payment_idCurso = payment_intent['metadata']['idCurso']
-        payment_idSocio = payment_intent['metadata']['idSocio']
-        # Crear el objeto PagoCurso en la base de datos
-        pago_curso = PagoCurso.objects.create(
-            cantidad=payment_amount,
-            estado=EstadoPago.PAGADO,
-            socio=payment_idSocio,
-            curso_escolar_id=payment_idCurso
-        )
-        pago_curso.save()
-
-    return HttpResponse(status=200)
-
 class CreateCuotaCheckoutSession(APIView):
     def post(self, request):
         dataDict = dict(request.data)
         price = int(dataDict['price'] * 100)
         product_name = dataDict['product_name']
         quantity = dataDict['quantity']
+        idCurso = dataDict['idCurso']
+        idSocio = dataDict['idSocio']
         
         try:
             checkout_session = stripe.checkout.Session.create(
@@ -194,6 +160,12 @@ class CreateCuotaCheckoutSession(APIView):
                 mode='payment',
                 success_url=dataDict['successUrl'],
                 cancel_url=dataDict['cancelUrl'],
+                payment_intent_data={
+                    'metadata': {
+                        'idCurso': idCurso,
+                        'idSocio': idSocio,
+                    }
+                }
             )
 
             return Response({'url': checkout_session.url})
@@ -201,31 +173,58 @@ class CreateCuotaCheckoutSession(APIView):
         except stripe.error.InvalidRequestError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-class CreatePagoCursoStripe(APIView):
+class PagoCursoStripeWebhook(APIView):
     def post(self, request):
-        event = stripe.Webhook.construct_event(
-            request.data,  # Pasar el cuerpo de la solicitud como bytes
-            request.META.get('HTTP_STRIPE_SIGNATURE'),  # Pasar la firma de la solicitud
-            settings.STRIPE_WEBHOOK_SECRET  # Pasar tu clave secreta de Stripe
-        )
+        event = None
+        payload = request.body
+        sig_header = request.META['HTTP_STRIPE_SIGNATURE']
 
-        if event['type'] == 'checkout.session.completed':
-            session = event['data']['object']
-            # Verificar el estado del pago en Stripe
-            if session['payment_status'] == 'paid':
-                cantidad = session['amount_total'] / 100
-                estado = 'ACEPTADO'
-                idCurso = session['metadata']['idCurso']
-                socio_id = request.user.socio.id
+        try:
+            event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+        except ValueError as err:
+            # Invalid payload
+            raise err
+        except stripe.error.SignatureVerificationError as err:
+            # Invalid signature
+            raise err
 
-                # Crea el PagoCurso
-                pago_curso = PagoCurso.objects.create(
-                    cantidad=cantidad,
-                    estado=estado,
-                    socio_id=socio_id,
-                    curso_escolar_id=idCurso
-                )
+        # Handle the event
+        if event.type == 'payment_intent.succeeded':
+            session = event.data.object
+            
+            payment_data = session['metadata']
+            payment_amount = session['amount']
+            payment_idCurso = payment_data['idCurso']
+            payment_idSocio = payment_data['idSocio']
 
-                return Response(status=status.HTTP_201_CREATED)
+            socio = get_object_or_404(Socio, id=payment_idSocio)
+            curso_escolar = get_object_or_404(CursoEscolar, id=payment_idCurso)
 
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+            pago_curso = PagoCurso.objects.create(
+                cantidad=payment_amount/100,
+                estado=EstadoPago.PAGADO,
+                socio=socio,
+                curso_escolar=curso_escolar
+            )
+            pago_curso.save()
+            
+        elif event.type == 'payment_intent.canceled' or event.type == 'payment_intent.payment_failed':
+            session = event.data.object
+            
+            payment_data = session['metadata']
+            payment_amount = session['amount']
+            payment_idCurso = payment_data['idCurso']
+            payment_idSocio = payment_data['idSocio']
+
+            socio = get_object_or_404(Socio, id=payment_idSocio)
+            curso_escolar = get_object_or_404(CursoEscolar, id=payment_idCurso)
+
+            pago_curso = PagoCurso.objects.create(
+                cantidad=payment_amount/100,
+                estado=EstadoPago.RECHAZADO,
+                socio=socio,
+                curso_escolar=curso_escolar
+            )
+            pago_curso.save()
+
+        return JsonResponse({'success': True})

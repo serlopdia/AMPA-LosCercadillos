@@ -60,19 +60,57 @@
                     </div>
                     <div class="p-4">
                         <p class="mb-4"><em>Si tienes alguna información relevante para el pedido, puedes dejarla en la caja de debajo.</em></p>
-                        <textarea name="" cols="30" rows="2" class="form-control"></textarea>
+                        <textarea [(ngModel)]="form.observaciones" id="observaciones" name="observaciones" cols="30" rows="2" class="form-control"></textarea>
                     </div>
                 </div>
+                
                 <div class="col-lg-6">
                     <div class="bg-light rounded-pill px-4 py-3 text-uppercase fw-bold">
-                        Resumen del pedido 
+                        Proceder al pago
                     </div>
                     <div class="p-4">
                         <p class="mb-4"><em>Los pedidos no son envíados, podrá recogerlo en las instalaciones del AMPA cuando la administración se lo indique.</em></p>
+
+                        <div class="form-group row">
+                            <div class="mb-3 col-sm-12">
+                                <label class="mb-2 text-muted" for="nombre">Nombre del titular</label>
+                                <input [(ngModel)]="form.nombre" id="nombre" type="text" class="form-control" name="nombre" placeholder="María Sánchez Pérez" required autofocus>
+                                <div class="invalid-feedback error">
+                                    <div>
+                                        Debe introducir el nombre del titular
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="mb-3 col-sm-12">
+                                <label class="mb-2 text-muted" for="email">Email</label>
+                                <input [(ngModel)]="form.email" id="email" type="email" class="form-control" name="email" placeholder="correo@ejemplo.com" required autofocus>
+                                <div class="invalid-feedback error">
+                                    <div>
+                                        Debe introducir un correo electrónico
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <div class="mb-3 col-sm-12">
+                                <label class="mb-2 text-muted" for="telefono">Número de teléfono</label>
+                                <input [(ngModel)]="form.telefono" id="telefono" type="text" class="form-control" name="telefono" placeholder="601234567" required autofocus>
+                                <div class="invalid-feedback error">
+                                    <div>
+                                        Debe introducir un correo electrónico
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <ul class="list-unstyled mb-4">
-                            <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total</strong><h5 class="fw-bold">{{ precioTotalCarrito }} €</h5></li>
+                            <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total a pagar</strong><h5 class="fw-bold">{{ precioTotalCarrito }} €</h5></li>
                         </ul>
-                        <a class="btn btn-dark rounded-pill py-2 d-md-block" (click)="pay()">Proceder al pago</a>
+                        <a class="btn btn-dark rounded-pill py-2 d-md-block" (click)="pay()">Realizar el pago</a>
                     </div>
                 </div>
         </div>
