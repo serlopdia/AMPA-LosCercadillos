@@ -16,8 +16,10 @@ interface Sugerencia {
 export class BuzonComponent implements OnInit {
 
   listaSugerencias: Sugerencia[] = [];
+  sugerenciasFiltradas: Sugerencia[] = [];
   sugerenciasFormateadas: Sugerencia[] = [];
   mapMostrarDescripcionCompleta: Map<number, boolean>;
+  valorBusqueda = '';
 
   constructor(private buzonService: BuzonService) {
     this.mapMostrarDescripcionCompleta = new Map();
@@ -27,6 +29,7 @@ export class BuzonComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.buscar();
     this.formatearSugerencias();
   }
 
@@ -51,6 +54,26 @@ export class BuzonComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  buscar() {
+    if (this.valorBusqueda.trim() !== '') {
+      this.sugerenciasFiltradas = this.sugerenciasFormateadas.filter((sugerencia) =>
+        sugerencia.titulo.toLowerCase().includes(this.valorBusqueda.toLowerCase()) ||
+        sugerencia.descripcion.toLowerCase().includes(this.valorBusqueda.toLowerCase())
+      );
+    } else {
+      this.buzonService.getSugerencias().subscribe({
+        next: res => {
+          res.forEach((sugerencia: Sugerencia) => {
+            sugerencia = this.formatearFecha(sugerencia);
+          });
+          this.sugerenciasFiltradas = res;
+        },error: err => {
+          console.log(err);
+        }
+      })
+    }
   }
 
   formatearSugerencias() {

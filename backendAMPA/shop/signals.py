@@ -13,17 +13,17 @@ def create_shop(sender, **kwargs):
             producto_sample_dos.save()
 
         if not Pago.objects.exists():
-            pago_sample_uno = Pago.objects.create(estado=EstadoPago.PENDIENTE, cantidad=6.25, socio=socio)
+            pago_sample_uno = Pago.objects.create(nombre='Sergio López Díaz', email='sergio@correo.com', telefono='601027857', estado=EstadoPago.PENDIENTE, cantidad=6.25, socio=socio)
             pago_sample_uno.save()
-            pago_sample_dos = Pago.objects.create(estado=EstadoPago.PAGADO, cantidad=31.0, socio=socio)
+            pago_sample_dos = Pago.objects.create(nombre='Sergio López Díaz', email='sergio@correo.com', telefono='601027857', estado=EstadoPago.PAGADO, cantidad=31.0, socio=socio)
             pago_sample_dos.save()
 
         if not Pedido.objects.exists():
             pago_sample_uno = Pago.objects.get(id=1)
             pago_sample_dos = Pago.objects.get(id=2)
-            pedido_sample_uno = Pedido.objects.create(estado=EstadoPedido.PREPARACION, pago=pago_sample_uno, socio=socio)
+            pedido_sample_uno = Pedido.objects.create(nombre='Sergio López Díaz', email='sergio@correo.com', telefono='601027857', estado=EstadoPedido.PREPARACION, observaciones='', pago=pago_sample_uno, socio=socio)
             pedido_sample_uno.save()
-            pedido_sample_dos = Pedido.objects.create(estado=EstadoPedido.ENTREGADO, pago=pago_sample_dos, socio=socio)
+            pedido_sample_dos = Pedido.objects.create(nombre='Sergio López Díaz', email='sergio@correo.com', telefono='601027857', estado=EstadoPedido.ENTREGADO, observaciones='La quiero de la clase de 1ºPrimaria B', pago=pago_sample_dos, socio=socio)
             pedido_sample_dos.save()
 
         if not LineaPedido.objects.exists():

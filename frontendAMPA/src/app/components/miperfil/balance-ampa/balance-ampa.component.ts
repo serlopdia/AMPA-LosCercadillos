@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BalanceService } from 'src/app/services/balance.service';
+import { UsersService } from 'src/app/services/users.service';
 
 interface Balance {
   id: number;
@@ -16,13 +17,24 @@ interface Balance {
 })
 export class BalanceAmpaComponent implements OnInit {
 
+  esSocio = false;
   listaCuentas: Balance[] = [];
   errorMessage = '';
 
-  constructor(private balanceService: BalanceService) { }
+  constructor(private balanceService: BalanceService, private usersService: UsersService) { }
 
   ngOnInit(): void {
-    this.getIngresosGastos();
+    this.usersService.checkEsSocio().subscribe(esSocio => {
+      this.esSocio = esSocio;
+      if(esSocio) {
+        this.getIngresosGastos();
+      } else {
+        document.location.href = "/miperfil/pagos"
+        window.location.href = "/miperfil/pagos"
+      }
+    }, error => {
+      console.log(error);
+    });
   }
 
   getIngresosGastos() {
@@ -31,12 +43,10 @@ export class BalanceAmpaComponent implements OnInit {
         const currentDate = new Date();
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(currentDate.getDate() - 30);
-        // FILTRA PARA OBTENER SOLO LOS REGISTROS DE LOS ÚLTIMOS 30 DÍAS
         const filteredRes = res.filter((obj: { created_at: string | number | Date; }) => {
           const createdAtDate = new Date(obj.created_at);
           return createdAtDate >= thirtyDaysAgo && createdAtDate <= currentDate;
         });
-        // ORDENA POR created_at DE FORMA DESCENDENTE
         this.listaCuentas = filteredRes.sort((a: { created_at: number; }, b: { created_at: number; }) => {
           if (a.created_at > b.created_at) {
             return -1;

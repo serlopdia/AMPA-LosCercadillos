@@ -49,7 +49,22 @@ export class ProductoComponent implements OnInit {
   }
 
   agregarStock(): void {
-    if (
+    if (!this.stockNuevo.nombre || !this.stockNuevo.cantidad) {
+      // Mostrar mensaje de error para campos vacíos
+      if (!this.stockNuevo.nombre) {
+        const nombreElement = document.getElementById('nombre_stockNuevo');
+        if (nombreElement) {
+          nombreElement.classList.add('is-invalid');
+        }
+      }
+      if (!this.stockNuevo.cantidad) {
+        const cantidadElement = document.getElementById('stockNuevo');
+        if (cantidadElement) {
+          cantidadElement.classList.add('is-invalid');
+        }
+      }
+      return;
+    } else if (
       this.stockNuevo.cantidad !== null &&
       this.stockNuevo.cantidad !== undefined &&
       this.stockNuevo.nombre &&
@@ -93,7 +108,25 @@ export class ProductoComponent implements OnInit {
               console.log("Stock " + res.id + " creado correctamente");
             },
             error: err => {
-              console.log(err);
+              let errorMessages = "Datos erróneos";
+              if (err.error && typeof err.error === "object") {
+                const errors = Object.entries(err.error);
+                const messages = errors.flatMap(([field, error]: [string, any]) => {
+                  if (Array.isArray(error)) {
+                    return error.map((errorMsg: string) => `${field}: ${errorMsg}`);
+                  } else if (typeof error === "string") {
+                    return [`${field}: ${error}`];
+                  } else {
+                    return [];
+                  }
+                });
+                if (messages.length > 0) {
+                  errorMessages = messages.join("\n");
+                }
+              }
+            
+              this.errorMessage = errorMessages;
+              window.alert("Error: " + this.errorMessage);
             }
           });
         }
@@ -101,9 +134,26 @@ export class ProductoComponent implements OnInit {
         window.location.href = "/dashboard/productos";
       },
       error: err => {
-        this.errorMessage = err.error.message;
-        console.log(err);
-      }
+          let errorMessages = "Datos erróneos";
+          if (err.error && typeof err.error === "object") {
+            const errors = Object.entries(err.error);
+            const messages = errors.flatMap(([field, error]: [string, any]) => {
+              if (Array.isArray(error)) {
+                return error.map((errorMsg: string) => `${field}: ${errorMsg}`);
+              } else if (typeof error === "string") {
+                return [`${field}: ${error}`];
+              } else {
+                return [];
+              }
+            });
+            if (messages.length > 0) {
+              errorMessages = messages.join("\n");
+            }
+          }
+        
+          this.errorMessage = errorMessages;
+          window.alert("Error: " + this.errorMessage);
+        }
     });
   }
 

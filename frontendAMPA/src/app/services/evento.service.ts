@@ -80,5 +80,41 @@ export class EventoService {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
     return this.http.get(`${API_url}/ampa/eventos/${idEvento}`,{'headers':headers})
   }
+
+  inscribirSocio(idEvento: any): Observable<any> {
+    if (this.usersService.isLoggedIn()) {
+      const ck = localStorage.getItem('auth-user');
+      if (ck != null) {
+        const tk = JSON.parse(ck);
+        const res = [];
+        for (const i in tk) {
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.set('Authorization', 'Token ' + res[0]);
+  
+        return this.http.post(`${API_url}/ampa/eventos/${idEvento}/join/`, null, { headers: headers });
+      }
+    }
+    return new Observable<any>();
+  }
+
+  abandonarEvento(idEvento: any): Observable<any> {
+    if (this.usersService.isLoggedIn()) {
+      const ck = localStorage.getItem('auth-user');
+      if (ck != null) {
+        const tk = JSON.parse(ck);
+        const res = [];
+        for (const i in tk) {
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.set('Authorization', 'Token ' + res[0]);
+  
+        return this.http.post(`${API_url}/ampa/eventos/${idEvento}/leave/`, null, { headers: headers });
+      }
+    }
+    return new Observable<any>();
+  }
   
 }

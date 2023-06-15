@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from './guards/admin.guard';
+import { UsuarioGuard } from './guards/usuario.guard';
 import { SocioGuard } from './guards/socio.guard';
 
 import { IndexComponent } from './components/index/index.component';
@@ -23,6 +24,7 @@ import { GestionCursosComponent } from './components/admin/gestion-cursos/gestio
 import { SocioComponent } from './components/admin/forms/socio/socio.component';
 import { ProductoComponent } from './components/admin/forms/producto/producto.component';
 import { EventoComponent } from './components/admin/forms/evento/evento.component';
+import { SociosEventoComponent } from './components/admin/socios-evento/socios-evento.component';
 import { NoticiaComponent } from './components/admin/forms/noticia/noticia.component';
 import { GestionColaboradoresComponent } from './components/admin/gestion-colaboradores/gestion-colaboradores.component';
 import { ColaboradorComponent } from './components/admin/forms/colaborador/colaborador.component';
@@ -31,6 +33,7 @@ import { ShowNoticiaComponent } from './components/admin/shows/show-noticia/show
 import { ShowProductoComponent } from './components/admin/shows/show-producto/show-producto.component';
 import { ShowEventoComponent } from './components/admin/shows/show-evento/show-evento.component';
 import { ShowPedidoComponent } from './components/admin/shows/show-pedido/show-pedido.component';
+import { ShowPagoComponent } from './components/admin/shows/show-pago/show-pago.component';
 import { ShowBalanceComponent } from './components/admin/shows/show-balance/show-balance.component';
 import { ShowCursoComponent } from './components/admin/shows/show-curso/show-curso.component';
 import { ShowAsuntoComponent } from './components/admin/shows/show-asunto/show-asunto.component';
@@ -47,19 +50,27 @@ import { CarritoComponent } from './components/public/carrito/carrito.component'
 import { VistaProductoComponent } from './components/public/vista-producto/vista-producto.component';
 import { VentajasComponent } from './components/public/ventajas/ventajas.component';
 import { DetallesNoticiaComponent } from './components/public/detalles-noticia/detalles-noticia.component';
+import { DetallesEventoComponent } from './components/public/detalles-evento/detalles-evento.component';
 
 import { DatosPersonalesComponent } from './components/miperfil/datos-personales/datos-personales.component';
 import { EditarDatosPersonalesComponent } from './components/miperfil/editar-datos-personales/editar-datos-personales.component';
+import { EditarPasswordSocioComponent } from './components/miperfil/editar-password-socio/editar-password-socio.component';
 import { CitasSocioComponent } from './components/miperfil/citas-socio/citas-socio.component';
 import { PagosSocioComponent } from './components/miperfil/pagos-socio/pagos-socio.component';
+import { PedidosSocioComponent } from './components/miperfil/pedidos-socio/pedidos-socio.component';
 import { BalanceAmpaComponent } from './components/miperfil/balance-ampa/balance-ampa.component';
 import { VistaColaboradoresComponent } from './components/miperfil/vista-colaboradores/vista-colaboradores.component';
 import { HijosSocioComponent } from './components/miperfil/hijos-socio/hijos-socio.component';
 import { CarnetVirtualComponent } from './components/miperfil/carnet-virtual/carnet-virtual.component';
 
+import { SuccessPayComponent } from './layouts/success-pay/success-pay.component';
+import { CancelPayComponent } from './layouts/cancel-pay/cancel-pay.component';
+import { NotSocioComponent } from './layouts/not-socio/not-socio.component';
+
 const routes: Routes = [
   { path: '', component: IndexComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
+  { path: 'not-socio', component: NotSocioComponent },
 
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
@@ -71,6 +82,7 @@ const routes: Routes = [
   { path: 'dashboard/pedidos', component: GestionPedidosComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/pedidos/show/:id', component: ShowPedidoComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/pagos', component: GestionPagosComponent, canActivate: [AdminGuard] },
+  { path: 'dashboard/pagos/show/:id', component: ShowPagoComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/citas', component: GestionCitasComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/citas/show/asunto/:id', component: ShowAsuntoComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/eventos', component: GestionEventosComponent, canActivate: [AdminGuard] },
@@ -91,6 +103,7 @@ const routes: Routes = [
   { path: 'dashboard/productos/:id/stocks', component: ShowStocksComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/eventos/form', component: EventoComponent, canActivate: [AdminGuard] },
   { path: 'dashboard/eventos/show/:id', component: ShowEventoComponent, canActivate: [AdminGuard] },
+  { path: 'dashboard/eventos/:id/socios', component: SociosEventoComponent, canActivate: [AdminGuard] },
   { path: 'gestion/noticias/form', component: NoticiaComponent, canActivate: [AdminGuard] },
   { path: 'gestion/noticias/show/:id', component: ShowNoticiaComponent, canActivate: [AdminGuard] },
   { path: 'gestion/colaboradores/form', component: ColaboradorComponent, canActivate: [AdminGuard] },
@@ -105,16 +118,22 @@ const routes: Routes = [
   { path: 'tienda/producto/:id', component: VistaProductoComponent, canActivate: [] },
   { path: 'carrito', component: CarritoComponent, canActivate: [] },
   { path: 'eventos', component: EventosComponent, canActivate: [] },
+  { path: 'eventos/:id', component: DetallesEventoComponent, canActivate: [] },
   { path: 'ventajas', component: VentajasComponent, canActivate: [] },
   
-  { path: 'miperfil/datos', component: DatosPersonalesComponent, canActivate: [SocioGuard] },
-  { path: 'miperfil/datos/editar', component: EditarDatosPersonalesComponent, canActivate: [SocioGuard] },
+  { path: 'miperfil/datos', component: DatosPersonalesComponent, canActivate: [UsuarioGuard] },
+  { path: 'miperfil/datos/editar', component: EditarDatosPersonalesComponent, canActivate: [UsuarioGuard] },
+  { path: 'miperfil/datos/editar/contrasenya', component: EditarPasswordSocioComponent, canActivate: [UsuarioGuard] },
   { path: 'miperfil/hijos', component: HijosSocioComponent, canActivate: [SocioGuard] },
   { path: 'miperfil/citas', component: CitasSocioComponent, canActivate: [SocioGuard] },
-  { path: 'miperfil/pagos', component: PagosSocioComponent, canActivate: [SocioGuard] },
+  { path: 'miperfil/pagos', component: PagosSocioComponent, canActivate: [UsuarioGuard] },
+  { path: 'miperfil/pedidos', component: PedidosSocioComponent, canActivate: [UsuarioGuard] },
   { path: 'miperfil/balance-ampa', component: BalanceAmpaComponent, canActivate: [SocioGuard] },
   { path: 'miperfil/colaboradores', component: VistaColaboradoresComponent, canActivate: [SocioGuard] },
   { path: 'miperfil/carnet', component: CarnetVirtualComponent, canActivate: [SocioGuard] },
+
+  { path: 'success', component: SuccessPayComponent, canActivate: [] },
+  { path: 'cancel', component: CancelPayComponent, canActivate: [] },
 ];
 
 @NgModule({

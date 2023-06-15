@@ -1,0 +1,45 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* for main section */
+  .active-cont {
+    margin-left: 300px;
+  }
+  
+  #menu-btn {
+    background-color: rgb(21, 30, 83);
+    color: #fff;
+  }
+  
+  .my-container {
+    transition: 0.4s;
+  }
+  
+  .my-container input {
+    border-radius: 2rem;
+    padding: 2px 20px;
+  }
+
+  .card {
+    display: flex;
+    flex: 0 0 20rem;
+    margin: 2vh 50px;
+  }
+  
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+  }
+  
+  .card-footer {
+    text-align: right;
+  }
+
+  .card:hover{
+    border-color: gray;
+  }
+  

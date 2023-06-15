@@ -18,11 +18,14 @@ interface Colaborador {
 export class GestionColaboradoresComponent implements OnInit {
 
   listaColaboradores: Colaborador[] = [];
+  colaboradoresFiltrados: Colaborador[] = [];
   colaboradoresFormateados: Colaborador[] = [];
+  valorBusqueda = '';
 
   constructor(private colaboradorService: ColaboradorService) { }
 
   ngOnInit(): void {
+    this.buscar();
     this.formatearColaboradores();
   }
 
@@ -47,6 +50,27 @@ export class GestionColaboradoresComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  buscar() {
+    if (this.valorBusqueda.trim() !== '') {
+      this.colaboradoresFiltrados = this.colaboradoresFormateados.filter((colaborador) =>
+        colaborador.nombre.toLowerCase().includes(this.valorBusqueda.toLowerCase()) ||
+        colaborador.ventaja.toLowerCase().includes(this.valorBusqueda.toLowerCase()) ||
+        colaborador.descripcion.toLowerCase().includes(this.valorBusqueda.toLowerCase())
+      );
+    } else {
+      this.colaboradorService.getColaboradores().subscribe({
+        next: res => {
+          res.forEach((colaborador: Colaborador) => {
+            colaborador = this.formatearFecha(colaborador);
+          });
+          this.colaboradoresFiltrados = res;
+        },error: err => {
+          console.log(err);
+        }
+      })
+    }
   }
 
   formatearColaboradores() {

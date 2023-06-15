@@ -4,29 +4,31 @@
   <div class="p-1 my-container active-cont">
 
     <nav class="navbar navbar-blank bg-blank">
-      <form class="form-inline buscador">
-        <input class="form-control mr-sm-2" type="search" placeholder="Buscar pago" style="margin-right: 20px;">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+      <form (ngSubmit)="buscar()" class="form-inline buscador">
+        <input class="form-control mr-sm-2" name="valorBusqueda" type="search" placeholder="Buscar pago" style="margin-right: 20px;" [(ngModel)]="valorBusqueda">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="button">Buscar</button>
       </form>
     </nav>
 
-    <div class="table-container">
+    <div *ngIf="pagosFiltrados.length > 0" class="table-container">
       <table class="table table-bordered table-hover">
         <thead>
           <tr>
             <th scope="col" style="width: 50px;">Id</th>
-            <th scope="col">Socio</th>
+            <th scope="col">Email</th>
+            <th scope="col">Teléfono</th>
             <th scope="col">Cantidad</th>
             <th scope="col">Fecha</th>
             <th scope="col">Estado</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let pago of pagosFormateados" 
+          <tr *ngFor="let pago of pagosFiltrados" 
           id="{{ pago.id }}" 
-          class="socio">
+          class="pago" [routerLink]="['/dashboard/pagos/show/'+pago.id]">
             <th scope="row">{{ pago.id }}</th>
-            <td>{{ nombresSocios[pago.socio] }}</td>
+            <td>{{ pago.email }}</td>
+            <td>{{ pago.telefono }}</td>
             <td>{{ pago.cantidad }} €</td>
             <td>{{ pago.created_at }}</td>
             <td [ngClass]="{
@@ -36,6 +38,11 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    
+    <div *ngIf="pagosFiltrados.length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+      <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+      <div style="opacity: .2;">No hay pagos aún.</div>
     </div>
 
   </div>

@@ -41,6 +41,7 @@ interface Clase {
 })
 export class HijosSocioComponent implements OnInit {
 
+  esSocio = false;
   hijoNuevo:any ={
     nombre: null,
     apellidos: null,
@@ -54,12 +55,22 @@ export class HijosSocioComponent implements OnInit {
   socio!: Socio;
   listaClases: Clase[] = [];
 
-  constructor(private hijoService: HijoService, private cursoService: CursoService, private route: ActivatedRoute, private usersService: UsersService) { }
+  constructor(private hijoService: HijoService, private cursoService: CursoService, private usersService: UsersService) { }
 
   ngOnInit(): void {
-    this.getDatosSocio();
-    this.getHijosSocio();
-    this.getClasesList();
+    this.usersService.checkEsSocio().subscribe(esSocio => {
+      this.esSocio = esSocio;
+      if(esSocio) {
+        this.getDatosSocio();
+        this.getHijosSocio();
+        this.getClasesList();
+      } else {
+        document.location.href = "/miperfil/pagos"
+        window.location.href = "/miperfil/pagos"
+      }
+    }, error => {
+      console.log(error);
+    });
   }
 
   getDatosSocio() {
@@ -95,13 +106,30 @@ export class HijosSocioComponent implements OnInit {
     this.hijoService.createHijo(hijo).subscribe({
       next: res => {
         this.getHijosSocio();
+        this.hijoNuevo = {};
       },
       error: err => {
-        this.errorMessage=err.error.message;
-        console.log(err);
-      }
-    })
-    this.hijoNuevo = {};
+          let errorMessages = "Datos erróneos";
+          if (err.error && typeof err.error === "object") {
+            const errors = Object.entries(err.error);
+            const messages = errors.flatMap(([field, error]: [string, any]) => {
+              if (Array.isArray(error)) {
+                return error.map((errorMsg: string) => `${field}: ${errorMsg}`);
+              } else if (typeof error === "string") {
+                return [`${field}: ${error}`];
+              } else {
+                return [];
+              }
+            });
+            if (messages.length > 0) {
+              errorMessages = messages.join("\n");
+            }
+          }
+        
+          this.errorMessage = errorMessages;
+          window.alert("Error: " + this.errorMessage);
+        }
+    });
   }
 
   guardarModificaciones(): void {

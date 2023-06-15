@@ -4,38 +4,47 @@
   <div class="p-1 my-container active-cont">
 
     <nav class="navbar navbar-blank bg-blank">
-      <form class="form-inline buscador">
-        <input class="form-control mr-sm-2" type="search" placeholder="Buscar pedido" style="margin-right: 20px;">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+      <form (ngSubmit)="buscar()" class="form-inline buscador">
+        <input class="form-control mr-sm-2" name="valorBusqueda" type="search" placeholder="Buscar pedido" style="margin-right: 20px;" [(ngModel)]="valorBusqueda">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="button">Buscar</button>
       </form>
     </nav>
 
-    <div class="table-container">
+    <div *ngIf="pedidosFiltrados.length > 0" class="table-container">
       <table class="table table-bordered table-hover">
         <thead>
           <tr>
             <th scope="col" style="width: 50px;">Id</th>
-            <th scope="col">Socio</th>
+            <th scope="col">Email</th>
+            <th scope="col">Teléfono</th>
             <th scope="col">Pago</th>
             <th scope="col">Fecha</th>
             <th scope="col">Estado</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let pedido of pedidosFormateados" 
+          <tr *ngFor="let pedido of pedidosFiltrados" 
           id="{{ pedido.id }}" 
-          class="socio">
+          class="pedido" [routerLink]="['/dashboard/pedidos/show/'+pedido.id]">
             <th scope="row">{{ pedido.id }}</th>
-            <td>{{ nombresSocios[pedido.socio] }}</td>
+            <td>{{ pedido.email }}</td>
+            <td>{{ pedido.telefono }}</td>
             <td>#{{ pedido.pago }}</td>
             <td>{{ pedido.created_at }}</td>
             <td [ngClass]="{
-              'text-success': pedido.estado === 'ENVIADO',
+              'text-success': pedido.estado === 'ENTREGADO',
               'text-primary': pedido.estado === 'PREPARACION',
-              'text-danger': pedido.estado === 'CANCELADO'}"><b>{{ pedido.estado }}</b></td>
+              'text-warning': pedido.estado === 'DEVUELTO',
+              'text-danger': pedido.estado === 'CANCELADO',
+              'text-dark': pedido.estado === 'NO_PAGADO'}"><b>{{ pedido.estado }}</b></td>
           </tr>
         </tbody>
       </table>
+    </div>
+    
+    <div *ngIf="pedidosFiltrados.length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+      <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+      <div style="opacity: .2;">No hay pedidos aún.</div>
     </div>
 
   </div>

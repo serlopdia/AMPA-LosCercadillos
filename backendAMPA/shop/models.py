@@ -14,7 +14,9 @@ class EstadoPago(models.TextChoices):
 class EstadoPedido(models.TextChoices):
     ENTREGADO = "ENTREGADO", _("Entregado"),
     PREPARACION = "PREPARACION", _("Preparación"),
+    DEVUELTO = "DEVUELTO", _("Devuelto"),
     CANCELADO = "CANCELADO", _("Cancelado"),
+    NO_PAGADO = "NO_PAGADO", _("No pagado"),
 
 class Producto(models.Model):
     nombre = models.CharField(max_length=64)
@@ -28,6 +30,9 @@ class Producto(models.Model):
         app_label="shop"
 
 class Pago(models.Model):
+    nombre = models.CharField(max_length=128)
+    email = models.CharField(max_length=128)
+    telefono = models.CharField(max_length=20)
     estado = models.CharField(choices=EstadoPago.choices, max_length=64)
     cantidad = models.FloatField()
     socio = models.ForeignKey(Socio, on_delete=models.SET_NULL, null=True)
@@ -41,7 +46,11 @@ class Pago(models.Model):
             raise ValidationError("El valor del campo 'estado' debe ser uno de los siguientes: 'PAGADO', 'PENDIENTE', 'RECHAZADO'")
 
 class Pedido(models.Model):
+    nombre = models.CharField(max_length=128)
+    email = models.CharField(max_length=128)
+    telefono = models.CharField(max_length=20)
     estado = models.CharField(choices=EstadoPedido.choices, max_length=64)
+    observaciones = models.CharField(max_length=512, null=True, blank=True)
     pago = models.ForeignKey(Pago, on_delete=models.SET_NULL, null=True)
     socio = models.ForeignKey(Socio, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -50,8 +59,8 @@ class Pedido(models.Model):
         app_label="shop"
 
     def clean(self):
-        if self.estado not in ["ENTREGADO", "PREPARACION", "DEVUELTO"]:
-            raise ValidationError("El valor del campo 'estado' debe ser uno de los siguientes: 'ENTREGADO', 'PREPARACION', 'DEVUELTO'")
+        if self.estado not in ["ENTREGADO", "PREPARACION", "DEVUELTO", "CANCELADO", "NO_PAGADO"]:
+            raise ValidationError("El valor del campo 'estado' debe ser uno de los siguientes: 'ENTREGADO', 'PREPARACION', 'DEVUELTO', 'CANCELADO', 'NO_PAGADO'")
 
 class StockProducto(models.Model):
     nombre = models.CharField(max_length=64)

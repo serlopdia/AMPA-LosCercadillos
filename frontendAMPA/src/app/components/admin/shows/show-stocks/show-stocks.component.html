@@ -36,31 +36,33 @@
                     </form>
                     
                     <br>
-                    <div class="form-group row">
-                        <h5 class="fs-5 mb-2">CREAR NUEVO</h5>
+                    <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && crearStock()" #f="ngForm" novalidate>
                         <div class="form-group row">
-                            <div class="mb-3 col-sm-6">
-                                <label class="mb-2 text-muted" for="nombre_stockNuevo">Nombre</label>
-                                <input [(ngModel)]="stockNuevo.nombre" id="nombre_stockNuevo" type="text" class="form-control" name="nombre_stock">
-                                <div class="invalid-feedback error">
-                                    <div>Debe introducir un nombre de stock, p.ej: Taza azul</div>
+                            <h5 class="fs-5 mb-2">CREAR NUEVO</h5>
+                            <div class="form-group row">
+                                <div class="mb-3 col-sm-6">
+                                    <label class="mb-2 text-muted" for="nombre_stockNuevo">Nombre</label>
+                                    <input [(ngModel)]="stockNuevo.nombre" #nombre="ngModel" id="nombre_stockNuevo" type="text" class="form-control" name="nombre_stock" [ngClass]="{ 'is-invalid': f.submitted && nombre.errors }" required>
+                                    <div class="invalid-feedback error">
+                                        <div>Debe introducir un nombre de stock, p.ej: Taza azul</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="mb-3 col-sm-4">
-                                <label class="mb-2 text-muted" for="stockNuevo">Cantidad</label>
-                                <input [(ngModel)]="stockNuevo.cantidad" id="stockNuevo" type="number" min="0" class="form-control" name="stock">
-                                <div class="invalid-feedback error">
-                                    <div>Debe introducir una cantidad de stock</div>
+                                <div class="mb-3 col-sm-4">
+                                    <label class="mb-2 text-muted" for="stockNuevo">Cantidad</label>
+                                    <input [(ngModel)]="stockNuevo.cantidad" #cantidad="ngModel" id="stockNuevo" type="number" min="0" class="form-control" name="stock" [ngClass]="{ 'is-invalid': f.submitted && cantidad.errors }" required>
+                                    <div class="invalid-feedback error">
+                                        <div>Debe introducir una cantidad de stock</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="align-items-center">
-                        <button type="button" class="btn btn-outline-success ms-auto" (click)="crearStock()">
-                            Crear nuevo stock
-                        </button>
-                    </div>
+                        <div class="align-items-center">
+                            <button type="submit" class="btn btn-outline-success ms-auto">
+                                Crear nuevo stock
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="card-footer py-3 border-0">

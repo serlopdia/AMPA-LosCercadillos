@@ -10,7 +10,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="asunto">Asunto</label>
-                            <input [(ngModel)]="form.nombre" id="asunto" type="text" class="form-control" name="asunto" value="" required autofocus>
+                            <input [(ngModel)]="form.nombre" #nombre="ngModel" id="asunto" type="text" class="form-control" name="asunto" [ngClass]="{ 'is-invalid': f.submitted && nombre.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir un nombre de asunto
@@ -22,7 +22,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="fecha_inicio">Fecha inicio</label>
-                            <input [(ngModel)]="form.fecha_inicio" id="fecha_inicio" type="date" class="form-control" name="fecha_inicio" value="" required autofocus>
+                            <input [(ngModel)]="form.fecha_inicio" #fecha_inicio="ngModel" id="fecha_inicio" type="date" class="form-control" name="fecha_inicio" [ngClass]="{ 'is-invalid': f.submitted && fecha_inicio.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una fecha de inicio
@@ -31,7 +31,7 @@
                         </div>
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="hora_inicio">Hora inicio</label>
-                            <input [(ngModel)]="form.hora_inicio" id="hora_inicio" type="time" class="form-control" name="hora_inicio" value="" required autofocus>
+                            <input [(ngModel)]="form.hora_inicio" #hora_inicio="ngModel" id="hora_inicio" type="time" class="form-control" name="hora_inicio" [ngClass]="{ 'is-invalid': f.submitted && hora_inicio.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una hora de inicio
@@ -43,7 +43,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="fecha_fin">Fecha fin</label>
-                            <input [(ngModel)]="form.fecha_fin" id="fecha_fin" type="date" class="form-control" name="fecha_fin" value="" required autofocus>
+                            <input [(ngModel)]="form.fecha_fin" #fecha_fin="ngModel" id="fecha_fin" type="date" class="form-control" name="fecha_fin" [ngClass]="{ 'is-invalid': f.submitted && fecha_fin.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una fecha de finalización
@@ -52,7 +52,7 @@
                         </div>
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="hora_fin">Hora fin</label>
-                            <input [(ngModel)]="form.hora_fin" id="hora_fin" type="time" class="form-control" name="hora_fin" value="" required autofocus>
+                            <input [(ngModel)]="form.hora_fin" #hora_fin="ngModel" id="hora_fin" type="time" class="form-control" name="hora_fin" [ngClass]="{ 'is-invalid': f.submitted && hora_fin.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una hora de finalización
@@ -64,7 +64,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="minutos_frecuencia">Minutos frecuencia</label>
-                            <input [(ngModel)]="form.minutos_frecuencia" id="minutos_frecuencia" type="number" min="1" step="1" class="form-control" name="minutos_frecuencia" value="" required autofocus>
+                            <input [(ngModel)]="form.minutos_frecuencia" #minutos_frecuencia="ngModel" id="minutos_frecuencia" type="number" min="1" step="1" class="form-control" name="minutos_frecuencia" [ngClass]="{ 'is-invalid': f.submitted && minutos_frecuencia.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir unos minutos de frecuencia

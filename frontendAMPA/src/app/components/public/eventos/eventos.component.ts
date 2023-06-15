@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EventoService } from 'src/app/services/evento.service';
+import { UsersService } from 'src/app/services/users.service';
 
 interface Socio {
   id: number;
@@ -31,13 +32,31 @@ interface Evento {
 })
 export class EventosComponent implements OnInit {
 
+  isLoggedIn = false;
+  isAdmin = false;
+  socio!: Socio;
   listaEventos: Evento[] = [];
   eventosFormateados: Evento[] = [];
+  errorMessage = ''; 
 
-  constructor(private eventoService: EventoService) { }
+  constructor(private eventoService: EventoService, private usersService: UsersService) { }
 
   ngOnInit(): void {
+    this.isLoggedIn = this.usersService.isLoggedIn();
+    this.isAdmin = this.usersService.isLogAdmin();
+    this.getDatosSocio();
     this.formatearEventos();
+  }
+
+  getDatosSocio() {
+    this.usersService.getUserData().subscribe({
+      next: data => {
+        this.socio = data as Socio;
+      },
+      error: err => {
+        console.log(err);
+      }
+    })
   }
 
   formatearFecha(evento: Evento) {
@@ -74,6 +93,23 @@ export class EventosComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  inscribirSocio(idEvento: number) {
+    this.eventoService.inscribirSocio(idEvento).subscribe({
+      next: res => {
+        document.location.href = "/eventos/"+idEvento;
+        window.location.href = "/eventos/"+idEvento;
+      },
+      error: err => {
+        this.errorMessage=err.error.message;
+        console.log(err);
+      }
+    })
+  }
+
+  isSocioInEvento(evento: Evento): boolean {
+    return this.socio && evento.socios.some(s => s.id === this.socio.id);
   }
 
 }

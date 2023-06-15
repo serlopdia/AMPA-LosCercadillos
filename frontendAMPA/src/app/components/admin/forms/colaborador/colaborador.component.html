@@ -10,7 +10,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="nombre">Nombre</label>
-                            <input [(ngModel)]="form.nombre" id="nombre" type="text" class="form-control" name="nombre" value="" required autofocus>
+                            <input [(ngModel)]="form.nombre" #nombre="ngModel" id="nombre" type="text" class="form-control" name="nombre" [ngClass]="{ 'is-invalid': f.submitted && nombre.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir un nombre
@@ -22,7 +22,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="ventaja">Ventaja</label>
-                            <input [(ngModel)]="form.ventaja" id="ventaja" type="text" class="form-control" name="ventaja" value="" required autofocus>
+                            <input [(ngModel)]="form.ventaja" #ventaja="ngModel" id="ventaja" type="text" class="form-control" name="ventaja" [ngClass]="{ 'is-invalid': f.submitted && ventaja.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir un ventaja
@@ -34,7 +34,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="descripcion">Descripcion</label>
-                            <textarea [(ngModel)]="form.descripcion" id="descripcion" class="form-control" name="descripcion" value="" required autofocus style="min-height: 15vh;"></textarea>
+                            <textarea [(ngModel)]="form.descripcion" #descripcion="ngModel" id="descripcion" class="form-control" name="descripcion" [ngClass]="{ 'is-invalid': f.submitted && descripcion.errors }" required autofocus style="min-height: 15vh;"></textarea>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una descripcion
@@ -46,7 +46,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="imagen">URL de colaborador</label>
-                            <input [(ngModel)]="form.imagen" id="imagen" type="text" class="form-control" name="imagen" value="" required autofocus>
+                            <input [(ngModel)]="form.imagen" #imagen="ngModel" id="imagen" type="text" class="form-control" name="imagen" [ngClass]="{ 'is-invalid': f.submitted && imagen.errors }" autofocus>
                         </div>
                     </div>
 

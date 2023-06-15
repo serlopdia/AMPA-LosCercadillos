@@ -295,12 +295,12 @@ class AsuntoSerializer(serializers.ModelSerializer):
         # Valida que la diferencia en minutos entre hora_inicio y hora_fin no sea menor a minutos_frecuencia
         minutos_diferencia = (fecha_hora_fin - fecha_hora_inicio).total_seconds() // 60
         if minutos_diferencia < data['minutos_frecuencia']:
-            raise serializers.ValidationError('La diferencia en minutos entre hora de inicio y fin no puede ser menor al valor del atributo minutos_frecuencia')
+            raise serializers.ValidationError('La diferencia en minutos entre hora de inicio y fin no puede ser menor a la frecuencia de minutos')
 
         # Valida que la diferencia en minutos entre hora_inicio y hora_fin sea divisible por minutos_frecuencia
         minutos_diferencia = (fecha_hora_fin - fecha_hora_inicio).total_seconds() // 60
         if minutos_diferencia % data['minutos_frecuencia'] != 0:
-            raise serializers.ValidationError('La diferencia en minutos entre hora de inicio y fin debe ser un múltiplo entero del valor del atributo minutos_frecuencia')
+            raise serializers.ValidationError('La diferencia en minutos entre hora de inicio y fin debe ser múltiplo de los minutos de frecuencia')
         
         return data
 
@@ -308,14 +308,20 @@ class AsuntoSerializer(serializers.ModelSerializer):
     def validate_dias_semana(self, value):
         accepted_values = {"LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"}
         already_used_values = []
+        found_accepted_value = False
         splitted = value.split(",")
         for part in splitted:
-            if (part.strip() in accepted_values and part.strip() not in already_used_values):
+            if part.strip() in accepted_values and part.strip() not in already_used_values:
                 already_used_values.append(part.strip())
-            elif (part.strip() in accepted_values and part.strip() in already_used_values):
+                found_accepted_value = True
+            elif part.strip() in accepted_values and part.strip() in already_used_values:
                 raise serializers.ValidationError("No puede repetir días de la semana")
             else:
                 raise serializers.ValidationError("Elige días de la semana válidos (LUNES, MARTES, MIERCOLES, JUEVES, VIERNES)")
+
+        if not found_accepted_value:
+            raise serializers.ValidationError("Debe incluir al menos uno de los días de la semana válidos (LUNES, MARTES, MIERCOLES, JUEVES, VIERNES)")
+
         return value
 
     def create(self, validated_data):

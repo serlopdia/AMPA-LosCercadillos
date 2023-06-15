@@ -32,8 +32,10 @@ interface Evento {
 export class GestionEventosComponent implements OnInit {
 
   listaEventos: Evento[] = [];
+  eventosFiltrados: Evento[] = [];
   eventosFormateados: Evento[] = [];
   mapMostrarDescripcionCompleta: Map<number, boolean>;
+  valorBusqueda = '';
 
   constructor(private eventoService: EventoService) {
     this.mapMostrarDescripcionCompleta = new Map();
@@ -43,6 +45,7 @@ export class GestionEventosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.buscar();
     this.formatearEventos();
   }
 
@@ -67,6 +70,26 @@ export class GestionEventosComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  buscar() {
+    if (this.valorBusqueda.trim() !== '') {
+      this.eventosFiltrados = this.eventosFormateados.filter((evento) =>
+        evento.titulo.toLowerCase().includes(this.valorBusqueda.toLowerCase()) ||
+        evento.descripcion.toLowerCase().includes(this.valorBusqueda.toLowerCase())
+      );
+    } else {
+      this.eventoService.getEventos().subscribe({
+        next: res => {
+          res.forEach((evento: Evento) => {
+            evento = this.formatearFecha(evento);
+          });
+          this.eventosFiltrados = res;
+        },error: err => {
+          console.log(err);
+        }
+      })
+    }
   }
 
   formatearEventos() {

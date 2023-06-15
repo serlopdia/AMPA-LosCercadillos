@@ -59,3 +59,17 @@ padding: 2px 20px;
     background-color: rgb(72, 0, 206);
     color: white;
 }
+
+.big-button-apuntado {
+    font-size: 18px;
+    padding: 10px 25px;
+    border-radius: 100px;
+    color: white;
+}
+
+.imagen-vacia {
+  color:#888;
+  -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+      -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+          filter: brightness(1.8) grayscale(1) opacity(.2);
+}

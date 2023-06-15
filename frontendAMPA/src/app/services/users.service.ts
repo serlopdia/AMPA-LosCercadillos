@@ -2,6 +2,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { API_url } from '../global';
+import { forkJoin } from 'rxjs';
+import { PagoCursoService } from './pago-curso.service';
+import { CursoService } from './curso.service';
+import { Router } from '@angular/router';
 
 interface Socio {
   id: number;
@@ -27,19 +31,11 @@ const httpOptions = {
 })
 export class UsersService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private pagoCursoService: PagoCursoService, private cursoService: CursoService, private router: Router) { }
 
   public saveUser(user:any): void{
     localStorage.removeItem(USER_KEY);
     localStorage.setItem(USER_KEY, JSON.stringify(user));
-  }
-
-  public getUser():any {
-    const user = localStorage.getItem(USER_KEY);
-    if(user) {
-      return JSON.parse(user);
-    }
-    return {};
   }
 
   public getUserData():Observable<any>{
@@ -196,6 +192,59 @@ export class UsersService {
 
     }
     return new Observable<any>;
+  }
+
+  deleteCuenta(idSocio:any): Observable<any>{
+    if(this.isLoggedIn()){
+      var ck = localStorage.getItem('auth-user')
+      if(ck != null){
+        var tk = JSON.parse(ck);
+        var res = [];
+        for(var i in tk){
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+        headers = headers.set('Authorization', 'Token ' + res[0]);
+        
+        return this.http.post(`${API_url}/users/delete/account/socio/`, { id: idSocio }, { 'headers': headers });
+      }
+    }
+    return new Observable<any>;
+  }
+
+  // COMPROBAR SI ES SOCIO DEL CURSO ACTUAL
+  checkEsSocio(): Observable<boolean> {
+    return new Observable<boolean>(observer => {
+      this.pagoCursoService.getPagosCursoSocioList().subscribe(pagos => {
+        this.cursoService.getCursos().subscribe(cursos => {
+          const pagosCursoPagados = pagos.filter((pago: { estado: string }) => pago.estado === "PAGADO");
+          const cursoActualId = cursos.find((curso: { actual: any }) => curso.actual).id;
+          const esSocio = pagosCursoPagados.some((pago: { curso_escolar: any }) => pago.curso_escolar === cursoActualId);
+          observer.next(esSocio);
+          observer.complete();
+        }, error => observer.error(error));
+      }, error => observer.error(error));
+    });
+  }
+
+  checkEsSocioById(id: number): Observable<boolean> {
+    return new Observable<boolean>(observer => {
+      this.pagoCursoService.getPagosCursoPorIdSocio(id).subscribe(pagos => {
+        const pagosCursoSocio = pagos.filter((pago: { socio: number }) => pago.socio === id);
+        this.cursoService.getCursos().subscribe(cursos => {
+          const pagosCursoPagados = pagosCursoSocio.filter((pago: { estado: string }) => pago.estado === "PAGADO");
+          const cursoActualId = cursos.find((curso: { actual: any }) => curso.actual).id;
+          const esSocio = pagosCursoPagados.some((pago: { curso_escolar: any }) => pago.curso_escolar === cursoActualId);
+          observer.next(esSocio);
+          observer.complete();
+        }, error => observer.error(error));
+      }, error => observer.error(error));
+    });
+  }
+
+  logoutAndRedirectToLogin(): void {
+    localStorage.removeItem('auth-user');
+    this.router.navigate(['/login']);
   }
 
 }

@@ -6,11 +6,11 @@
 
 <app-sidebar-socios></app-sidebar-socios>
 
-<div class="personal-container">
-    <h1 class="text-primary">Actualmente el AMPA cuenta con: &nbsp;&nbsp;<b><span class="{{ calcularBalance() < 0 ? 'text-danger' : (calcularBalance() == 0 ? 'text-primary' : 'text-success') }}">{{ calcularBalance() }} €</span></b></h1>
+<div *ngIf="esSocio" class="personal-container">
+    <h1 class="text-primary">Actualmente el AMPA cuenta con: &nbsp;&nbsp;<b><span class="{{ calcularBalance() < 0 ? 'text-danger' : (calcularBalance() == 0 ? 'text-primary' : 'text-success') }}" style="white-space: nowrap;">{{ calcularBalance() }} €</span></b></h1>
 
     <h2>Ingresos del último mes:</h2>
-    <div class="table-container">
+    <div *ngIf="getListaCuentasIngreso().length > 0" class="table-container">
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
@@ -28,9 +28,14 @@
             </tbody>
         </table>
     </div>
+    
+    <div *ngIf="getListaCuentasIngreso().length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+      <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+      <div style="opacity: .2;">No existen ingresos en el último mes.</div>
+    </div>
 
     <h2>Gastos del último mes:</h2>
-    <div class="table-container">
+    <div *ngIf="getListaCuentasGasto().length > 0" class="table-container">
         <table class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -47,5 +52,10 @@
             </tr>
         </tbody>
         </table>
+    </div>
+    
+    <div *ngIf="getListaCuentasGasto().length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+      <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+      <div style="opacity: .2;">No existen gastos en el último mes.</div>
     </div>
 </div>

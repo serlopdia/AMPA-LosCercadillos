@@ -19,13 +19,16 @@ interface Producto {
 })
 export class GestionProductosComponent implements OnInit {
   
+  valorBusqueda = "";
   listaProductos: Producto[] = [];
+  productosFiltrados: Producto[] = [];
   productosFormateados: any[] = [];
 
   constructor(private productoService: ProductoService, private usersService: UsersService) { }
 
   ngOnInit(): void {
     this.getProductosList();
+    this.buscar();
   }
 
   getProductosList() {
@@ -36,6 +39,23 @@ export class GestionProductosComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  buscar() {
+    if (this.valorBusqueda.trim() !== '') {
+      this.productosFiltrados = this.listaProductos.filter((producto) =>
+        producto.nombre.toLowerCase().includes(this.valorBusqueda.toLowerCase()) ||
+        producto.descripcion.toLowerCase().includes(this.valorBusqueda.toLowerCase())
+      );
+    } else {
+      this.productoService.getProductosList().subscribe({
+        next: res => {
+          this.productosFiltrados = res;
+        },error: err => {
+          console.log(err);
+        }
+      })
+    }
   }
 
 }

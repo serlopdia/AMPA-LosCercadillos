@@ -4,8 +4,12 @@ import { UsersService } from 'src/app/services/users.service';
 
 interface Pedido {
   id: number;
+  nombre: string;
+  email: string;
+  telefono: string;
   estado: string;
-  pedido: number;
+  observaciones: string;
+  pago: number;
   socio: number;
   created_at: string;
 }
@@ -17,7 +21,9 @@ interface Pedido {
 })
 export class GestionPedidosComponent implements OnInit {
   
+  valorBusqueda = '';
   listaPedidos: Pedido[] = [];
+  pedidosFiltrados: Pedido[] = [];
   pedidosFormateados: any[] = [];
   nombresSocios: { [id: number]: string } = {};
 
@@ -25,6 +31,7 @@ export class GestionPedidosComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPedidosList();
+    this.buscar();
     this.formatearPedidos();
     this.nombresSocios = this.usersService.getNombresSocios();
   }
@@ -37,6 +44,28 @@ export class GestionPedidosComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  buscar() {
+    if (this.valorBusqueda.trim() !== '') {
+      this.pedidosFiltrados = this.pedidosFormateados.filter((pedido) =>
+        pedido.email.toLowerCase().includes(this.valorBusqueda.toLowerCase()) ||
+        pedido.telefono.toLowerCase().includes(this.valorBusqueda.toLowerCase()) ||
+        pedido.pago.toString().toLowerCase().includes(this.valorBusqueda.toLowerCase()) ||
+        pedido.estado.toLowerCase().includes(this.valorBusqueda.toLowerCase())
+      );
+    } else {
+      this.pedidoService.getPedidosList().subscribe({
+        next: res => {
+          res.forEach((pedido: Pedido) => {
+            pedido.created_at = this.formatearFecha(pedido).created_at;
+          });
+          this.pedidosFiltrados = res;
+        },error: err => {
+          console.log(err);
+        }
+      })
+    }
   }
 
   formatearFecha(pedido: Pedido): Pedido {

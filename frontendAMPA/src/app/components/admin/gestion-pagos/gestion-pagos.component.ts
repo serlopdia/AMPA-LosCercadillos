@@ -4,6 +4,9 @@ import { UsersService } from 'src/app/services/users.service';
 
 interface Pago {
   id: number;
+  nombre: string;
+  email: string;
+  telefono: string;
   estado: string;
   cantidad: number;
   socio: number;
@@ -20,11 +23,14 @@ export class GestionPagosComponent implements OnInit {
   listaPagos: Pago[] = [];
   pagosFormateados: any[] = [];
   nombresSocios: { [id: number]: string } = {};
+  valorBusqueda = '';
+  pagosFiltrados: Pago[] = [];
 
   constructor(private pagoService: PagoService, private usersService: UsersService) { }
 
   ngOnInit(): void {
     this.getPagosList();
+    this.buscar();
     this.formatearPagos();
     this.nombresSocios = this.usersService.getNombresSocios();
   }
@@ -37,6 +43,27 @@ export class GestionPagosComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  buscar() {
+    if (this.valorBusqueda.trim() !== '') {
+      this.pagosFiltrados = this.pagosFormateados.filter((pago) =>
+        pago.email.toLowerCase().includes(this.valorBusqueda.toLowerCase()) ||
+        pago.telefono.toLowerCase().includes(this.valorBusqueda.toLowerCase()) ||
+        pago.estado.toLowerCase().includes(this.valorBusqueda.toLowerCase())
+      );
+    } else {
+      this.pagoService.getPagosList().subscribe({
+        next: res => {
+          res.forEach((pago: Pago) => {
+            pago.created_at = this.formatearFecha(pago).created_at;
+          });
+          this.pagosFiltrados = res;
+        },error: err => {
+          console.log(err);
+        }
+      })
+    }
   }
 
   formatearFecha(pago: Pago): Pago {

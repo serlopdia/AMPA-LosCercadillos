@@ -6,7 +6,7 @@
         <h1>Actualmente el AMPA cuenta con: &nbsp;&nbsp;<b><span class="{{ calcularBalance() < 0 ? 'text-danger' : (calcularBalance() == 0 ? 'text-primary' : 'text-success') }}">{{ calcularBalance() }} €</span></b></h1>
 
         <h2>Ingresos</h2>
-        <div class="table-container">
+        <div *ngIf="getListaCuentasIngreso().length > 0" class="table-container">
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
@@ -35,11 +35,17 @@
                 </tbody>
             </table>
         </div>
+    
+        <div *ngIf="getListaCuentasIngreso().length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+          <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+          <div style="opacity: .2;">No hay ingresos aún.</div>
+        </div>
+
         <form name="formIngreso" (ngSubmit)="fi.form.valid && nuevoIngreso()" #fi="ngForm" novalidate>
             <div class="form-container d-flex justify-content-end">
                 <div class="form-group row align-items-center">
                     <div class="mb-3 col-sm-3">
-                        <input [(ngModel)]="formIngreso.cantidad" #cantidad="ngModel" name="cantidad" id="cantidad" type="number" min="0" class="form-control" placeholder="Cantidad" required>
+                        <input [(ngModel)]="formIngreso.cantidad" #cantidad="ngModel" name="cantidad" id="cantidad" type="number" min="0" [ngClass]="{ 'is-invalid': fi.submitted && cantidad.errors }" class="form-control" placeholder="Cantidad" required>
                         <div class="invalid-feedback error" *ngIf="cantidad.errors && fi.submitted">
                             <div *ngIf="cantidad.errors['required']">
                                 Debe introducir una cantidad
@@ -47,7 +53,7 @@
                         </div>
                     </div>
                     <div class="mb-3 col-sm-6">
-                        <input [(ngModel)]="formIngreso.asunto" #asunto="ngModel" name="asunto" id="asunto" type="text" class="form-control" placeholder="Asunto" required maxlength="32">
+                        <input [(ngModel)]="formIngreso.asunto" #asunto="ngModel" name="asunto" id="asunto" type="text" [ngClass]="{ 'is-invalid': fi.submitted && asunto.errors }" class="form-control" placeholder="Asunto" required maxlength="32">
                         <div class="invalid-feedback error" *ngIf="asunto.errors && fi.submitted">
                             <div *ngIf="asunto.errors['required']">
                                 Debe introducir un asunto
@@ -65,7 +71,7 @@
         </form>
 
         <h2>Gastos</h2>
-        <div class="table-container">
+        <div *ngIf="getListaCuentasGasto().length > 0" class="table-container">
             <table class="table table-bordered table-hover">
             <thead>
                 <tr>
@@ -94,11 +100,17 @@
             </tbody>
             </table>
         </div>
+    
+        <div *ngIf="getListaCuentasGasto().length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+          <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+          <div style="opacity: .2;">No hay gastos aún.</div>
+        </div>
+        
         <form name="formGasto" (ngSubmit)="fg.form.valid && nuevoGasto()" #fg="ngForm" novalidate>
             <div class="form-container d-flex justify-content-end">
                 <div class="form-group row align-items-center">
                     <div class="mb-3 col-sm-3">
-                        <input [(ngModel)]="formGasto.cantidad" #cantidad="ngModel" name="cantidad" id="cantidad" type="number" min="0" class="form-control" placeholder="Cantidad" required>
+                        <input [(ngModel)]="formGasto.cantidad" #cantidad="ngModel" name="cantidad" id="cantidad" type="number" [ngClass]="{ 'is-invalid': fg.submitted && cantidad.errors }" min="0" class="form-control" placeholder="Cantidad" required>
                         <div class="invalid-feedback error" *ngIf="cantidad.errors && fg.submitted">
                             <div *ngIf="cantidad.errors['required']">
                                 Debe introducir una cantidad
@@ -106,7 +118,7 @@
                         </div>
                     </div>
                     <div class="mb-3 col-sm-6">
-                        <input [(ngModel)]="formGasto.asunto" #asunto="ngModel" name="asunto" id="asunto" type="text" class="form-control" placeholder="Asunto" required maxlength="32">
+                        <input [(ngModel)]="formGasto.asunto" #asunto="ngModel" name="asunto" id="asunto" type="text" [ngClass]="{ 'is-invalid': fg.submitted && asunto.errors }" class="form-control" placeholder="Asunto" required maxlength="32">
                         <div class="invalid-feedback error" *ngIf="asunto.errors && fg.submitted">
                             <div *ngIf="asunto.errors['required']">
                                 Debe introducir un asunto

@@ -51,3 +51,10 @@
   overflow: visible;
   transition: max-height 0.3s ease-in-out;
 }
+
+.imagen-vacia {
+  color:#888;
+  -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+      -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+          filter: brightness(1.8) grayscale(1) opacity(.2);
+}

@@ -4,15 +4,15 @@
     <div class="p-1 my-container active-cont">
 
         <nav class="navbar navbar-blank bg-blank">
-          <form class="form-inline buscador">
-            <input class="form-control mr-sm-2" type="search" placeholder="Buscar colaborador" style="margin-right: 20px;">
+          <form (ngSubmit)="buscar()" class="form-inline buscador">
+            <input class="form-control mr-sm-2" name="valorBusqueda" type="search" placeholder="Buscar colaborador" style="margin-right: 20px;" [(ngModel)]="valorBusqueda">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
           </form>
           <button class="btn btn-primary creador my-2 my-sm-0" routerLink="/gestion/colaboradores/form">Crear colaborador</button>
         </nav>
 
-        <div class="card-container">
-            <div *ngFor="let colaborador of colaboradoresFormateados" class="card" [routerLink]="['/gestion/colaboradores/show/'+colaborador.id]">
+        <div *ngIf="colaboradoresFiltrados.length > 0" class="card-container">
+            <div *ngFor="let colaborador of colaboradoresFiltrados" class="card" [routerLink]="['/gestion/colaboradores/show/'+colaborador.id]">
                 <img src="{{ colaborador.imagen }}" class="card-img-top" alt="Imagen no disponible">
                 <div class="card-body">
                     <h5 class="card-title">{{ colaborador.nombre }}</h5>
@@ -24,6 +24,11 @@
                     </p>
                 </div>
             </div>
+        </div>
+    
+        <div *ngIf="colaboradoresFiltrados.length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+          <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+          <div style="opacity: .2;">No hay colaboradores aún.</div>
         </div>
         
     </div>

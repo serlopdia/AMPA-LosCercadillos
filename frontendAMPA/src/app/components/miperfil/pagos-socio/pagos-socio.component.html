@@ -9,6 +9,19 @@
 <div class="personal-container">
     <h1>Pagos</h1>
 
+    <div *ngIf="esSocio && cursoActual">
+      <h3>{{ cursoActual.nombre }}: <span class="text-primary">{{ formatearFechaCurso(cursoActual.fecha_inicio) }}</span>-<span class="text-primary">{{ formatearFechaCurso(cursoActual.fecha_fin) }}</span></h3>
+      <h3 class="text-success">Estás al pago de la cuota de socio de este curso escolar.</h3>
+    </div>
+
+    <div *ngIf="!esSocio && cursoActual">
+      <h3>{{ cursoActual.nombre }}: <span class="text-primary">{{ formatearFechaCurso(cursoActual.fecha_inicio) }}</span>-<span class="text-primary">{{ formatearFechaCurso(cursoActual.fecha_fin) }}</span></h3>
+      <h3 class="text-danger">¡Tienes pendiente el pago de la cuota de socio de este curso!</h3>
+      <div class="button-container">
+          <button class="btn big-button" (click)="pay()"><b>¡Procede al pago!</b></button>
+      </div>
+    </div>
+
     <div *ngIf="pagosFormateados.length > 0">
       <h2>Historial de pagos:</h2>
       <div class="table-container">
@@ -26,7 +39,7 @@
             id="{{ pago.id }}" 
             class="socio">
               <td>{{ pago.created_at }}</td>
-              <td>Compra</td>
+              <td>{{ pago.tipo }}</td>
               <td>{{ pago.cantidad }} €</td>
               <td [ngClass]="{
                 'text-danger': pago.estado === 'RECHAZADO',
@@ -35,5 +48,10 @@
             </tr>
           </tbody>
       </table>
+    </div>
+    
+    <div *ngIf="pagosFormateados.length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+      <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+      <div style="opacity: .2;">No has realizado ningún pago.</div>
     </div>
 </div>

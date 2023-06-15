@@ -24,6 +24,7 @@ interface Socio {
 })
 export class CarnetVirtualComponent implements OnInit, OnDestroy {
 
+  esSocio = false;
   socio!: Socio;
   currentTime: Date | undefined;
   formattedDate: string | undefined;
@@ -39,9 +40,19 @@ export class CarnetVirtualComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getDatosSocio();
-    this.startClockTimer();
-    this.startPageReloadTimer();
+    this.usersService.checkEsSocio().subscribe(esSocio => {
+      this.esSocio = esSocio;
+      if(esSocio) {
+        this.getDatosSocio();
+        this.startClockTimer();
+        this.startPageReloadTimer();
+      } else {
+        document.location.href = "/miperfil/pagos"
+        window.location.href = "/miperfil/pagos"
+      }
+    }, error => {
+      console.log(error);
+    });
   }
 
   ngOnDestroy(): void {

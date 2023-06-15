@@ -9,12 +9,14 @@
 </head>
 
 <body>
-	<section class="h-100">
+	<section class="h-100" style="background-color: #E3FDF8;">
 		<div class="container h-100">
 			<div class="row justify-content-sm-center h-100">
 				<div class="col-xxl-6 col-xl-7 col-lg-7 col-md-9 col-sm-11">
 					<div class="text-center my-5">
-						<img src="../../../assets/images/logo.png" alt="logo" width="300">
+						<a href="">
+							<img src="../../../assets/images/logo.png" alt="logo" width="300">
+						</a>
 					</div>
 					<div class="card shadow-lg">
 						<div class="card-body p-5">
@@ -23,7 +25,7 @@
                                 <div class="form-group row">
                                     <div class="mb-3 col-sm-6">
                                         <label class="mb-2 text-muted" for="first_name">Nombre</label>
-                                        <input [(ngModel)]="form.first_name" #first_name="ngModel" id="first_name" type="text" class="form-control" name="first_name" value="" required autofocus>
+                                        <input [(ngModel)]="form.first_name" #first_name="ngModel" id="first_name" type="text" class="form-control" name="first_name" [ngClass]="{ 'is-invalid': f.submitted && first_name.errors }" required autofocus>
                                         <div class="invalid-feedback error" *ngIf="first_name.errors && f.submitted">
                                             <div *ngIf="first_name.errors['required']">
                                                 Debe introducir un nombre
@@ -32,7 +34,7 @@
                                     </div>
                                     <div class="mb-3 col-sm-6">
                                         <label class="mb-2 text-muted" for="last_name">Apellidos</label>
-                                        <input [(ngModel)]="form.last_name" #last_name="ngModel" id="last_name" type="text" class="form-control" name="last_name" value="" required autofocus>
+                                        <input [(ngModel)]="form.last_name" #last_name="ngModel" id="last_name" type="text" class="form-control" name="last_name" [ngClass]="{ 'is-invalid': f.submitted && last_name.errors }" required autofocus>
                                         <div class="invalid-feedback error" *ngIf="last_name.errors && f.submitted">
                                             <div *ngIf="last_name.errors['required']">
                                                 Debe introducir unos apellidos
@@ -44,7 +46,7 @@
                                 <div class="form-group row">
                                     <div class="mb-3 col-sm-6">
                                         <label class="mb-2 text-muted" for="email">Email</label>
-                                        <input [(ngModel)]="form.email" #email="ngModel" id="email" type="email" class="form-control" name="email" value="" required autofocus>
+                                        <input [(ngModel)]="form.email" #email="ngModel" id="email" type="email" class="form-control" name="email" [ngClass]="{ 'is-invalid': f.submitted && email.errors }" required autofocus>
                                         <div class="invalid-feedback error" *ngIf="email.errors && f.submitted">
                                             <div *ngIf="email.errors['required']">
                                                 Debe introducir un email
@@ -53,7 +55,7 @@
                                     </div>
                                     <div class="mb-3 col-sm-6">
                                         <label class="mb-2 text-muted" for="username">Usuario</label>
-                                        <input [(ngModel)]="form.username" #username="ngModel" id="username" type="text" class="form-control" name="username" value="" required autofocus>
+                                        <input [(ngModel)]="form.username" #username="ngModel" id="username" type="text" class="form-control" name="username" [ngClass]="{ 'is-invalid': f.submitted && username.errors }" required autofocus>
                                         <div class="invalid-feedback error" *ngIf="username.errors && f.submitted">
                                             <div *ngIf="username.errors['required']">
                                                 Debe introducir un usuario
@@ -65,7 +67,7 @@
                                 <div class="form-group row">
                                     <div class="mb-3 col-sm-6">
                                         <label class="mb-2 text-muted" for="password">Contraseña</label>
-                                        <input [(ngModel)]="form.password" #password="ngModel" id="password" type="password" class="form-control" name="password" value="" required autofocus>
+                                        <input [(ngModel)]="form.password" #password="ngModel" id="password" type="password" class="form-control" name="password" [ngClass]="{ 'is-invalid': f.submitted && password.errors }" required autofocus>
                                         <div class="invalid-feedback error" *ngIf="password.errors && f.submitted">
                                             <div *ngIf="password.errors['required']">
                                                 Debe introducir una contraseña
@@ -74,7 +76,7 @@
                                     </div>
                                     <div class="mb-3 col-sm-6">
                                         <label class="mb-2 text-muted" for="password_confirm">Confirmar contraseña</label>
-                                        <input [(ngModel)]="form.password_confirm" #password_confirm="ngModel" id="password_confirm" type="password" class="form-control" name="password_confirm" value="" required autofocus>
+                                        <input [(ngModel)]="form.password_confirm" #password_confirm="ngModel" id="password_confirm" type="password" class="form-control" name="password_confirm" [ngClass]="{ 'is-invalid': f.submitted && password_confirm.errors }" required autofocus>
                                         <div class="invalid-feedback error" *ngIf="password_confirm.errors && f.submitted">
                                             <div *ngIf="password_confirm.errors['required']">
                                                 Debe confirmar la contraseña
@@ -86,7 +88,7 @@
                                 <div class="form-group row">
                                     <div class="mb-3 col-sm-6">
                                         <label class="mb-2 text-muted" for="tel">Teléfono</label>
-                                        <input [(ngModel)]="form.tel" #tel="ngModel" id="tel" type="text" class="form-control" name="tel" value="" required autofocus>
+                                        <input [(ngModel)]="form.tel" #tel="ngModel" id="tel" type="text" class="form-control" name="tel" [ngClass]="{ 'is-invalid': f.submitted && tel.errors }" required autofocus>
                                         <div class="invalid-feedback error" *ngIf="tel.errors && f.submitted">
                                             <div *ngIf="tel.errors['required']">
                                                 Debe introducir un número de teléfono
@@ -95,7 +97,7 @@
                                     </div>
                                     <div class="mb-3 col-sm-6">
                                         <label class="mb-2 text-muted" for="dni">DNI</label>
-                                        <input [(ngModel)]="form.dni" #dni="ngModel" id="dni" type="text" class="form-control" name="dni" value="" required autofocus>
+                                        <input [(ngModel)]="form.dni" #dni="ngModel" id="dni" type="text" class="form-control" name="dni" [ngClass]="{ 'is-invalid': f.submitted && dni.errors }" required autofocus>
                                         <div class="invalid-feedback error" *ngIf="dni.errors && f.submitted">
                                             <div *ngIf="dni.errors['required']">
                                                 Debe introducir un DNI
@@ -107,7 +109,7 @@
                                 <div class="form-group row">
                                     <div class="mb-3 col-sm-12">
                                         <label class="mb-2 text-muted" for="address">Dirección</label>
-                                        <input [(ngModel)]="form.address" #address="ngModel" id="address" type="text" class="form-control" name="address" value="" required autofocus>
+                                        <input [(ngModel)]="form.address" #address="ngModel" id="address" type="text" class="form-control" name="address" [ngClass]="{ 'is-invalid': f.submitted && address.errors }" required autofocus>
                                         <div class="invalid-feedback error" *ngIf="address.errors && f.submitted">
                                             <div *ngIf="address.errors['required']">
                                                 Debe introducir una dirección
@@ -134,13 +136,17 @@
 						</div>
 					</div>
 					<div class="text-center mt-5 text-muted">
-						Made with ❤️ by Sergio López
+                        <a class="m-2 text-success d-inline-block align-middle" href="/ventajas">
+                            <h2><b>¿QUÉ VENTAJAS TIENE SER SOCIO?</b></h2>
+                        </a>
 					</div>
                     <br>
 				</div>
 			</div>
 		</div>
 	</section>
+
+    <app-footer></app-footer>
 
 </body>
 </html>
