@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StripeComponent } from './stripe.component';
+import { NotSocioComponent } from './not-socio.component';
 
-describe('StripeComponent', () => {
-  let component: StripeComponent;
-  let fixture: ComponentFixture<StripeComponent>;
+describe('NotSocioComponent', () => {
+  let component: NotSocioComponent;
+  let fixture: ComponentFixture<NotSocioComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StripeComponent ]
+      declarations: [ NotSocioComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(StripeComponent);
+    fixture = TestBed.createComponent(NotSocioComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

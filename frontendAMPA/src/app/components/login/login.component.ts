@@ -37,18 +37,18 @@ export class LoginComponent implements OnInit {
           return;
         }
         this.isLoggedIn = true;
-        this.reloadPage();
+        window.location.href="/miperfil/datos"
       },
       error: err => {
-        this.errorMessage = err.error.message;
+        this.errorMessage = err.error.error;
         this.isLoginFailed = true;
-        window.alert("Credenciales incorrectas");
+        window.alert(this.errorMessage);
       }}
     );
   }
 
   reloadPage(): void{
-    window.location.href=""
+    window.location.href="/miperfil/datos"
   }
 
   deleteSession(){

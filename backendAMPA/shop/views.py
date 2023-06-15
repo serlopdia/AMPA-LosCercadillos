@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .models import *
 from .serializer import *
-import json
 import stripe
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -133,7 +132,7 @@ class CompraStripeWebhook(APIView):
             pago.save()
 
             pedido.pago = pago
-            pedido.estadoPedido = EstadoPedido.PREPARACION
+            pedido.estado = EstadoPedido.PREPARACION
             pedido.save()
 
         elif event.type == 'payment_intent.canceled' or event.type == 'payment_intent.payment_failed':
@@ -164,7 +163,7 @@ class CompraStripeWebhook(APIView):
             pago.save()
 
             pedido.pago = pago
-            pedido.estadoPedido = EstadoPedido.CANCELADO
+            pedido.estado = EstadoPedido.CANCELADO
             pedido.save()
 
         return JsonResponse({'success': True})

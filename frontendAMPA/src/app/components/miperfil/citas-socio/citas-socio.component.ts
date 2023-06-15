@@ -43,6 +43,7 @@ interface Cita {
 })
 export class CitasSocioComponent implements OnInit {
 
+  esSocio = false;
   form:any ={
     fecha: null,
     hora: null,
@@ -61,10 +62,20 @@ export class CitasSocioComponent implements OnInit {
   constructor(private citaService: CitaService, private usersService: UsersService) { }
 
   ngOnInit(): void {
-    this.getDatosSocio();
-    this.getCitasSocioList();
-    this.getAsuntosList();
-    this.getAsuntosAbiertosList();
+    this.usersService.checkEsSocio().subscribe(esSocio => {
+      this.esSocio = esSocio;
+      if(esSocio) {
+        this.getDatosSocio();
+        this.getCitasSocioList();
+        this.getAsuntosList();
+        this.getAsuntosAbiertosList();
+      } else {
+        document.location.href = "/miperfil/pagos"
+        window.location.href = "/miperfil/pagos"
+      }
+    }, error => {
+      console.log(error);
+    });
   }
 
   getDatosSocio() {
@@ -196,10 +207,27 @@ export class CitasSocioComponent implements OnInit {
         window.location.href = "/miperfil/citas"
       },
       error: err => {
-        this.errorMessage=err.error.message;
-        console.log(err);
-      }
-    })
+          let errorMessages = "Datos erróneos";
+          if (err.error && typeof err.error === "object") {
+            const errors = Object.entries(err.error);
+            const messages = errors.flatMap(([field, error]: [string, any]) => {
+              if (Array.isArray(error)) {
+                return error.map((errorMsg: string) => `${field}: ${errorMsg}`);
+              } else if (typeof error === "string") {
+                return [`${field}: ${error}`];
+              } else {
+                return [];
+              }
+            });
+            if (messages.length > 0) {
+              errorMessages = messages.join("\n");
+            }
+          }
+        
+          this.errorMessage = errorMessages;
+          window.alert("Error: " + this.errorMessage);
+        }
+    });
   }
   
   eliminarCita(idEntrada: any) {

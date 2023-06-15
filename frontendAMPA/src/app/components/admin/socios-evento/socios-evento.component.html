@@ -1,0 +1,46 @@
+<app-dashboard></app-dashboard>
+
+  <!-- Main Wrapper -->
+  <div class="p-1 my-container active-cont">
+
+    <div *ngIf="evento">
+        <h1 style="margin: 2vh 50px;">Socios inscritos a: <span class="text-primary">{{ evento.titulo }}</span></h1>
+    
+        <div class="table-container">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th scope="col" style="width: 50px;">Id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">DNI</th>
+                <th scope="col">Email</th>
+                <th scope="col">Teléfono</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let socio of listaSocios" 
+              id="{{ socio.id }}" 
+              class="socio" [routerLink]="['/dashboard/socios/form/'+socio.id]">
+                <th scope="row">{{ socio.id }}</th>
+                <td>{{ socio.first_name }}</td>
+                <td>{{ socio.last_name }}</td>
+                <td>{{ socio.dni }}</td>
+                <td>{{ socio.email }}</td>
+                <td>{{ socio.tel }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    
+        <h5 class="text-muted" style="margin: 1vh 50px;">Inscritos <span class="text-primary">{{ evento.socios.length }}</span> socios de <span class="text-primary">{{ evento.capacidad }}</span> de capacidad.</h5>
+    
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <button type="button" class="btn btn-rosa enviar-correo" (click)="enviarCorreo()">
+            <i class="fa-solid fa-file-export" style="margin-right: 10px;"></i>
+            Enviar correo
+          </button>
+        </div>
+    </div>
+
+  </div>

@@ -1,0 +1,74 @@
+<app-dashboard></app-dashboard>
+
+    <!-- Main Wrapper -->
+    <div class="p-1 my-container active-cont">
+
+        <div *ngIf="pago" class="card shadow-lg">
+            <div class="card-body p-5">
+                <h1 class="fs-4 card-title fw-bold mb-4">DETALLES EL PAGO #{{ pago.id }}</h1>
+
+                <div class="form-group row">
+                    <div class="mb-4 col-sm-12">
+                        <h3 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Id: </h3>
+                        <h3 class="d-inline">{{ pago.id }}</h3>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="mb-4 col-sm-12">
+                        <h3 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Nombre: </h3>
+                        <h3 class="d-inline">{{ pago.nombre }}</h3>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="mb-4 col-sm-12">
+                        <h3 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Email: </h3>
+                        <h3 class="d-inline">{{ pago.email }}</h3>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="mb-4 col-sm-12">
+                        <h3 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Teléfono: </h3>
+                        <h3 class="d-inline">{{ pago.telefono }}</h3>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="mb-4 col-sm-12">
+                        <h3 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Estado: </h3>
+                        <h3 class="d-inline" [ngClass]="{
+                            'text-danger': pago.estado === 'RECHAZADO',
+                            'text-primary': pago.estado === 'PENDIENTE',
+                            'text-success': pago.estado === 'PAGADO'}"><b>{{ pago.estado }}</b></h3>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="mb-4 col-sm-12">
+                        <h3 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Cantidad: </h3>
+                        <h3 class="d-inline">{{ pago.cantidad }}</h3>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="mb-4 col-sm-12">
+                        <h3 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Socio: </h3>
+                        <h3 class="d-inline" *ngIf="pago.socio">{{ pago.socio }}</h3>
+                        <h3 class="d-inline" *ngIf="!pago.socio">Sin socio asignado</h3>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="mb-4 col-sm-12">
+                        <h3 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Fecha creación del pago: </h3>
+                        <h3 class="d-inline">{{ formatDate(pago.created_at) }}</h3>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    
+    </div>

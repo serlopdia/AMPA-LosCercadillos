@@ -78,6 +78,19 @@ export class DetallesEventoComponent implements OnInit {
     })
   }
 
+  inscribirSocio(idEvento: number) {
+    this.eventoService.inscribirSocio(idEvento).subscribe({
+      next: res => {
+        document.location.href = "/eventos/"+idEvento;
+        window.location.href = "/eventos/"+idEvento;
+      },
+      error: err => {
+        this.errorMessage=err.error.message;
+        console.log(err);
+      }
+    })
+  }
+
   abandonarEvento(idEvento: number) {
     this.eventoService.abandonarEvento(idEvento).subscribe({
       next: res => {

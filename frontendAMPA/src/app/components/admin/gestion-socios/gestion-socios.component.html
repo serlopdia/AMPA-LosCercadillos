@@ -4,14 +4,22 @@
   <div class="p-1 my-container active-cont">
 
     <nav class="navbar navbar-blank bg-blank">
-      <form class="form-inline buscador">
-        <input class="form-control mr-sm-2" type="search" placeholder="Buscar socio" style="margin-right: 20px;" [(ngModel)]="valorBusqueda">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+      <form (ngSubmit)="buscar()" class="form-inline buscador flex-wrap">
+        <div class="form-group" style="margin-right: 20px; margin-bottom: 20px;">
+          <input class="form-control mr-sm-2" type="search" name="valorBusqueda" placeholder="Buscar socio" [(ngModel)]="valorBusqueda">
+        </div>
+        <div class="form-group">
+          <label style="margin-right: 20px;">
+            <input type="checkbox" name="mostrarEliminados" [(ngModel)]="mostrarEliminados">
+            Mostrar eliminados
+          </label>
+          <button class="btn btn-outline-success my-2 my-sm-0" type="button" (click)="buscar()">Buscar</button>
+        </div>
       </form>
     </nav>
 
-    <div class="table-container">
-      <table class="table table-bordered table-hover">
+    <div *ngIf="sociosFiltrados.length > 0" class="table-container">
+      <table class="table table-bordered table-hover" id="usuarios-ampa">
         <thead>
           <tr>
             <th scope="col" style="width: 50px;">Id</th>
@@ -20,11 +28,12 @@
             <th scope="col">DNI</th>
             <th scope="col">Email</th>
             <th scope="col">Teléfono</th>
-            <th scope="col" style="width: 40px;">P</th>
+            <th scope="col" style="width: 40px;">Eliminado</th>
+            <th scope="col" style="width: 40px;">Abonado</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let socio of listaSocios" 
+          <tr *ngFor="let socio of sociosFiltrados; let i = index" 
           id="{{ socio.id }}" 
           class="socio" [routerLink]="['/dashboard/socios/form/'+socio.id]">
             <th scope="row">{{ socio.id }}</th>
@@ -33,18 +42,23 @@
             <td>{{ socio.dni }}</td>
             <td>{{ socio.email }}</td>
             <td>{{ socio.tel }}</td>
-            <td></td>
-          </tr>
+            <td [ngClass]="socio.deleted ? 'text-danger' : 'text-success'"><b>{{ socio.deleted ? 'Sí' : 'No' }}</b></td>
+            <td [ngClass]="cuotasPagadas[i] ? 'text-success' : 'text-danger'"><b>{{ cuotasPagadas[i] ? 'Sí' : 'No' }}</b></td></tr>
         </tbody>
       </table>
     </div>
+    
+    <div *ngIf="sociosFiltrados.length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+      <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+      <div style="opacity: .2;">No hay socios aún.</div>
+    </div>
 
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <button type="button" class="btn btn-rosa enviar-correo">
+    <div *ngIf="sociosFiltrados.length > 0" style="display: flex; justify-content: space-between; align-items: center;">
+      <button type="button" class="btn btn-rosa enviar-correo" (click)="enviarCorreo()">
         <i class="fa-solid fa-file-export" style="margin-right: 10px;"></i>
         Enviar correo
       </button>
-      <button type="button" class="btn btn-success exportar">
+      <button type="button" class="btn btn-success exportar" (click)="exportExcel()">
         <i class="fa-solid fa-file-arrow-down" style="margin-right: 10px;"></i>
         Exportar a Excel
       </button>

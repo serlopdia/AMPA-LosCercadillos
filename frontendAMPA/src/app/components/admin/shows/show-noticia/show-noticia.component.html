@@ -10,7 +10,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="titulo">Título</label>
-                            <input [(ngModel)]="form.titulo" id="titulo" type="text" class="form-control" name="titulo" value="" required autofocus>
+                            <input [(ngModel)]="form.titulo" #titulo="ngModel" id="titulo" type="text" class="form-control" name="titulo" [ngClass]="{ 'is-invalid': f.submitted && titulo.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir un título
@@ -22,7 +22,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="cuerpo">Cuerpo</label>
-                            <textarea [(ngModel)]="form.cuerpo" id="cuerpo" class="form-control" name="cuerpo" value="" required autofocus style="min-height: 15vh;"></textarea>
+                            <textarea [(ngModel)]="form.cuerpo" #cuerpo="ngModel" id="cuerpo" class="form-control" name="cuerpo" [ngClass]="{ 'is-invalid': f.submitted && cuerpo.errors }" required autofocus style="min-height: 15vh;"></textarea>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir un cuerpo
@@ -34,7 +34,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="imagen">URL de imagen</label>
-                            <input [(ngModel)]="form.imagen" id="imagen" type="text" class="form-control" name="imagen" value="" required autofocus>
+                            <input [(ngModel)]="form.imagen" #imagen="ngModel" id="imagen" type="text" class="form-control" name="imagen" [ngClass]="{ 'is-invalid': f.submitted && imagen.errors }" autofocus>
                         </div>
                     </div>
 

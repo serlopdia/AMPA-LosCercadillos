@@ -71,7 +71,7 @@
 
         <div class="card-footer py-3 border-0">
             <div class="d-flex justify-content-between">
-                <button class="btn big-button" routerLink="/miperfil/carnet">
+                <button [class]="esSocio ? 'btn big-button' : 'btn big-button bg-warning'" [routerLink]="esSocio ? '/miperfil/carnet' : '/miperfil/pagos'">
                     <b>CARNET VIRTUAL</b>
                 </button>
                 <button type="submit" class="btn btn-primary" routerLink="/miperfil/datos/editar">
@@ -79,6 +79,11 @@
                 </button>
             </div>
         </div>
+    </div>
+    
+    <div class="button-container">
+        <h3>¿Desea eliminar su cuenta?</h3>
+        <button class="btn big-button bg-danger" (click)="confirmarEliminacion1()"><b>Eliminar cuenta</b></button>
     </div>
 
 </div>

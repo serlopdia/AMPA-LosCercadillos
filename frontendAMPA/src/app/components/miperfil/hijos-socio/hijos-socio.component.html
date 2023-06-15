@@ -6,7 +6,7 @@
 
 <app-sidebar-socios></app-sidebar-socios>
 
-<div class="personal-container">
+<div *ngIf="esSocio" class="personal-container">
     <div *ngIf="hijosSocio.length > 0" class="card shadow-lg">
         <div class="card-body p-5">
             <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && guardarModificaciones()" #f="ngForm" novalidate>
@@ -72,51 +72,58 @@
         </div>
     </div>
     
+    <div *ngIf="hijosSocio.length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+      <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+      <div style="opacity: .2;">No has asociado ningún alumno.</div>
+    </div>
+    
     <div class="card shadow-lg" style="margin-top: 5vh;">
-        <div class="card-body p-5">
-            <div class="form-group row">
-                <h5 class="fs-5 mb-2">CREAR NUEVO</h5>
+        <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && crearHijo()" #f="ngForm" novalidate>
+            <div class="card-body p-5">
                 <div class="form-group row">
-                    <div class="mb-3 col-sm-6">
-                        <label class="mb-2 text-muted" for="nombre">Nombre</label>
-                        <input [(ngModel)]="hijoNuevo.nombre" id="nombre" type="text" class="form-control" name="nombre">
-                        <div class="invalid-feedback error">
-                            <div>Debe introducir un nombre</div>
+                    <h5 class="fs-5 mb-2">ASOCIAR ALUMNO</h5>
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="nombre">Nombre</label>
+                            <input [(ngModel)]="hijoNuevo.nombre" #nombreInput="ngModel" id="nombre" type="text" class="form-control" name="nombre" [ngClass]="{ 'is-invalid': f.submitted && nombreInput.invalid }" required>
+                            <div *ngIf="f.submitted && nombreInput.invalid" class="invalid-feedback error">
+                                <div>Debe introducir un nombre</div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="apellidos">Apellidos</label>
+                            <input [(ngModel)]="hijoNuevo.apellidos" #apellidosInput="ngModel" id="apellidos" type="text" class="form-control" name="apellidos" [ngClass]="{ 'is-invalid': f.submitted && apellidosInput.invalid }" required>
+                            <div *ngIf="f.submitted && apellidosInput.invalid" class="invalid-feedback error">
+                                <div>Debe introducir unos apellidos</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="mb-3 col-sm-6">
-                        <label class="mb-2 text-muted" for="apellidos">Apellidos</label>
-                        <input [(ngModel)]="hijoNuevo.apellidos" id="apellidos" type="text" class="form-control" name="apellidos">
-                        <div class="invalid-feedback error">
-                            <div>Debe introducir unos apellidos</div>
+                    <div class="form-group row">
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="fecha_nacimiento">Fecha de nacimiento</label>
+                            <input [(ngModel)]="hijoNuevo.fecha_nacimiento" #fechaNacimientoInput="ngModel" id="fecha_nacimiento" type="date" class="form-control" name="fecha_nacimiento" [ngClass]="{ 'is-invalid': f.submitted && fechaNacimientoInput.invalid }" required>
+                            <div *ngIf="f.submitted && fechaNacimientoInput.invalid" class="invalid-feedback error">
+                                <div>Debe introducir una fecha de nacimiento</div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="mb-3 col-sm-6">
-                        <label class="mb-2 text-muted" for="fecha_nacimiento">Fecha de nacimiento</label>
-                        <input [(ngModel)]="hijoNuevo.fecha_nacimiento" id="fecha_nacimiento" type="date" class="form-control" name="fecha_nacimiento">
-                        <div class="invalid-feedback error">
-                            <div>Debe introducir una fecha de nacimiento</div>
-                        </div>
-                    </div>
-                    <div class="mb-3 col-sm-6">
-                        <label class="mb-2 text-muted" for="clase">Clase</label>
-                        <select [(ngModel)]="hijoNuevo.clase" class="form-select" name="clase">
-                            <option *ngFor="let clase of listaClases" [value]="clase.id">{{ clase.curso }}º {{ clase.tipo_clase }} {{ clase.letra }}</option>
-                        </select>
-                        <div class="invalid-feedback error">
-                            <div>Debe introducir una clase</div>
+                        <div class="mb-3 col-sm-6">
+                            <label class="mb-2 text-muted" for="clase">Clase</label>
+                            <select [(ngModel)]="hijoNuevo.clase" #claseInput="ngModel" class="form-select" name="clase" [ngClass]="{ 'is-invalid': f.submitted && claseInput.invalid }" required>
+                                <option *ngFor="let clase of listaClases" [value]="clase.id">{{ clase.curso }}º {{ clase.tipo_clase }} {{ clase.letra }}</option>
+                            </select>
+                            <div *ngIf="f.submitted && claseInput.invalid" class="invalid-feedback error">
+                                <div>Debe introducir una clase</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card-footer py-3 border-0">
-            <button type="button" class="btn btn-success ms-auto" (click)="crearHijo()">
-                Crear nuevo
-            </button>
-        </div>
+            <div class="card-footer py-3 border-0">
+                <button type="submit" class="btn btn-success ms-auto">
+                    Asociar
+                </button>
+            </div>
+        </form>
     </div>
 </div>

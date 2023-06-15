@@ -50,7 +50,7 @@ class Pedido(models.Model):
     email = models.CharField(max_length=128)
     telefono = models.CharField(max_length=20)
     estado = models.CharField(choices=EstadoPedido.choices, max_length=64)
-    observaciones = models.CharField(max_length=512, null=True)
+    observaciones = models.CharField(max_length=512, null=True, blank=True)
     pago = models.ForeignKey(Pago, on_delete=models.SET_NULL, null=True)
     socio = models.ForeignKey(Socio, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

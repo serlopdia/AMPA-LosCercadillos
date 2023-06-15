@@ -6,7 +6,7 @@
 
 <app-sidebar-socios></app-sidebar-socios>
 
-<div class="personal-container">
+<div *ngIf="esSocio" class="personal-container">
     <h1 class="h-outside-card">Citas</h1>
     
     <div *ngIf="citasSocio.length > 0">
@@ -36,16 +36,21 @@
             </table>
         </div>
     </div>
+    
+    <div *ngIf="citasSocio.length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+      <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+      <div style="opacity: .2;">No has reservado ninguna cita.</div>
+    </div>
 
     <form *ngIf="!isSuccessful && asuntoSeleccionado" name="form" (ngSubmit)="f.form.valid && reservarCita()" #f="ngForm" novalidate>
         <div class="card shadow-lg">
             <div class="card-body p-5">
-                <h1 class="fs-4 card-title fw-bold mb-4">RESERVAR UNA CITA</h1>
+                <h1 class="fs-4 card-title fw-bold mb-4">RESERVAR CITA</h1>
 
                 <div class="form-group row">
                     <div class="mb-3 col-sm-12">
                         <label class="mb-2 text-muted" for="asunto">Asunto</label>
-                        <select (change)="actualizarAsuntoSeleccionado($any($event.target).value)" class="form-select" name="tipo">
+                        <select [(ngModel)]="form.asunto" (change)="actualizarAsuntoSeleccionado($any($event.target).value)" #asunto="ngModel" class="form-select" name="tipo" [ngClass]="{ 'is-invalid': f.submitted && asunto.errors }" required>
                             <option *ngFor="let asunto of asuntosAbiertos" [value]="asunto.id">{{ asunto.nombre }}</option>
                         </select>
                         <div class="invalid-feedback error">
@@ -60,7 +65,7 @@
                 <div class="form-group row">
                     <div class="mb-3 col-sm-6">
                         <label class="mb-2 text-muted" for="fecha">Fecha</label>
-                        <input [(ngModel)]="form.fecha" id="fecha" type="date" class="form-control" name="fecha" [min]="fechaMinima" [max]="asuntoSeleccionado.fecha_fin" (ngModelChange)="actualizarHorasDisponibles()" required autofocus>
+                        <input [(ngModel)]="form.fecha" #fecha="ngModel" id="fecha" type="date" class="form-control" name="fecha" [min]="fechaMinima" [max]="asuntoSeleccionado.fecha_fin" (ngModelChange)="actualizarHorasDisponibles()" [ngClass]="{ 'is-invalid': f.submitted && fecha.errors }" required autofocus>
                         <div class="invalid-feedback error">
                             <div>
                                 Debe introducir una fecha
@@ -69,7 +74,7 @@
                     </div>
                     <div class="mb-3 col-sm-6">
                         <label class="mb-2 text-muted" for="hora">Hora</label>
-                        <select [(ngModel)]="form.hora" class="form-select" name="tipo">
+                        <select [(ngModel)]="form.hora" #hora="ngModel" class="form-select" name="hora" [ngClass]="{ 'is-invalid': f.submitted && hora.errors }" required>
                             <option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</option>
                         </select>
                         <div class="invalid-feedback error">
@@ -85,7 +90,7 @@
             <div class="card-footer py-3 border-0">
                 <div class="align-items-center d-flex">
                     <button type="submit" class="btn btn-success ms-auto">
-                        Reservar cita
+                        Reservar
                     </button>
                 </div>
             </div>

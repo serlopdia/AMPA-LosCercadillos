@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
 import { UsersService } from '../services/users.service';
+import { Observable, first, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,23 +12,37 @@ export class SocioGuard implements CanActivate {
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): boolean | UrlTree {
+    state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     
-    const esSocio = this.isSocioLogged();
+    return this.isSocioLogged().pipe(
+      map(esSocio => {
+        const esUsuario = this.isUsuarioLogged();
 
-    if (esSocio) {
-      return true;
-    } else {
-      return this.router.parseUrl('/unauthorized');
-    }
+        if (esSocio) {
+          return true;
+        } else if (!esUsuario) {
+          return this.router.parseUrl('/unauthorized');
+        } else {
+          return this.router.parseUrl('/not-socio');
+        }
+      })
+    );
   }
 
-  isSocioLogged(): boolean {
+  isSocioLogged(): Observable<boolean> {
+    return this.usersService.checkEsSocio().pipe(
+      map(esSocio => {
+        return esSocio;
+      }),
+      first()
+    );
+  }
+
+  isUsuarioLogged(): boolean {
     let res = false;
-    if(this.usersService.isLoggedIn() && !this.usersService.isLogAdmin()) {
+    if (this.usersService.isLoggedIn() && !this.usersService.isLogAdmin()) {
       res = true;
     }
     return res;
   }
-  
 }

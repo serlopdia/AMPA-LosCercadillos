@@ -10,7 +10,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="tipo">Tipo</label>
-                            <select [(ngModel)]="form.tipo" id="tipo" class="form-select" name="tipo" aria-label="Default select example">
+                            <select [(ngModel)]="form.tipo" #tipo="ngModel" id="tipo" class="form-select" name="tipo" [ngClass]="{ 'is-invalid': f.submitted && tipo.errors }" required aria-label="Default select example">
                                 <option value="INGRESO">Ingreso</option>
                                 <option value="GASTO">Gasto</option>
                             </select>
@@ -25,7 +25,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="asunto">Asunto</label>
-                            <input [(ngModel)]="form.asunto" id="asunto" class="form-control" name="asunto" value="" required autofocus>
+                            <input [(ngModel)]="form.asunto" #asunto="ngModel" id="asunto" class="form-control" name="asunto" [ngClass]="{ 'is-invalid': f.submitted && asunto.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir un asunto
@@ -37,7 +37,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="cantidad">Cantidad</label>
-                            <input [(ngModel)]="form.cantidad" id="cantidad" type="number" min="0" class="form-control" name="cantidad" value="" required autofocus>
+                            <input [(ngModel)]="form.cantidad" #cantidad="ngModel" id="cantidad" type="number" min="0" class="form-control" name="cantidad" [ngClass]="{ 'is-invalid': f.submitted && cantidad.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una cantidad

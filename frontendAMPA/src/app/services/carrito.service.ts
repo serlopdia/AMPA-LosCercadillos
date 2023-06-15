@@ -27,14 +27,17 @@ export class CarritoService {
   }
 
   agregarAlCarrito(idProducto: string, idStock: string, cantidadUnidades: number) {
-    const lineaPedidoTemporal: LineaPedidoTemporal = {
-      idProducto: idProducto,
-      idStock: idStock,
-      cantidad: cantidadUnidades
-    };
-
-    this.carrito.push(lineaPedidoTemporal);
-
+    const lineaExistente = this.carrito.find((linea) => linea.idProducto === idProducto && linea.idStock === idStock);
+    if (lineaExistente) {
+      lineaExistente.cantidad += cantidadUnidades;
+    } else {
+      const lineaPedidoTemporal: LineaPedidoTemporal = {
+        idProducto: idProducto,
+        idStock: idStock,
+        cantidad: cantidadUnidades
+      };
+      this.carrito.push(lineaPedidoTemporal);
+    }
     localStorage.setItem('carrito', JSON.stringify(this.carrito));
   }
 

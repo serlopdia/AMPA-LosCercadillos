@@ -53,10 +53,27 @@ export class EventoComponent implements OnInit {
         window.location.href = "/dashboard/eventos"
       },
       error: err => {
-        this.errorMessage=err.error.message;
-        console.log(err);
+        let errorMessages = "Datos erróneos";
+        if (err.error && typeof err.error === "object") {
+          const errors = Object.values(err.error);
+          const messages = errors.flatMap((error: any) => {
+            if (Array.isArray(error)) {
+              return error;
+            } else if (typeof error === "string") {
+              return [error];
+            } else {
+              return [];
+            }
+          });
+          if (messages.length > 0) {
+            errorMessages = messages.join("\n");
+          }
+        }
+  
+        this.errorMessage = errorMessages;
+        window.alert("Error: " + this.errorMessage);
       }
-    })
+    });
   }
 
 }

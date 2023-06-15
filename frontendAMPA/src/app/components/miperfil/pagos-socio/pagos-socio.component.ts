@@ -46,12 +46,8 @@ export class PagosSocioComponent implements OnInit {
   listaPagosSocio: PagoCombinado[] = [];
   pagosFormateados: any[] = [];
   cursoActual!: Curso;
-  cuotaActualPagada: boolean | undefined;
+  esSocio = false;
   stripePromise = loadStripe(environment.stripe_key);
-  private paymentHandler: any = null;
-  public paymentMessageShown: boolean = false;
-  public paymentMessageSuccess: boolean = false;
-  public paymentMessageText: string = '';
 
   constructor(private pagoService: PagoService, private pagoCursoService: PagoCursoService, private cursoService: CursoService, private usersService: UsersService) { }
 
@@ -59,7 +55,12 @@ export class PagosSocioComponent implements OnInit {
     this.getDatosSocio();
     this.getCursoActual();
     this.combinarPagos();
-    this.comprobarCuotaCursoPagada();
+
+    this.usersService.checkEsSocio().subscribe(esSocio => {
+      this.esSocio = esSocio;
+    }, error => {
+      console.log(error);
+    });
   }
 
   getDatosSocio() {
@@ -118,23 +119,6 @@ export class PagosSocioComponent implements OnInit {
     this.cursoService.getCursos().subscribe({
       next: res => {
         this.cursoActual = res.find((curso: { actual: any }) => curso.actual);
-      },
-      error: err => {
-        console.log(err);
-      }
-    });
-  }
-
-  comprobarCuotaCursoPagada() {
-    forkJoin([
-      this.pagoCursoService.getPagosCursoSocioList(),
-      this.cursoService.getCursos()
-    ]).subscribe({
-      next: res => {
-        const pagosCursoPagados = res[0].filter((pago: { estado: string }) => pago.estado === "PAGADO");
-        const cursoActualId = res[1].find((curso: { actual: any }) => curso.actual).id;
-  
-        this.cuotaActualPagada = pagosCursoPagados.some((pago: { curso_escolar: any }) => pago.curso_escolar === cursoActualId);
       },
       error: err => {
         console.log(err);

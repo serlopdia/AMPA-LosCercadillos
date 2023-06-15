@@ -10,7 +10,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="first_name">Nombre</label>
-                            <input [(ngModel)]="form.nombre" id="first_name" type="text" class="form-control" name="first_name" value="" required autofocus>
+                            <input [(ngModel)]="form.nombre" #nombre="ngModel" id="first_name" type="text" class="form-control" name="first_name" [ngClass]="{ 'is-invalid': f.submitted && nombre.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir un nombre
@@ -22,7 +22,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="descripcion">Descripción</label>
-                            <textarea [(ngModel)]="form.descripcion" id="descripcion" class="form-control" name="descripcion" value="" required autofocus style="min-height: 15vh;"></textarea>
+                            <textarea [(ngModel)]="form.descripcion" #descripcion="ngModel" id="descripcion" class="form-control" name="descripcion" [ngClass]="{ 'is-invalid': f.submitted && descripcion.errors }" required autofocus style="min-height: 15vh;"></textarea>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una descripción
@@ -34,7 +34,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="precio_general">Precio general</label>
-                            <input [(ngModel)]="form.precio_general" id="precio_general" type="number" min="0" class="form-control" name="precio_general" placeholder="€" value="" required autofocus>
+                            <input [(ngModel)]="form.precio_general" #precio_general="ngModel" id="precio_general" type="number" min="0" class="form-control" name="precio_general" placeholder="€" [ngClass]="{ 'is-invalid': f.submitted && precio_general.errors }" required autofocus>
                             <div class="invalid-feedback error">
                             <div>
                                 Debe introducir un precio general
@@ -43,7 +43,7 @@
                         </div>
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="precio_socio">Precio socios</label>
-                            <input [(ngModel)]="form.precio_socio" id="precio_socio" type="number" min="0" class="form-control" name="precio_socio" placeholder="€" value="" required autofocus>
+                            <input [(ngModel)]="form.precio_socio" #precio_socio="ngModel" id="precio_socio" type="number" min="0" class="form-control" name="precio_socio" placeholder="€" [ngClass]="{ 'is-invalid': f.submitted && precio_socio.errors }" required autofocus>
                             <div class="invalid-feedback error">
                             <div>
                                 Debe introducir un precio para socios
@@ -55,7 +55,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="imagen">URL de imagen</label>
-                            <input [(ngModel)]="form.imagen" id="imagen" type="text" class="form-control" name="imagen" value="" required autofocus>
+                            <input [(ngModel)]="form.imagen" #imagen="ngModel" id="imagen" type="text" class="form-control" name="imagen" [ngClass]="{ 'is-invalid': f.submitted && imagen.errors }" autofocus>
                         </div>
                     </div>
 

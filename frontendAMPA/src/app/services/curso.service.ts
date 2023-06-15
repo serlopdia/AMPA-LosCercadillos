@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_url } from '../global';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -8,11 +8,21 @@ import { UsersService } from './users.service';
   providedIn: 'root'
 })
 export class CursoService {
+  
+  private usersService?: UsersService | undefined;
 
-  constructor(private http: HttpClient, private usersService: UsersService) { }
+  constructor(private http: HttpClient, private injector: Injector) { }
+
+  private getUsersService(): UsersService {
+    if (!this.usersService) {
+      this.usersService = this.injector.get(UsersService);
+    }
+    return this.usersService;
+  }
   
   getClases(): Observable<any>{
-    if(this.usersService.isLoggedIn()){
+    const usersService = this.getUsersService();
+    if(usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -30,7 +40,8 @@ export class CursoService {
   }
 
   getClaseById(id: number): Observable<any> {
-    if (this.usersService.isLoggedIn()) {
+    const usersService = this.getUsersService();
+    if (usersService.isLoggedIn()) {
       var ck = localStorage.getItem('auth-user');
       if (ck != null) {
         var tk = JSON.parse(ck);
@@ -48,7 +59,8 @@ export class CursoService {
   }
 
   createCurso(dataCurso:any): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    const usersService = this.getUsersService();
+    if(usersService.isLogAdmin()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -66,7 +78,8 @@ export class CursoService {
   }
 
   createClase(dataClase:any): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    const usersService = this.getUsersService();
+    if(usersService.isLogAdmin()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -84,7 +97,8 @@ export class CursoService {
   }
 
   deleteClase(idEntry:any): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    const usersService = this.getUsersService();
+    if(usersService.isLogAdmin()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -102,7 +116,8 @@ export class CursoService {
   }
   
   getCursos(): Observable<any>{
-    if(this.usersService.isLoggedIn()){
+    const usersService = this.getUsersService();
+    if(usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -120,7 +135,8 @@ export class CursoService {
   }
 
   getCursoById(idCurso:any):Observable<any>{
-    if(this.usersService.isLoggedIn()){
+    const usersService = this.getUsersService();
+    if(usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck!=null){
         var tk = JSON.parse(ck);
@@ -138,7 +154,8 @@ export class CursoService {
   }
 
   updateCurso(idEntry:any, dataEntry:any): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    const usersService = this.getUsersService();
+    if(usersService.isLogAdmin()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -156,7 +173,8 @@ export class CursoService {
   }
 
   deleteCurso(idEntry:any): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    const usersService = this.getUsersService();
+    if(usersService.isLogAdmin()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);

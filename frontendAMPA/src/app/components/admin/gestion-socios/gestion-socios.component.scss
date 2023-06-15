@@ -76,3 +76,10 @@ th, td {
   border-color: #E056C1;
 }
 // <<<<<<<<<<<<<<<<< CSS PARA HACER EL BOTÓN DE ENVIAR CORREO
+
+.imagen-vacia {
+  color:#888;
+  -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+      -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+          filter: brightness(1.8) grayscale(1) opacity(.2);
+}

@@ -10,6 +10,7 @@ class Socio(models.Model):
     dni = models.CharField(max_length=10)
     address = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
+    deleted = models.BooleanField(default=False)
 
     class Meta:
         app_label="users"

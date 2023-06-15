@@ -10,7 +10,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="titulo">Título</label>
-                            <input [(ngModel)]="form.titulo" id="titulo" type="text" class="form-control" name="titulo" value="" required autofocus>
+                            <input [(ngModel)]="form.titulo" #titulo="ngModel" id="titulo" type="text" class="form-control" name="titulo" [ngClass]="{ 'is-invalid': f.submitted && titulo.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir un título
@@ -22,7 +22,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="descripcion">Descripción</label>
-                            <textarea [(ngModel)]="form.descripcion" id="descripcion" class="form-control" name="descripcion" value="" required autofocus style="min-height: 15vh;"></textarea>
+                            <textarea [(ngModel)]="form.descripcion" #descripcion="ngModel" id="descripcion" class="form-control" name="descripcion" [ngClass]="{ 'is-invalid': f.submitted && descripcion.errors }" required autofocus style="min-height: 15vh;"></textarea>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una descripción
@@ -34,7 +34,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="capacidad">Capacidad</label>
-                            <input [(ngModel)]="form.capacidad" id="capacidad" type="number" min="1" class="form-control" name="capacidad" value="" required autofocus>
+                            <input [(ngModel)]="form.capacidad" #capacidad="ngModel" id="capacidad" type="number" min="1" class="form-control" name="capacidad" [ngClass]="{ 'is-invalid': f.submitted && capacidad.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una capacidad
@@ -43,7 +43,7 @@
                         </div>
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="fin_inscripcion">Fecha fin de inscripción</label>
-                            <input [(ngModel)]="form.fin_inscripcion" id="fin_inscripcion" type="datetime-local" class="form-control" name="fin_inscripcion" value="" required autofocus>
+                            <input [(ngModel)]="form.fin_inscripcion" #fin_inscripcion="ngModel" id="fin_inscripcion" type="datetime-local" class="form-control" name="fin_inscripcion" [ngClass]="{ 'is-invalid': f.submitted && fin_inscripcion.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una fecha y hora de finalización
@@ -56,11 +56,16 @@
 
                 <div class="card-footer py-3 border-0">
                     <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-danger" (click)="confirmarEliminacion()">
-                            Eliminar
-                        </button>
-                        <button type="submit" class="btn btn-success">
-                            Modificar datos
+                        <div>
+                            <button type="button" class="btn btn-danger" (click)="confirmarEliminacion()">
+                                Eliminar
+                            </button>
+                            <button type="submit" class="btn btn-success" style="margin-left: 0.5vw;">
+                                Modificar datos
+                            </button>
+                        </div>
+                        <button *ngIf="evento" type="button" class="btn btn-primary" [routerLink]="['/dashboard/eventos/'+evento.id+'/socios']">
+                            Ver socios inscritos
                         </button>
                     </div>
                 </div>

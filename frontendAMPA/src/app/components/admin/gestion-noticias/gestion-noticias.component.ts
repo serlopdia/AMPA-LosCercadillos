@@ -17,8 +17,10 @@ interface Noticia {
 export class GestionNoticiasComponent implements OnInit {
 
   listaNoticias: Noticia[] = [];
+  noticiasFiltradas: Noticia[] = [];
   noticiasFormateadas: Noticia[] = [];
   mapMostrarCuerpoCompleto: Map<number, boolean>;
+  valorBusqueda = '';
 
   constructor(private noticiaService: NoticiaService) {
     this.mapMostrarCuerpoCompleto = new Map();
@@ -28,6 +30,7 @@ export class GestionNoticiasComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.buscar();
     this.formatearNoticias();
   }
 
@@ -52,6 +55,26 @@ export class GestionNoticiasComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  buscar() {
+    if (this.valorBusqueda.trim() !== '') {
+      this.noticiasFiltradas = this.noticiasFormateadas.filter((noticia) =>
+        noticia.titulo.toLowerCase().includes(this.valorBusqueda.toLowerCase()) ||
+        noticia.cuerpo.toLowerCase().includes(this.valorBusqueda.toLowerCase())
+      );
+    } else {
+      this.noticiaService.getNoticias().subscribe({
+        next: res => {
+          res.forEach((noticia: Noticia) => {
+            noticia = this.formatearFecha(noticia);
+          });
+          this.noticiasFiltradas = res;
+        },error: err => {
+          console.log(err);
+        }
+      })
+    }
   }
 
   formatearNoticias() {

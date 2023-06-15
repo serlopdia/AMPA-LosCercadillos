@@ -19,7 +19,7 @@
                 <p>{{ evento.created_at }}</p>
             </div>
             <div class="align-items-center d-flex">
-                <button *ngIf="!isSocioInEvento(evento) && isLoggedIn" type="submit" class="btn big-button ms-auto" (click)="inscribirSocio(evento.id)">
+                <button *ngIf="!isSocioInEvento(evento) && isLoggedIn && !isAdmin" type="submit" class="btn big-button ms-auto" (click)="inscribirSocio(evento.id)">
                     <b>Apuntarse</b>
                 </button>
                 <button *ngIf="!isLoggedIn || isAdmin" type="submit" class="btn big-button ms-auto" routerLink="/login">
@@ -30,6 +30,11 @@
                 </button>
             </div>
         </div>
+    </div>
+    
+    <div *ngIf="eventosFormateados.length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+      <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+      <div style="opacity: .2;">No existen eventos aún.</div>
     </div>
 
 </div>

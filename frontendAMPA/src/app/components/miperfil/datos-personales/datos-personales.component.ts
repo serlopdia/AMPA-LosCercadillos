@@ -21,12 +21,19 @@ interface Socio {
 })
 export class DatosPersonalesComponent implements OnInit {
 
+  esSocio = false;
   socio!: Socio;
 
   constructor(private usersService: UsersService) { }
 
   ngOnInit(): void {
     this.getDatosSocio();
+
+    this.usersService.checkEsSocio().subscribe(esSocio => {
+      this.esSocio = esSocio;
+    }, error => {
+      console.log(error);
+    });
   }
 
   getDatosSocio() {
@@ -38,6 +45,28 @@ export class DatosPersonalesComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  borrarCuenta(): void {
+    this.usersService.deleteCuenta(this.socio.id).subscribe({
+      next: res => {
+        this.usersService.logout();
+      },error: err => {
+        console.log(err)
+      }
+    })
+  }
+
+  confirmarEliminacion1(): void {
+    if (confirm('Vas a eliminar tu cuenta. ¿Estás seguro/a?')) {
+      this.confirmarEliminacion2();
+    }
+  }
+
+  confirmarEliminacion2(): void {
+    if (confirm('Si la eliminas no la podrás recuperar, PERDERÁS EL DERECHO A SOCIO, todos los datos de pedidos, pagos, etc. Definitivamente, ¿estás seguro/a?')) {
+      this.borrarCuenta();
+    }
   }
 
 }

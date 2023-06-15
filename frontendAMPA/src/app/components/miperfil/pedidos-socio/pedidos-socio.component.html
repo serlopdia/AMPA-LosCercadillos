@@ -1,0 +1,46 @@
+<app-navbar></app-navbar>
+
+<div class="title-container">
+    <h1><b>Mi Perfil</b></h1>
+</div>
+
+<app-sidebar-socios></app-sidebar-socios>
+
+<div class="personal-container">
+    <h1>Pedidos</h1>
+
+    <div>
+      <h2>Historial de pedidos:</h2>
+      <div *ngIf="listaPedidosSocio.length > 0" class="table-container">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">Email</th>
+              <th scope="col">Telefono</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pedido of listaPedidosSocio" 
+            id="{{ pedido.id }}" 
+            class="socio">
+              <td>{{ pedido.created_at }}</td>
+              <td>{{ pedido.email }}</td>
+              <td>{{ pedido.telefono }}</td>
+              <td [ngClass]="{
+                'text-success': pedido.estado === 'ENTREGADO',
+                'text-primary': pedido.estado === 'PREPARACION',
+                'text-warning': pedido.estado === 'DEVUELTO',
+                'text-danger': pedido.estado === 'CANCELADO',
+                'text-dark': pedido.estado === 'NO_PAGADO'}"><b>{{ pedido.estado }}</b></td>
+            </tr>
+          </tbody>
+      </table>
+    </div>
+    
+    <div *ngIf="listaPedidosSocio.length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+      <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+      <div style="opacity: .2;">No has realizado ningún pedido.</div>
+    </div>
+</div>

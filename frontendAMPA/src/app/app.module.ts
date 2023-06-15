@@ -2,6 +2,8 @@ import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { MarkdownModule } from 'ngx-markdown';
 import { DatePipe } from '@angular/common';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,7 +13,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { DashboardComponent } from './layouts/dashboard/dashboard.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth.interceptor';
 import { IndexComponent } from './components/index/index.component';
 import { UnauthorizedComponent } from './layouts/unauthorized/unauthorized.component';
 import { GestionSociosComponent } from './components/admin/gestion-socios/gestion-socios.component';
@@ -62,10 +65,16 @@ import { SidebarSociosComponent } from './layouts/sidebar-socios/sidebar-socios.
 import { EditarDatosPersonalesComponent } from './components/miperfil/editar-datos-personales/editar-datos-personales.component';
 import { CarnetVirtualComponent } from './components/miperfil/carnet-virtual/carnet-virtual.component';
 import { DetallesNoticiaComponent } from './components/public/detalles-noticia/detalles-noticia.component';
-import { StripeComponent } from './components/stripe/stripe.component';
-import { CancelComponent } from './cancel/cancel.component';
-import { SuccessComponent } from './success/success.component';
 import { DetallesEventoComponent } from './components/public/detalles-evento/detalles-evento.component';
+import { SuccessPayComponent } from './layouts/success-pay/success-pay.component';
+import { CancelPayComponent } from './layouts/cancel-pay/cancel-pay.component';
+import { SociosEventoComponent } from './components/admin/socios-evento/socios-evento.component';
+import { ShowPagoComponent } from './components/admin/shows/show-pago/show-pago.component';
+import { PedidosSocioComponent } from './components/miperfil/pedidos-socio/pedidos-socio.component';
+import { NotSocioComponent } from './layouts/not-socio/not-socio.component';
+import { EditarPasswordSocioComponent } from './components/miperfil/editar-password-socio/editar-password-socio.component';
+
+registerLocaleData(localeEs);
 
 @NgModule({
   declarations: [
@@ -125,10 +134,14 @@ import { DetallesEventoComponent } from './components/public/detalles-evento/det
     EditarDatosPersonalesComponent,
     CarnetVirtualComponent,
     DetallesNoticiaComponent,
-    StripeComponent,
-    CancelComponent,
-    SuccessComponent,
     DetallesEventoComponent,
+    SuccessPayComponent,
+    CancelPayComponent,
+    SociosEventoComponent,
+    ShowPagoComponent,
+    PedidosSocioComponent,
+    NotSocioComponent,
+    EditarPasswordSocioComponent,
   ],
   imports: [
     BrowserModule,
@@ -141,7 +154,15 @@ import { DetallesEventoComponent } from './components/public/detalles-evento/det
   providers: [
     Title,
     DatePipe,
-    { provide: LOCALE_ID, useValue: 'es' }
+    { 
+      provide: LOCALE_ID, 
+      useValue: 'es' 
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

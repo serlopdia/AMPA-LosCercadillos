@@ -67,10 +67,27 @@ export class EditarDatosPersonalesComponent implements OnInit {
         window.location.href = "/miperfil/datos"
       },
       error: err => {
-        this.errorMessage=err.error.message;
-        console.log(err);
-      }
-    })
+          let errorMessages = "Datos erróneos";
+          if (err.error && typeof err.error === "object") {
+            const errors = Object.entries(err.error);
+            const messages = errors.flatMap(([field, error]: [string, any]) => {
+              if (Array.isArray(error)) {
+                return error.map((errorMsg: string) => `${field}: ${errorMsg}`);
+              } else if (typeof error === "string") {
+                return [`${field}: ${error}`];
+              } else {
+                return [];
+              }
+            });
+            if (messages.length > 0) {
+              errorMessages = messages.join("\n");
+            }
+          }
+        
+          this.errorMessage = errorMessages;
+          window.alert("Error: " + this.errorMessage);
+        }
+    });
   }
 
 }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CancelComponent } from './cancel.component';
+import { SuccessPayComponent } from './success-pay.component';
 
-describe('CancelComponent', () => {
-  let component: CancelComponent;
-  let fixture: ComponentFixture<CancelComponent>;
+describe('SuccessPayComponent', () => {
+  let component: SuccessPayComponent;
+  let fixture: ComponentFixture<SuccessPayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CancelComponent ]
+      declarations: [ SuccessPayComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CancelComponent);
+    fixture = TestBed.createComponent(SuccessPayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

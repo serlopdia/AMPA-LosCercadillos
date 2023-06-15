@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ColaboradorService } from 'src/app/services/colaborador.service';
+import { UsersService } from 'src/app/services/users.service';
 
 interface Colaborador {
   id: number;
@@ -17,12 +18,23 @@ interface Colaborador {
 })
 export class VistaColaboradoresComponent implements OnInit {
 
+  esSocio = false;
   listaColaboradores: Colaborador[] = [];
 
-  constructor(private colaboradorService: ColaboradorService) { }
+  constructor(private colaboradorService: ColaboradorService, private usersService: UsersService) { }
 
   ngOnInit(): void {
-    this.getColaboradoresList();
+    this.usersService.checkEsSocio().subscribe(esSocio => {
+      this.esSocio = esSocio;
+      if(esSocio) {
+        this.getColaboradoresList();
+      } else {
+        document.location.href = "/miperfil/pagos"
+        window.location.href = "/miperfil/pagos"
+      }
+    }, error => {
+      console.log(error);
+    });
   }
 
   getColaboradoresList() {

@@ -61,9 +61,17 @@ th, td {
 
 .big-button {
     font-size: 20px;
-    width: 180px;
+    width: 200px;
     height: 50px;
     border-radius: 100px;
     background-color: rgb(72, 0, 206);
     color: white;
+    white-space: nowrap;
+}
+
+.imagen-vacia {
+  color:#888;
+  -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+      -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+          filter: brightness(1.8) grayscale(1) opacity(.2);
 }

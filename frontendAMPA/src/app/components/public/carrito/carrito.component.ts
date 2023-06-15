@@ -36,6 +36,7 @@ interface LineaPedidoTemporal {
   cantidad: number;
 }
 interface LineaFormateada {
+  productoId: number;
   imagen: string;
   nombre: string;
   precio: number;
@@ -50,6 +51,7 @@ interface LineaFormateada {
 })
 export class CarritoComponent implements OnInit {
 
+  esSocio = false;
   form:any ={
     nombre: null,
     email: null,
@@ -58,6 +60,7 @@ export class CarritoComponent implements OnInit {
   }
   carrito: LineaPedidoTemporal[] = [];
   carritoFormateado: LineaFormateada[] = [];
+  isSuccessful = false;
   precioTotalCarrito = 0;
   producto!:Producto;
   errorMessage = '';
@@ -74,6 +77,13 @@ export class CarritoComponent implements OnInit {
         this.precioTotalCarrito = precioTotal;
       }
     );
+    this.getDatosSocio();
+
+    this.usersService.checkEsSocio().subscribe(esSocio => {
+      this.esSocio = esSocio;
+    }, error => {
+      console.log(error);
+    });
   }
 
   getDatosSocio() {
@@ -107,19 +117,21 @@ export class CarritoComponent implements OnInit {
       const stock = await this.stockService.getStock(lineaPedido.idStock).toPromise();
       let lineaFormateada: LineaFormateada;
 
-      if(!this.usersService.isLoggedIn()) {
+      if(this.esSocio) {
         lineaFormateada = {
+          productoId: producto.id,
           imagen: producto.imagen,
           nombre: producto.nombre,
-          precio: producto.precio_general.toString(),
+          precio: producto.precio_socio.toString(),
           opcion: stock.nombre,
           cantidad: lineaPedido.cantidad
         }
       } else {
         lineaFormateada = {
+          productoId: producto.id,
           imagen: producto.imagen,
           nombre: producto.nombre,
-          precio: producto.precio_socio.toString(),
+          precio: producto.precio_general.toString(),
           opcion: stock.nombre,
           cantidad: lineaPedido.cantidad
         }
@@ -146,10 +158,10 @@ export class CarritoComponent implements OnInit {
           const lineaPedido = this.carrito[i];
           let precioProducto: number;
           
-          if(!this.usersService.isLoggedIn()) {
-            precioProducto = producto.precio_general;
-          } else {
+          if(this.esSocio) {
             precioProducto = producto.precio_socio;
+          } else {
+            precioProducto = producto.precio_general;
           }
           const cantidad = lineaPedido.cantidad;
   
@@ -197,8 +209,26 @@ export class CarritoComponent implements OnInit {
               console.log("Línea pedido " + res.id + " creada correctamente");
             },
             error: err => {
-              console.log(err);
+          let errorMessages = "Datos erróneos";
+          if (err.error && typeof err.error === "object") {
+            const errors = Object.entries(err.error);
+            const messages = errors.flatMap(([field, error]: [string, any]) => {
+              if (Array.isArray(error)) {
+                return error.map((errorMsg: string) => `${field}: ${errorMsg}`);
+              } else if (typeof error === "string") {
+                return [`${field}: ${error}`];
+              } else {
+                return [];
+              }
+            });
+            if (messages.length > 0) {
+              errorMessages = messages.join("\n");
             }
+          }
+        
+          this.errorMessage = errorMessages;
+          window.alert("Error: " + this.errorMessage);
+        }
           });
         }
         
@@ -219,15 +249,50 @@ export class CarritoComponent implements OnInit {
           next: (res) => {
             window.location.href = res.url;
           },
-          error: (err) => {
-            console.log(err);
-          },
+          error: err => {
+            let errorMessages = "Datos erróneos";
+            if (err.error && typeof err.error === "object") {
+              const errors = Object.values(err.error);
+              const messages = errors.flatMap((error: any) => {
+                if (Array.isArray(error)) {
+                  return error;
+                } else if (typeof error === "string") {
+                  return [error];
+                } else {
+                  return [];
+                }
+              });
+              if (messages.length > 0) {
+                errorMessages = messages.join("\n");
+              }
+            }
+      
+            this.errorMessage = errorMessages;
+            window.alert("Error: " + this.errorMessage);
+          }
         });
         
       },
       error: err => {
-        this.errorMessage = err.error.message;
-        console.log(err);
+        let errorMessages = "Datos erróneos";
+        if (err.error && typeof err.error === "object") {
+          const errors = Object.entries(err.error);
+          const messages = errors.flatMap(([field, error]: [string, any]) => {
+            if (Array.isArray(error)) {
+              return error.map((errorMsg: string) => `${field}: ${errorMsg}`);
+            } else if (typeof error === "string") {
+              return [`${field}: ${error}`];
+            } else {
+              return [];
+            }
+          });
+          if (messages.length > 0) {
+            errorMessages = messages.join("\n");
+          }
+        }
+      
+        this.errorMessage = errorMessages;
+        window.alert("Error: " + this.errorMessage);
       }
     });
   }

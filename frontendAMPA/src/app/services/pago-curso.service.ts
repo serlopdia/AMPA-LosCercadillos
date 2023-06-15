@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { UsersService } from './users.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
@@ -16,13 +16,22 @@ const httpOptions = {
 })
 export class PagoCursoService {
   
+  private usersService?: UsersService | undefined;
   stripePromise = loadStripe(environment.stripe_key);
 
-  constructor(private http: HttpClient, private usersService: UsersService) { }
+  constructor(private http: HttpClient, private injector: Injector) { }
+
+  private getUsersService(): UsersService {
+    if (!this.usersService) {
+      this.usersService = this.injector.get(UsersService);
+    }
+    return this.usersService;
+  }
   
   // DEVUELVE UNA LISTA DE TODOS LOS PAGOS
   getPagosCursoList(): Observable<any>{
-    if(this.usersService.isLogAdmin()){
+    const usersService = this.getUsersService();
+    if(usersService.isLogAdmin()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -39,9 +48,16 @@ export class PagoCursoService {
     return new Observable<any>;
   }
 
+  getPagosCursoPorIdSocio(id: number): Observable<any> {
+    return this.getPagosCursoList().pipe(
+      map(pagos => pagos.filter((pago: { socio: number }) => pago.socio === id))
+    );
+  }
+
   // DEVUELVE UNA LISTA DE TODOS LOS PAGOS DEL SOCIO LOGUEADO
   getPagosCursoSocioList(): Observable<any>{
-    if(this.usersService.isLoggedIn()){
+    const usersService = this.getUsersService();
+    if(usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);
@@ -59,7 +75,8 @@ export class PagoCursoService {
   }
 
   createPagoCurso(dataPago:any): Observable<any>{
-    if(this.usersService.isLoggedIn()){
+    const usersService = this.getUsersService();
+    if(usersService.isLoggedIn()){
       var ck = localStorage.getItem('auth-user')
       if(ck != null){
         var tk = JSON.parse(ck);

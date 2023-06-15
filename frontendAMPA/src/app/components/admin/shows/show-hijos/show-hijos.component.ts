@@ -77,21 +77,38 @@ export class ShowHijosComponent implements OnInit {
     this.hijoService.createHijo(hijo).subscribe({
       next: res => {
         this.getHijosSocio();
+        this.hijoNuevo = {};
       },
       error: err => {
-        this.errorMessage=err.error.message;
-        console.log(err);
-      }
-    })
-    this.hijoNuevo = {};
+          let errorMessages = "Datos erróneos";
+          if (err.error && typeof err.error === "object") {
+            const errors = Object.entries(err.error);
+            const messages = errors.flatMap(([field, error]: [string, any]) => {
+              if (Array.isArray(error)) {
+                return error.map((errorMsg: string) => `${field}: ${errorMsg}`);
+              } else if (typeof error === "string") {
+                return [`${field}: ${error}`];
+              } else {
+                return [];
+              }
+            });
+            if (messages.length > 0) {
+              errorMessages = messages.join("\n");
+            }
+          }
+        
+          this.errorMessage = errorMessages;
+          window.alert("Error: " + this.errorMessage);
+        }
+    });
   }
 
   guardarModificaciones(): void {
     this.hijosSocio.forEach(hijo => {
       this.actualizarHijo(hijo);
     });
-    document.location.href = "/dashboard/socios/form/"+this.idSocio;
-    window.location.href = "/dashboard/socios/form/"+this.idSocio;
+    document.location.href = "/dashboard/socios/"+this.idSocio+"/hijos";
+    window.location.href = "/dashboard/socios/"+this.idSocio+"/hijos";
   }
   
   actualizarHijo(hijo: Hijo): void{

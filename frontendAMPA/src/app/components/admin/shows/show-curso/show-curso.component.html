@@ -10,7 +10,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="nombre">Nombre del curso</label>
-                            <input [(ngModel)]="form.nombre" id="nombre" type="text" class="form-control" name="nombre" value="" required autofocus>
+                            <input [(ngModel)]="form.nombre" #nombre="ngModel" id="nombre" type="text" class="form-control" name="nombre" [ngClass]="{ 'is-invalid': f.submitted && nombre.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir un nombre de curso
@@ -22,7 +22,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="fecha_inicio">Fecha inicio</label>
-                            <input [(ngModel)]="form.fecha_inicio" id="fecha_inicio" type="date" class="form-control" name="fecha_inicio" value="" required autofocus>
+                            <input [(ngModel)]="form.fecha_inicio" #fecha_inicio="ngModel" id="fecha_inicio" type="date" class="form-control" name="fecha_inicio" [ngClass]="{ 'is-invalid': f.submitted && fecha_inicio.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una fecha de inicio
@@ -31,7 +31,7 @@
                         </div>
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="fecha_fin">Fecha fin</label>
-                            <input [(ngModel)]="form.fecha_fin" id="fecha_fin" type="date" class="form-control" name="fecha_fin" value="" required autofocus>
+                            <input [(ngModel)]="form.fecha_fin" #fecha_fin="ngModel" id="fecha_fin" type="date" class="form-control" name="fecha_fin" [ngClass]="{ 'is-invalid': f.submitted && fecha_fin.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una fecha de finalización
@@ -43,7 +43,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="precio_cuota">Precio de cuota</label>
-                            <input [(ngModel)]="form.precio_cuota" id="precio_cuota" type="number" min="0" placeholder="€" class="form-control" name="precio_cuota" value="" required autofocus>
+                            <input [(ngModel)]="form.precio_cuota" #precio_cuota="ngModel" id="precio_cuota" type="number" min="0" placeholder="€" class="form-control" name="precio_cuota" [ngClass]="{ 'is-invalid': f.submitted && precio_cuota.errors }" required autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir un precio de cuota para socio

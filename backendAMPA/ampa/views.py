@@ -37,9 +37,6 @@ class JoinEventoView(APIView):
         if not evento.visible:
             return Response({'error': 'El evento no está visible para inscripciones'}, status=400)
 
-        if evento.socios.count() >= evento.capacidad:
-            return Response({'error': 'El evento ha alcanzado su capacidad máxima'}, status=400)
-
         socio = Socio.objects.get(user=request.user)
         if socio in evento.socios.all():
             return Response({'error': 'El socio ya está inscrito en este evento'}, status=400)

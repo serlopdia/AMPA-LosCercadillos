@@ -30,7 +30,13 @@
                     <h5 class="mb-2">Actualmente, se han inscrito <span class="text-success">{{ evento.socios.length }} socios</span>. La capacidad es <span class="text-primary">{{ evento.socios.length }}/{{ evento.capacidad }}</span>.</h5>
                 </div>
                 <div class="mb-3 col-sm-6 d-flex justify-content-end">
-                    <button *ngIf="isSocioInEvento(evento)" type="submit" class="btn big-button bg-danger">
+                    <button *ngIf="!isSocioInEvento(evento) && isLoggedIn && !isAdmin" type="submit" class="btn big-button" style="background-color: rgb(72, 0, 206);" (click)="inscribirSocio(evento.id)">
+                        <b>Apuntarse</b>
+                    </button>
+                    <button *ngIf="!isLoggedIn || isAdmin" type="submit" class="btn big-button" style="background-color: rgb(72, 0, 206);" routerLink="/login">
+                        <b>Inicia sesión para apuntarte</b>
+                    </button>
+                    <button *ngIf="isSocioInEvento(evento)" type="submit" class="btn big-button bg-danger" (click)="abandonarEvento(evento.id)">
                         <b>Borrar inscripción</b>
                     </button>
                 </div>

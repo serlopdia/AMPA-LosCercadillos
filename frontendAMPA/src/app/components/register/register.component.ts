@@ -49,31 +49,56 @@ export class RegisterComponent implements OnInit {
           this.usersService.login(this.loginCredentials).subscribe({
             next: data => {
               this.usersService.saveUser(data);
-              this.reloadPage();
+              window.location.href="/miperfil/pagos"
             },
             error: err => {
-              this.errorMessage = err.error.message;
-              this.isLoginFailed = true;
-              window.alert("Registro correcto pero algo falló al iniciar sesión.");
+              let errorMessages = "Registro correcto pero algo falló al iniciar sesión";
+              if (err.error && typeof err.error === "object") {
+                const errors = Object.values(err.error);
+                const messages = errors.flatMap((error: any) => {
+                  if (Array.isArray(error)) {
+                    return error;
+                  } else if (typeof error === "string") {
+                    return [error];
+                  } else {
+                    return [];
+                  }
+                });
+                if (messages.length > 0) {
+                  errorMessages = messages.join("\n");
+                }
+              }
+              this.errorMessage = errorMessages;
+              this.isSignUpFailed = true;
+              window.alert("Error: " + this.errorMessage);
             }
           });
         },
         error: err => {
-          this.errorMessage=err.error.error;
+          let errorMessages = "Credenciales incorrectas";
+          if (err.error && typeof err.error === "object") {
+            const errors = Object.values(err.error);
+            const messages = errors.flatMap((error: any) => {
+              if (Array.isArray(error)) {
+                return error;
+              } else if (typeof error === "string") {
+                return [error];
+              } else {
+                return [];
+              }
+            });
+            if (messages.length > 0) {
+              errorMessages = messages.join("\n");
+            }
+          }
+          this.errorMessage = errorMessages;
           this.isSignUpFailed = true;
-          console.log(err)
+          window.alert("Error: " + this.errorMessage);
         }
-      })
+      });
+    } else {
+      window.alert("Las contraseñas no coinciden");
     }
-    else{
-      var campo = <HTMLElement>document.getElementById("invalid-r")
-      campo.style.display = "block";
-      campo.style.paddingLeft = "5%";
-    }
-  }
-
-  reloadPage(): void{
-    window.location.href=""
   }
 
 }

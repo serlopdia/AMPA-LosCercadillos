@@ -55,6 +55,7 @@ export class VistaProductoComponent implements OnInit {
     this.getDatosProducto();
     this.getProductosList();
     this.getStocksProducto();
+    this.obtenerStockMaximo();
   }
   
   async getDatosProducto(): Promise<void>{
@@ -104,13 +105,48 @@ export class VistaProductoComponent implements OnInit {
   actualizarOpcionSeleccionada(valor: string) {
     this.opcionSeleccionada = valor;
   }
+  
+  obtenerStockDisponible(): number {
+    const stockSeleccionado = this.stocksProducto.find((stock) => stock.nombre === this.opcionSeleccionada);
+    if (stockSeleccionado) {
+      const cantidadAgregada = this.obtenerCantidadAgregada(stockSeleccionado.id.toString());
+      return stockSeleccionado.cantidad - cantidadAgregada;
+    }
+    return 0;
+  }
+  
+  obtenerStockMaximo(): number {
+    const stockSeleccionado = this.stocksProducto.find((stock) => stock.nombre === this.opcionSeleccionada);
+    if (stockSeleccionado) {
+      const cantidadAgregada = this.obtenerCantidadAgregada(stockSeleccionado.id.toString());
+      const stockDisponible = stockSeleccionado.cantidad - cantidadAgregada;
+      const stockRestante = stockDisponible - this.cantidadUnidades - cantidadAgregada;
+      return stockRestante >= 0 ? stockRestante : 0;
+    }
+    return 0;
+  }
+  
+  obtenerCantidadAgregada(idStock: string): number {
+    let cantidadAgregada = 0;
+    for (const linea of this.carritoService.carrito) {
+      if (linea.idStock === idStock) {
+        cantidadAgregada += linea.cantidad;
+      }
+    }
+    return cantidadAgregada;
+  }
 
   incrementarCantidad(): void {
-    this.cantidadUnidades++;
+    const stockMaximo = this.obtenerStockMaximo();
+    if (stockMaximo > 0 && this.cantidadUnidades < stockMaximo) {
+      this.cantidadUnidades++;
+    } else {
+      this.cantidadUnidades = 1;
+    }
   }
   
   decrementarCantidad(): void {
-    if (this.cantidadUnidades > 1) {
+    if (this.cantidadUnidades > 0) {
       this.cantidadUnidades--;
     }
   }
@@ -129,10 +165,17 @@ export class VistaProductoComponent implements OnInit {
     let cantidadUnidades = this.cantidadUnidades;
   
     if (idStock) {
+      let stockDisponible = this.stocksProducto.find((stock) => stock.id.toString() === idStock)?.cantidad;
+      if (stockDisponible !== undefined && cantidadUnidades > stockDisponible) {
+        cantidadUnidades = stockDisponible;
+        this.cantidadUnidades = cantidadUnidades;
+      }
+  
       this.carritoService.agregarAlCarrito(idProducto, idStock, cantidadUnidades);
+      this.cantidadUnidades = 0;
     } else {
       console.log('No se encontró opción seleccionada para el producto.');
     }
-  }  
+  }
 
 }
