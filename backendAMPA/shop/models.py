@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
+import re
 
 from users.models import Socio
 
@@ -39,11 +40,20 @@ class Pago(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label="shop"
+        app_label = "shop"
 
     def clean(self):
         if self.estado not in ["PAGADO", "PENDIENTE", "RECHAZADO"]:
             raise ValidationError("El valor del campo 'estado' debe ser uno de los siguientes: 'PAGADO', 'PENDIENTE', 'RECHAZADO'")
+        
+        if len(self.telefono) != 9:
+            raise ValidationError("El número de teléfono debe tener 9 dígitos.")
+
+        if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', self.email):
+            raise ValidationError("El correo electrónico no tiene un formato válido.")
+
+        if self.cantidad < 0:
+            raise ValidationError("La cantidad debe ser un número positivo o igual a 0.")
 
 class Pedido(models.Model):
     nombre = models.CharField(max_length=128)
@@ -56,12 +66,18 @@ class Pedido(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label="shop"
+        app_label = "shop"
 
     def clean(self):
         if self.estado not in ["ENTREGADO", "PREPARACION", "DEVUELTO", "CANCELADO", "NO_PAGADO"]:
             raise ValidationError("El valor del campo 'estado' debe ser uno de los siguientes: 'ENTREGADO', 'PREPARACION', 'DEVUELTO', 'CANCELADO', 'NO_PAGADO'")
+        
+        if len(self.telefono) != 9:
+            raise ValidationError("El número de teléfono debe tener 9 dígitos.")
 
+        if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', self.email):
+            raise ValidationError("El correo electrónico no tiene un formato válido.")
+        
 class StockProducto(models.Model):
     nombre = models.CharField(max_length=64)
     cantidad = models.IntegerField()
@@ -69,8 +85,15 @@ class StockProducto(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label="shop"
+        app_label = "shop"
         unique_together = ('nombre', 'producto')
+
+    def clean(self):
+        if self.cantidad < 0:
+            raise ValidationError("La cantidad debe ser mayor o igual a cero.")
+
+        if StockProducto.objects.filter(nombre__iexact=self.nombre, producto=self.producto).exclude(id=self.id).exists():
+            raise ValidationError("Ya existe otro stock con el mismo nombre para este producto.")
 
 class LineaPedido(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True)
@@ -80,4 +103,8 @@ class LineaPedido(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label="shop"
+        app_label = "shop"
+
+    def clean(self):
+        if self.cantidad < 0:
+            raise ValidationError("La cantidad debe ser mayor o igual a cero.")
