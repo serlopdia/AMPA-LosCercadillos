@@ -205,6 +205,7 @@ export class CitasSocioComponent implements OnInit {
       next: res => {
         document.location.href = "/miperfil/citas"
         window.location.href = "/miperfil/citas"
+        window.alert("Cita reservada correctamente");
       },
       error: err => {
           let errorMessages = "Datos erróneos";

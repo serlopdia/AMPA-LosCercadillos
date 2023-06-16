@@ -77,21 +77,8 @@ export class NoticiaService {
   }
 
   getNoticia(idNoticia:any):Observable<any>{
-    if(this.usersService.isLoggedIn()){
-      var ck = localStorage.getItem('auth-user')
-      if(ck!=null){
-        var tk = JSON.parse(ck);
-        var res = [];
-        for(var i in tk){
-          res.push(tk[i]);
-        }
-        let headers = new HttpHeaders()
-        headers = headers.set('Authorization', 'Token '+res[0])
-
-        return this.http.get(`${API_url}/ampa/noticias/${idNoticia}`,{'headers':headers})
-      }
-    }
-    return new Observable<any>;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
+    return this.http.get(`${API_url}/ampa/noticias/${idNoticia}`,{'headers':headers})
   }
 
 }

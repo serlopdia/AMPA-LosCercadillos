@@ -35,7 +35,7 @@
                     
                         <div class="form-group pt-3">
                             <label class="mb-2 text-muted" for="fecha_nacimiento{{hijo.id}}">Fecha de nacimiento</label>
-                            <input [(ngModel)]="hijosSocio[i].fecha_nacimiento" [id]="'fecha_nacimiento' + hijo.id" [name]="'fecha_nacimiento' + hijo.id" type="date" class="form-control" required autofocus>
+                            <input [(ngModel)]="hijosSocio[i].fecha_nacimiento" [id]="'fecha_nacimiento' + hijo.id" [name]="'fecha_nacimiento' + hijo.id" type="date" class="form-control" required [max]="getCurrentDate()" autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir una fecha de nacimiento
@@ -45,7 +45,7 @@
                     
                         <div class="form-group pt-3">
                             <label class="mb-2 text-muted" for="clase{{hijo.id}}">Clase</label>
-                            <select [(ngModel)]="hijosSocio[i].clase" [id]="'clase' + hijo.id" [name]="'clase' + hijo.id" class="form-select" required autofocus>
+                            <select [(ngModel)]="hijosSocio[i].clase" [id]="'clase' + hijo.id" [name]="'clase' + hijo.id" class="form-select" autofocus>
                                 <option *ngFor="let clase of listaClases" [value]="clase.id">{{ clase.curso }}º {{ clase.tipo_clase }} {{ clase.letra }}</option>
                             </select>
                             <div class="invalid-feedback error">
@@ -101,14 +101,14 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="fecha_nacimiento">Fecha de nacimiento</label>
-                            <input [(ngModel)]="hijoNuevo.fecha_nacimiento" #fechaNacimientoInput="ngModel" id="fecha_nacimiento" type="date" class="form-control" name="fecha_nacimiento" [ngClass]="{ 'is-invalid': f.submitted && fechaNacimientoInput.invalid }" required>
+                            <input [(ngModel)]="hijoNuevo.fecha_nacimiento" #fechaNacimientoInput="ngModel" id="fecha_nacimiento" type="date" class="form-control" name="fecha_nacimiento" [ngClass]="{ 'is-invalid': f.submitted && fechaNacimientoInput.invalid }" required [max]="getCurrentDate()">
                             <div *ngIf="f.submitted && fechaNacimientoInput.invalid" class="invalid-feedback error">
                                 <div>Debe introducir una fecha de nacimiento</div>
                             </div>
                         </div>
                         <div class="mb-3 col-sm-6">
                             <label class="mb-2 text-muted" for="clase">Clase</label>
-                            <select [(ngModel)]="hijoNuevo.clase" #claseInput="ngModel" class="form-select" name="clase" [ngClass]="{ 'is-invalid': f.submitted && claseInput.invalid }" required>
+                            <select [(ngModel)]="hijoNuevo.clase" #claseInput="ngModel" class="form-select" name="clase" [ngClass]="{ 'is-invalid': f.submitted && claseInput.invalid }">
                                 <option *ngFor="let clase of listaClases" [value]="clase.id">{{ clase.curso }}º {{ clase.tipo_clase }} {{ clase.letra }}</option>
                             </select>
                             <div *ngIf="f.submitted && claseInput.invalid" class="invalid-feedback error">

@@ -10,7 +10,7 @@
         <img [src]="noticia.imagen" class="d-block mx-auto" alt="imagen de la noticia">
       </div>
       <div class="carousel-caption shadowed-text">
-        <h5 class="truncate">{{ noticia.titulo }}</h5>
+        <a [routerLink]="['/noticias/'+noticia.id]" class="text-white"><h5 class="truncate">{{ noticia.titulo }}</h5></a>
         <p class="truncate">{{ noticia.cuerpo }}</p>
       </div>
     </div>

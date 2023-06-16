@@ -35,6 +35,24 @@ export class BuzonService {
     return new Observable<any>;
   }
 
+  getSugerencia(id: any): Observable<any> {
+    if (this.usersService.isLogAdmin()) {
+      var ck = localStorage.getItem('auth-user');
+      if (ck != null) {
+        var tk = JSON.parse(ck);
+        var res = [];
+        for (var i in tk) {
+          res.push(tk[i]);
+        }
+        let headers = new HttpHeaders();
+        headers = headers.set('Authorization', 'Token ' + res[0]);
+  
+        return this.http.get(`${API_url}/ampa/sugerencias/${id}/`, { 'headers': headers });
+      }
+    }
+    return new Observable<any>();
+  }
+
   createSugerencia(dataSugerencia:any): Observable<any>{
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' })
     return this.http.post(`${API_url}/ampa/sugerencias/`, JSON.stringify(dataSugerencia), { 'headers': headers });

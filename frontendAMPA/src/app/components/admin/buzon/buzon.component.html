@@ -11,7 +11,7 @@
         </nav>
 
         <div *ngFor="let sugerencia of sugerenciasFiltradas" id="{{ sugerencia.id }}" class="card">
-            <div class="card-body">
+            <div class="card-body" [routerLink]="['/gestion/buzon/show/'+sugerencia.id]">
                 <h5 class="card-title">{{ sugerencia.titulo }}</h5>
                 <p class="card-text card-text-limitado" [ngClass]="{'card-text-extendido': mapMostrarDescripcionCompleta.get(sugerencia.id) || sugerencia.descripcion.length <= 350}">
                     {{ sugerencia.descripcion }}

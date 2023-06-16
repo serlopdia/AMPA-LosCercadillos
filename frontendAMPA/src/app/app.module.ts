@@ -73,6 +73,7 @@ import { ShowPagoComponent } from './components/admin/shows/show-pago/show-pago.
 import { PedidosSocioComponent } from './components/miperfil/pedidos-socio/pedidos-socio.component';
 import { NotSocioComponent } from './layouts/not-socio/not-socio.component';
 import { EditarPasswordSocioComponent } from './components/miperfil/editar-password-socio/editar-password-socio.component';
+import { ShowSugerenciaComponent } from './components/admin/shows/show-sugerencia/show-sugerencia.component';
 
 registerLocaleData(localeEs);
 
@@ -142,6 +143,7 @@ registerLocaleData(localeEs);
     PedidosSocioComponent,
     NotSocioComponent,
     EditarPasswordSocioComponent,
+    ShowSugerenciaComponent,
   ],
   imports: [
     BrowserModule,

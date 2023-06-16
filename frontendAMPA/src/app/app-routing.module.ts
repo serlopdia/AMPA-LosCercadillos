@@ -34,6 +34,7 @@ import { ShowProductoComponent } from './components/admin/shows/show-producto/sh
 import { ShowEventoComponent } from './components/admin/shows/show-evento/show-evento.component';
 import { ShowPedidoComponent } from './components/admin/shows/show-pedido/show-pedido.component';
 import { ShowPagoComponent } from './components/admin/shows/show-pago/show-pago.component';
+import { ShowSugerenciaComponent } from './components/admin/shows/show-sugerencia/show-sugerencia.component';
 import { ShowBalanceComponent } from './components/admin/shows/show-balance/show-balance.component';
 import { ShowCursoComponent } from './components/admin/shows/show-curso/show-curso.component';
 import { ShowAsuntoComponent } from './components/admin/shows/show-asunto/show-asunto.component';
@@ -88,6 +89,7 @@ const routes: Routes = [
   { path: 'dashboard/eventos', component: GestionEventosComponent, canActivate: [AdminGuard] },
   
   { path: 'gestion/buzon', component: BuzonComponent, canActivate: [AdminGuard] },
+  { path: 'gestion/buzon/show/:id', component: ShowSugerenciaComponent, canActivate: [AdminGuard] },
   { path: 'gestion/noticias', component: GestionNoticiasComponent, canActivate: [AdminGuard] },
   { path: 'gestion/balances', component: GestionBalanceComponent, canActivate: [AdminGuard] },
   { path: 'gestion/balances/show/:id', component: ShowBalanceComponent, canActivate: [AdminGuard] },

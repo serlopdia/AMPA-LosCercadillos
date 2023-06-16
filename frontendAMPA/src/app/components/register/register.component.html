@@ -96,11 +96,11 @@
                                         </div>
                                     </div>
                                     <div class="mb-3 col-sm-6">
-                                        <label class="mb-2 text-muted" for="dni">DNI</label>
+                                        <label class="mb-2 text-muted" for="dni">DNI/NIE</label>
                                         <input [(ngModel)]="form.dni" #dni="ngModel" id="dni" type="text" class="form-control" name="dni" [ngClass]="{ 'is-invalid': f.submitted && dni.errors }" required autofocus>
                                         <div class="invalid-feedback error" *ngIf="dni.errors && f.submitted">
                                             <div *ngIf="dni.errors['required']">
-                                                Debe introducir un DNI
+                                                Debe introducir un documento de identidad
                                             </div>                                            
                                         </div>
                                     </div>
