@@ -2,6 +2,9 @@ from django.forms import ValidationError
 from rest_framework import serializers
 from .models import Administrador, Socio
 from django.contrib.auth.models import User
+from django.core.validators import validate_email
+from django.contrib.auth import password_validation
+import re
 
 class SocioSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
@@ -9,29 +12,73 @@ class SocioSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(source='user.last_name')
     password = serializers.CharField(source='user.password')
     email = serializers.EmailField(source='user.email')
+    tel = serializers.CharField()
 
     class Meta:
         model = Socio
         fields = ('id', 'username', 'first_name', 'last_name', 'password', 'email', 'tel', 'dni', 'address', 'created_at', 'deleted')
         read_only_fields = ('created_at', )
 
-    def validate_email(self, value):
-        instance = self.instance
-        user = instance.user if instance else None
-        if user and value == user.email:
-            return value
-        if User.objects.filter(email=value).exists():
-            raise ValidationError('El correo electrónico ya está en uso.')
-        return value
+    def validate_password(self, value):
+        if len(value) < 8:
+            raise ValidationError("La contraseña debe tener al menos 8 caracteres.")
+
+        has_letter = False
+        has_number = False
+
+        for char in value:
+            if char.isalpha():
+                has_letter = True
+            elif char.isdigit():
+                has_number = True
+
+            if has_letter and has_number:
+                return value
+
+        raise ValidationError("La contraseña debe contener al menos una letra y un número.")
 
     def validate_username(self, value):
-        instance = self.instance
-        user = instance.user if instance else None
-        if user and value == user.username:
-            return value
-        if User.objects.filter(username=value).exists():
-            raise ValidationError('El nombre de usuario ya está en uso.')
+        if len(value) < 4:
+            raise serializers.ValidationError("El nombre de usuario debe tener al menos 4 caracteres.")
         return value
+
+    def validate_email(self, value):
+        validate_email(value)
+        return value
+
+    def validate_tel(self, value):
+        if not re.match(r'^\d{9}$', value):
+            raise serializers.ValidationError("El número de teléfono debe tener 9 cifras.")
+        return value
+
+    def validate_dni(self, value):
+        dni_pattern = r'^\d{8}[A-Z]$'
+        nie_pattern = r'^[XYZ]\d{7}[A-Z]$'
+        if not re.match(dni_pattern, value) and not re.match(nie_pattern, value):
+            raise serializers.ValidationError("El documento de identidad debe seguir un formato correcto, recuerda las letras en mayúsculas.")
+        dni_letters = 'TRWAGMYFPDXBNJZSQVHLCKE'
+        if re.match(dni_pattern, value):
+            number = int(value[:-1])
+            letter = value[-1]
+            if not letter.isupper():
+                raise serializers.ValidationError("La letra del DNI debe estar en mayúsculas.")
+            index = number % 23
+            if letter != dni_letters[index]:
+                raise serializers.ValidationError("El DNI es incorrecto.")
+        return value
+
+    def validate(self, attrs):
+        password = attrs.get('user', {}).get('password')
+        username = attrs.get('user', {}).get('username')
+
+        if password:
+            user = self.instance.user if self.instance else None
+            password_validation.validate_password(password, user=user)
+
+        if username and len(username) < 4:
+            raise serializers.ValidationError("El nombre de usuario debe tener al menos 4 caracteres.")
+
+        return attrs
 
     def create(self, validated_data):
         user_data = validated_data.pop('user', {})

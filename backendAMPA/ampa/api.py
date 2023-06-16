@@ -1,7 +1,8 @@
 from rest_framework import viewsets, permissions
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 from .models import Asunto, Balance, Cita, Clase, Colaborador, CursoEscolar, Evento, Hijo, Noticia, PagoCurso, Sugerencia, Vista
 from .serializer import AsuntoSerializer, BalanceSerializer, CitaSerializer, ClaseSerializer, ColaboradorSerializer, CursoEscolarSerializer, EventoSerializer, HijoSerializer, NoticiaSerializer, PagoCursoSerializer, SugerenciaSerializer, VistaSerializer
-
 
 class IsOwnerOrAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -89,13 +90,7 @@ class ColaboradorViewSet(viewsets.ModelViewSet):
 class CitaViewSet(viewsets.ModelViewSet):
     queryset = Cita.objects.all()
     serializer_class = CitaSerializer
-
-    def get_permissions(self):
-        if self.request.method == 'POST':
-            permission_classes = [permissions.IsAuthenticated]
-        else:
-            permission_classes = [IsOwnerOrAdmin]
-        return [permission() for permission in permission_classes]
+    permission_classes = [permissions.IsAuthenticated]
 
 class AsuntoViewSet(viewsets.ModelViewSet):
     queryset = Asunto.objects.all()
@@ -125,7 +120,7 @@ class CursoEscolarViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [permissions.IsAdminUser]
         return [permission() for permission in permission_classes]

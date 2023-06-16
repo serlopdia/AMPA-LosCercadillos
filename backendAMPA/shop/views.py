@@ -1,9 +1,12 @@
 from django.conf import settings
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django.http import JsonResponse
 from rest_framework import permissions, authentication, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from ampa.models import CursoEscolar, PagoCurso
 from .models import *
 from .serializer import *
 import stripe
@@ -23,6 +26,25 @@ class IsSocioOrAdmin(permissions.BasePermission):
             return True
         return False
     
+class EstadoPago(models.TextChoices):
+    PAGADO = "PAGADO", _("Pagado"),
+    PENDIENTE = "PENDIENTE", _("Pendiente"),
+    RECHAZADO = "RECHAZADO", _("Rechazado"),
+
+class IsSocioAbonado(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            return False
+
+        # Verificar si el usuario tiene un PagoCurso asociado en estado "PAGADO" con el curso_escolar actual
+        curso_actual = CursoEscolar.objects.filter(actual=True).first()
+        if curso_actual:
+            pago_curso = PagoCurso.objects.filter(socio=request.user.socio, curso_escolar=curso_actual, estado=EstadoPago.PAGADO).first()
+            if pago_curso:
+                return True
+
+        return False
+    
 class PagosSocioList(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated, IsSocioOrAdmin]
@@ -36,7 +58,7 @@ class PagosSocioList(APIView):
 
 class PedidosSocioList(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsSocioOrAdmin]
 
     def get(self, request, *args, **kwargs):
         pk = self.kwargs.get('pk')

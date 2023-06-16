@@ -65,6 +65,20 @@ Calendarios, tazas, agendas, etc.
 ## - MUCHO MÁS!!
 Muchas más opciones como reservar citas, etc."""
 
+cuerpo_noticia1 = """En una iniciativa para fomentar hábitos alimentarios saludables entre los estudiantes, el AMPA del CEIP Los Cercadillos ha organizado un emocionante taller de cocina. La actividad, que se llevó a cabo en las instalaciones del colegio, contó con la participación de expertos en nutrición y chef locales.
+
+Durante el taller, los estudiantes tuvieron la oportunidad de aprender sobre la importancia de una dieta equilibrada y cómo preparar comidas saludables y deliciosas. Los voluntarios del AMPA se aseguraron de que los niños se involucraran activamente en el proceso de cocina, desde la selección de ingredientes hasta el emplatado final.
+
+Además de aprender nuevas recetas y técnicas culinarias, los estudiantes también recibieron consejos valiosos sobre cómo llevar una alimentación saludable en su vida diaria. El AMPA del CEIP Los Cercadillos está comprometido en promover la educación nutricional como parte integral del desarrollo de los niños, y este taller fue solo una de las muchas actividades planificadas para el año escolar."""
+
+cuerpo_noticia2 = """Con el objetivo de brindar apoyo adicional y fortalecer la comunidad escolar, el AMPA del CEIP Los Cercadillos ha lanzado un emocionante programa de mentoría para los estudiantes de primaria. Este programa busca establecer relaciones de confianza entre los estudiantes más jóvenes y los voluntarios adultos, quienes actuarán como mentores.
+
+Los mentores, seleccionados cuidadosamente entre los miembros del AMPA, trabajarán estrechamente con los estudiantes asignados, ofreciéndoles apoyo académico, orientación emocional y aliento en su desarrollo personal. A través de actividades divertidas y formativas, los mentores buscarán fomentar habilidades sociales, fortalecer la autoestima y promover la motivación de los estudiantes.
+
+El programa de mentoría también incluirá reuniones regulares entre los mentores y los padres o tutores legales de los estudiantes, para mantener una comunicación fluida y asegurarse de que se aborden todas las necesidades y preocupaciones.
+
+El AMPA del CEIP Los Cercadillos espera que este programa de mentoría tenga un impacto positivo en la vida de los estudiantes, ayudándolos a desarrollar habilidades clave y a sentirse apoyados en su proceso educativo y personal."""
+
 @receiver(post_migrate, dispatch_uid="dependent_logic_signal")
 def create_ampa(sender, **kwargs):
     if sender.name == "ampa":
@@ -81,9 +95,9 @@ def create_ampa(sender, **kwargs):
             vista_comedor.save()
             
         if not Noticia.objects.exists():
-            noticia_sample_uno = Noticia.objects.create(titulo="Título de la noticia", cuerpo="Cuerpo de la noticia", imagen="https://media.istockphoto.com/id/469182248/es/foto/titular-de-peri%C3%B3dico-con-el-comunicado-de-prensa.jpg?s=612x612&w=0&k=20&c=3n5aqYwqSBkDUK2T7PxeY5T2L08uM0TXVhfr9QZKknc=")
+            noticia_sample_uno = Noticia.objects.create(titulo="Organización de un taller de cocina saludable para los estudiantes", cuerpo=cuerpo_noticia1, imagen="https://www.cateringalcala.com/pics_fotosnoticias/14/big_crop_diseno-sin-titulo_1.png")
             noticia_sample_uno.save()
-            noticia_sample_dos = Noticia.objects.create(titulo="Noticia de bolsa", cuerpo="La imagen representa unas gráficas de bolsa", imagen="https://alicanteplaza.es/public/Image/2021/6/1609779456ibex_NoticiaAmpliada_NoticiaAmpliada.jpg")
+            noticia_sample_dos = Noticia.objects.create(titulo="Lanzamiento de un programa de mentoría para estudiantes de primaria", cuerpo=cuerpo_noticia2, imagen="https://www.agenciaandaluzaeducacion.es/sites/default/files/2020-01/51fbb676-b144-4680-9fd2-49df386ce505.jpg")
             noticia_sample_dos.save()
 
         if not Evento.objects.exists():
@@ -99,9 +113,9 @@ def create_ampa(sender, **kwargs):
             colaborador_sample_dos.save()
 
         if not Sugerencia.objects.exists():
-            sugerencia_sample_uno = Sugerencia.objects.create(titulo="Mejora en el programa de tutorías", descripcion="Propongo implementar un sistema de tutorías más estructurado y personalizado para los estudiantes.")
+            sugerencia_sample_uno = Sugerencia.objects.create(nombre='Sergio López Díaz', email='sergio@correo.com', titulo="Mejora en el programa de tutorías", descripcion="Propongo implementar un sistema de tutorías más estructurado y personalizado para los estudiantes.")
             sugerencia_sample_uno.save()
-            sugerencia_sample_dos = Sugerencia.objects.create(titulo="Ampliación del horario de la biblioteca", descripcion="Sería beneficioso extender el horario de la biblioteca para que los estudiantes tengan más tiempo de estudio por las tardes y los fines de semana.")
+            sugerencia_sample_dos = Sugerencia.objects.create(nombre='Sergio López Díaz', email='sergio@correo.com', titulo="Ampliación del horario de la biblioteca", descripcion="Sería beneficioso extender el horario de la biblioteca para que los estudiantes tengan más tiempo de estudio por las tardes y los fines de semana.")
             sugerencia_sample_dos.save()
 
         if not Balance.objects.exists():

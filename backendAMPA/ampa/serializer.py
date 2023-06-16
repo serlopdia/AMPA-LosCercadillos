@@ -1,6 +1,7 @@
 from datetime import *
 from rest_framework import serializers
 from django.db.models import Q
+import re
 
 from users.serializer import SocioSerializer
 from .models import Asunto, Balance, Cita, Clase, Colaborador, CursoEscolar, EstadoPago, Evento, Hijo, Noticia, PagoCurso, Sugerencia, TipoClase, Vista
@@ -66,9 +67,8 @@ class EventoSerializer(serializers.ModelSerializer):
         }
 
     def validate_fin_inscripcion(self, value):
-        # Obtener la fecha y hora actual con información de zona horaria
         now = datetime.now(timezone.utc)
-        # Verificar que value no sea anterior a la fecha actual
+
         if value <= now:
             raise serializers.ValidationError("La fecha del evento debe ser futura a la fecha actual")
         return value
@@ -113,12 +113,19 @@ class ColaboradorSerializer(serializers.ModelSerializer):
 class SugerenciaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sugerencia
-        fields = ('id', 'titulo', 'descripcion', 'created_at')
+        fields = ('id', 'nombre', 'email', 'titulo', 'descripcion', 'created_at')
         read_only_fields = ('id', 'created_at')
         extra_kwargs = {
+            'nombre': {'required': True},
+            'email': {'required': True},
             'titulo': {'required': True},
             'descripcion': {'required': True},
         }
+
+    def validate_email(self, value):
+        if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', value):
+            raise serializers.ValidationError("El correo electrónico no tiene un formato válido.")
+        return value
 
     def create(self, validated_data):
         sugerencia = Sugerencia.objects.create(**validated_data)
@@ -129,7 +136,7 @@ class SugerenciaSerializer(serializers.ModelSerializer):
         instance.descripcion = validated_data.get('descripcion', instance.descripcion)
         instance.save()
         return instance
-
+    
 class BalanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Balance
@@ -143,7 +150,12 @@ class BalanceSerializer(serializers.ModelSerializer):
 
     def validate_tipo(self, value):
         if value not in ['INGRESO', 'GASTO']:
-            raise serializers.ValidationError("El valor del campo 'tipo' debe ser uno de los siguientes: 'INGRESO', 'GASTO'")
+            raise serializers.ValidationError("El tipo debe ser uno de los siguientes: 'INGRESO', 'GASTO'")
+        return value
+
+    def validate_cantidad(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("El valor de la cantidad debe ser un número positivo")
         return value
 
     def create(self, validated_data):
@@ -172,10 +184,10 @@ class CursoEscolarSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data['fecha_fin'] <= data['fecha_inicio']:
             raise serializers.ValidationError('La fecha de finalización debe ser posterior a la fecha de inicio')
-        # Validación 1: si no hay ningún curso con actual=True, se guarda el actual en True
+
         if data.get('actual') and not CursoEscolar.objects.filter(actual=True).exists():
             return data
-        # Validación 2: si existe algún curso con actual=True, se cambia a False y se guarda el actual en True
+
         if data.get('actual') and data.get('actual') != self.instance.actual and \
            CursoEscolar.objects.filter(Q(actual=True) & ~Q(id=self.instance.id)).exists():
             CursoEscolar.objects.filter(actual=True).update(actual=False)
@@ -211,10 +223,8 @@ class ClaseSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        # Verifica que no exista otra instancia de Clase con la misma combinación
-        # de curso, letra, tipo_clase y curso_escolar.
         curso = data.get('curso')
-        letra = data.get('letra')
+        letra = data.get('letra').upper()
         tipo_clase = data.get('tipo_clase')
         curso_escolar = data.get('curso_escolar')
         if Clase.objects.filter(
@@ -224,6 +234,7 @@ class ClaseSerializer(serializers.ModelSerializer):
             curso_escolar=curso_escolar
         ).exists():
             raise serializers.ValidationError("Ya existe una clase con esta combinación de curso, letra, tipo de clase y curso escolar.")
+        data['letra'] = letra
         return data
 
     def create(self, validated_data):
@@ -232,7 +243,7 @@ class ClaseSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.curso = validated_data.get('curso', instance.curso)
-        instance.letra = validated_data.get('letra', instance.letra)
+        instance.letra = validated_data.get('letra', instance.letra).upper()
         instance.tipo_clase = validated_data.get('tipo_clase', instance.tipo_clase)
         instance.curso_escolar = validated_data.get('curso_escolar', instance.curso_escolar)
         instance.save()
@@ -284,27 +295,22 @@ class AsuntoSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, data):
-        # Valida que la fecha de fin sea posterior a la fecha de inicio
         if data['fecha_fin'] <= data['fecha_inicio']:
             raise serializers.ValidationError('La fecha de finalización debe ser posterior a la fecha de inicio')
         
-        # Combina la fecha y hora de inicio y fin en objetos datetime.datetime
         fecha_hora_inicio = datetime.combine(data['fecha_inicio'], data['hora_inicio'])
         fecha_hora_fin = datetime.combine(data['fecha_fin'], data['hora_fin'])
 
-        # Valida que la diferencia en minutos entre hora_inicio y hora_fin no sea menor a minutos_frecuencia
         minutos_diferencia = (fecha_hora_fin - fecha_hora_inicio).total_seconds() // 60
         if minutos_diferencia < data['minutos_frecuencia']:
             raise serializers.ValidationError('La diferencia en minutos entre hora de inicio y fin no puede ser menor a la frecuencia de minutos')
 
-        # Valida que la diferencia en minutos entre hora_inicio y hora_fin sea divisible por minutos_frecuencia
         minutos_diferencia = (fecha_hora_fin - fecha_hora_inicio).total_seconds() // 60
         if minutos_diferencia % data['minutos_frecuencia'] != 0:
             raise serializers.ValidationError('La diferencia en minutos entre hora de inicio y fin debe ser múltiplo de los minutos de frecuencia')
         
         return data
 
-    # Valida que todos los valores de la lista de días de la semana de un asunto se encuentren entre los valores permitidos
     def validate_dias_semana(self, value):
         accepted_values = {"LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"}
         already_used_values = []
@@ -369,14 +375,11 @@ class CitaSerializer(serializers.ModelSerializer):
                 fecha_cita = datetime.strptime(self.initial_data.get('fecha'), '%Y-%m-%d').date()
                 hora_cita = time.fromisoformat(str(value))
 
-                # Combina la fecha y hora de la cita en un objeto datetime para realizar comparaciones
                 fecha_hora_cita = datetime.combine(fecha_cita, hora_cita)
 
-                # Valida que la hora de la cita esté dentro del rango del asunto
                 if not hora_inicio <= hora_cita <= hora_fin:
                     raise serializers.ValidationError('La hora de la cita debe estar dentro de los límites del asunto')
 
-                # Valida que la diferencia en minutos entre la hora de inicio del asunto y la hora de la cita sea un múltiplo entero de minutos_frecuencia
                 minutos_diferencia = (fecha_hora_cita - datetime.combine(fecha_cita, hora_inicio)).total_seconds() // 60
                 if minutos_diferencia % minutos_frecuencia != 0:
                     raise serializers.ValidationError(f'La hora de la cita debe ser un múltiplo entero de {minutos_frecuencia} minutos')
@@ -391,12 +394,10 @@ class CitaSerializer(serializers.ModelSerializer):
         if cita is None or (
             data.get('fecha', cita.fecha) != cita.fecha or data.get('hora', cita.hora) != cita.hora
         ):
-            # Obtiene los parámetros de fecha, hora y asunto de la nueva cita
             fecha_cita = datetime.strptime(data['fecha'].strftime('%Y-%m-%d'), '%Y-%m-%d').date()
             hora_cita = time.fromisoformat(str(data['hora']))
             asunto = data['asunto']
 
-            # Verifica si ya existe una cita con los mismos parámetros
             citas_existentes = Cita.objects.filter(
                 fecha=fecha_cita,
                 hora=hora_cita,
@@ -406,10 +407,8 @@ class CitaSerializer(serializers.ModelSerializer):
             if citas_existentes:
                 raise serializers.ValidationError('Ya existe una cita para el mismo día, misma hora y mismo asunto')
 
-            # Obtiene el día de la semana de la cita en inglés
             dia_semana_cita = fecha_cita.strftime('%A')
 
-            # Mapeo de nombres de días de la semana en inglés a español
             dias_semana_map = {
                 'Monday': 'LUNES',
                 'Tuesday': 'MARTES',
@@ -418,10 +417,8 @@ class CitaSerializer(serializers.ModelSerializer):
                 'Friday': 'VIERNES'
             }
 
-            # Obtiene el día de la semana correspondiente en español
             dia_semana_cita_es = dias_semana_map.get(dia_semana_cita)
 
-            # Valida que el día de la semana de la cita esté en la lista de días permitidos
             dias_semana_asunto = [dia.strip().upper() for dia in asunto.dias_semana.split(",")]
             if dia_semana_cita_es not in dias_semana_asunto:
                 raise serializers.ValidationError('La fecha no corresponde a un día de semana entre los del asunto')
@@ -453,17 +450,14 @@ class PagoCursoSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, data):
-        # Obtener el curso del pago
         curso_escolar = data['curso_escolar']
 
-        # Verificar que no exista otro PagoCurso con el mismo socio y curso en estado "PAGADO" o "PENDIENTE"
         pagos = PagoCurso.objects.filter(socio=data['socio'], curso_escolar=curso_escolar, estado__in=[EstadoPago.PAGADO, EstadoPago.PENDIENTE])
         if self.instance:
             pagos = pagos.exclude(pk=self.instance.pk)
         if pagos.exists():
             raise serializers.ValidationError("Actualmente existe un pagoCurso asociado a este curso y socio en estado PAGADO o PENDIENTE")
 
-        # Verificar que la cantidad es igual al precio_cuota del curso
         if data['cantidad'] != curso_escolar.precio_cuota:
             raise serializers.ValidationError("La cantidad del pago debe ser la misma que la del precio de la cuota del curso")
 
