@@ -11,7 +11,7 @@ from .serializer import *
 import stripe
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
-webhook_secret = settings.STRIPE_WEBHOOK_SECRET
+webhook_secret = settings.STRIPE_PAGOCURSO_WEBHOOK_SECRET
 
 FRONTEND_CHECKOUT_SUCCESS_URL = settings.CHECKOUT_SUCCESS_URL
 FRONTEND_CHECKOUT_FAILED_URL = settings.CHECKOUT_FAILED_URL
