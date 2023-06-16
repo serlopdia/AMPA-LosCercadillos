@@ -21,10 +21,32 @@
 
             <div class="card-body p-4">
                 <h1 class="fs-4 card-title fw-bold mb-4">CREAR UNA SUGERENCIA</h1>
+
+                <div class="form-group row">
+                    <div class="mb-3 col-sm-6">
+                        <label class="mb-2 text-muted" for="nombre">Nombre</label>
+                        <input [(ngModel)]="form.nombre" #nombre="ngModel" id="nombre" class="form-control" name="nombre" [ngClass]="{ 'is-invalid': f.submitted && nombre.errors }" required autofocus>
+                        <div class="invalid-feedback error">
+                            <div>
+                                Debe introducir un nombre
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 col-sm-6">
+                        <label class="mb-2 text-muted" for="email">Email</label>
+                        <input [(ngModel)]="form.email" #email="ngModel" id="email" class="form-control" name="email" [ngClass]="{ 'is-invalid': f.submitted && email.errors }" required autofocus>
+                        <div class="invalid-feedback error">
+                            <div>
+                                Debe introducir un email
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group row">
                     <div class="mb-3 col-sm-12">
                         <label class="mb-2 text-muted" for="titulo">Título</label>
-                        <input [(ngModel)]="form.titulo" id="titulo" type="text" class="form-control" name="titulo" value="" required autofocus>
+                        <input [(ngModel)]="form.titulo" #titulo="ngModel" id="titulo" type="text" class="form-control" name="titulo" [ngClass]="{ 'is-invalid': f.submitted && titulo.errors }" required autofocus>
                         <div class="invalid-feedback error">
                             <div>
                                 Debe introducir un título
@@ -36,7 +58,7 @@
                 <div class="form-group row">
                     <div class="mb-3 col-sm-12">
                         <label class="mb-2 text-muted" for="descripcion">Descripción</label>
-                        <textarea [(ngModel)]="form.descripcion" id="descripcion" class="form-control" name="descripcion" value="" required autofocus style="min-height: 15vh;"></textarea>
+                        <textarea [(ngModel)]="form.descripcion" #descripcion="ngModel" id="descripcion" class="form-control" name="descripcion" [ngClass]="{ 'is-invalid': f.submitted && descripcion.errors }" required autofocus style="min-height: 15vh;"></textarea>
                         <div class="invalid-feedback error">
                             <div>
                                 Debe introducir una descripción

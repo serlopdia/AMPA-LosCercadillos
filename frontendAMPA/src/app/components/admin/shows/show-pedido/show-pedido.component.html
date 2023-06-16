@@ -57,7 +57,9 @@
                 <div class="form-group row">
                     <div class="mb-4 col-sm-12">
                         <h3 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Pago: </h3>
-                        <h3 class="d-inline" *ngIf="pedido.pago">{{ pedido.pago }}</h3>
+                        <a class="text-dark" [routerLink]="['/dashboard/pagos/show/'+pedido.pago]">
+                            <h3 class="d-inline" *ngIf="pedido.pago">{{ pedido.pago }}</h3>
+                        </a>
                         <h3 class="d-inline" *ngIf="!pedido.pago">Sin pago creado</h3>
                     </div>
                 </div>
@@ -65,7 +67,9 @@
                 <div class="form-group row">
                     <div class="mb-4 col-sm-12">
                         <h3 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Socio: </h3>
-                        <h3 class="d-inline" *ngIf="pedido.socio">{{ pedido.socio }}</h3>
+                        <a class="text-dark" [routerLink]="['/dashboard/socios/form/'+pedido.socio]">
+                            <h3 class="d-inline" *ngIf="pedido.socio">{{ pedido.socio }}</h3>
+                        </a>
                         <h3 class="d-inline" *ngIf="!pedido.socio">Sin socio asignado</h3>
                     </div>
                 </div>

@@ -83,6 +83,7 @@ export class DetallesEventoComponent implements OnInit {
       next: res => {
         document.location.href = "/eventos/"+idEvento;
         window.location.href = "/eventos/"+idEvento;
+        window.alert("Se ha inscrito al evento correctamente");
       },
       error: err => {
         this.errorMessage=err.error.message;

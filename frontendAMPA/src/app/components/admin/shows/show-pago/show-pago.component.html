@@ -55,7 +55,9 @@
                 <div class="form-group row">
                     <div class="mb-4 col-sm-12">
                         <h3 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Socio: </h3>
-                        <h3 class="d-inline" *ngIf="pago.socio">{{ pago.socio }}</h3>
+                        <a class="text-dark" [routerLink]="['/dashboard/socios/form/'+pago.socio]">
+                            <h3 class="d-inline" *ngIf="pago.socio">{{ pago.socio }}</h3>
+                        </a>
                         <h3 class="d-inline" *ngIf="!pago.socio">Sin socio asignado</h3>
                     </div>
                 </div>

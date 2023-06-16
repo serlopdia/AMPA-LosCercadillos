@@ -22,7 +22,7 @@
                     <div class="form-group row">
                         <div class="mb-3 col-sm-12">
                             <label class="mb-2 text-muted" for="ventaja">Ventaja</label>
-                            <input [(ngModel)]="form.ventaja" #ventaja="ngModel" id="ventaja" type="text" class="form-control" name="ventaja" [ngClass]="{ 'is-invalid': f.submitted && ventaja.errors }" required autofocus>
+                            <input [(ngModel)]="form.ventaja" #ventaja="ngModel" id="ventaja" type="text" class="form-control" name="ventaja" [ngClass]="{ 'is-invalid': f.submitted && ventaja.errors }" autofocus>
                             <div class="invalid-feedback error">
                                 <div>
                                     Debe introducir un ventaja
