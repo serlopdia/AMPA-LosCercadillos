@@ -12,7 +12,7 @@ class TipoVista(models.TextChoices):
     PRINCIPAL = "PRINCIPAL", _("Principal"),
     COLEGIO = "COLEGIO", _("Colegio"),
     COMEDOR = "COMEDOR", _("Comedor"),
-    CONTACTO = "CONTACTO", _("Contacto"),
+    VENTAJAS = "VENTAJAS", _("Ventajas"),
 
 class TipoBalance(models.TextChoices):
     INGRESO = "INGRESO", _("Ingreso"),

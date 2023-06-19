@@ -2,7 +2,7 @@ from django.db.models.signals import post_migrate
 from django.dispatch import receiver
 from .models import *
 
-@receiver(post_migrate)
+""" @receiver(post_migrate)
 def create_shop(sender, **kwargs):
     if sender.name == "shop":
         socio = Socio.objects.filter(id=1).first()
@@ -45,3 +45,4 @@ def create_shop(sender, **kwargs):
             stock_producto_sample_dos.save()
             stock_producto_sample_tres = StockProducto.objects.create(nombre="Camiseta AMPA", cantidad=25, producto=producto_sample_dos)
             stock_producto_sample_tres.save()
+ """

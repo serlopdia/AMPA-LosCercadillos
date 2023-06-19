@@ -46,9 +46,7 @@ class PagoViewSet(viewsets.ModelViewSet):
     serializer_class = PagoSerializer
 
     def get_permissions(self):
-        if self.request.method == 'POST':
-            permission_classes = [permissions.AllowAny]
-        elif self.request.method == 'GET':
+        if self.request.method == 'GET':
             permission_classes = [IsOwnerOrAdmin]
         else:
             permission_classes = [permissions.IsAdminUser]
@@ -58,20 +56,6 @@ class PedidoViewSet(viewsets.ModelViewSet):
     queryset = Pedido.objects.all()
     permission_classes = [permissions.IsAdminUser]
     serializer_class = PedidoSerializer
-
-    def get_permissions(self):
-        if self.request.method == 'POST':
-            permission_classes = [permissions.AllowAny]
-        elif self.request.method == 'GET':
-            permission_classes = [IsOwnerOrAdmin]
-        else:
-            permission_classes = [permissions.IsAdminUser]
-        return [permission() for permission in permission_classes]
-
-class LineaPedidoViewSet(viewsets.ModelViewSet):
-    queryset = LineaPedido.objects.all()
-    permission_classes = [permissions.IsAdminUser]
-    serializer_class = LineaPedidoSerializer
 
     def get_permissions(self):
         if self.request.method == 'POST':
@@ -92,6 +76,20 @@ class StockProductoViewSet(viewsets.ModelViewSet):
             permission_classes = [permissions.IsAdminUser]
         elif self.request.method == 'GET':
             permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
+    
+class LineaPedidoViewSet(viewsets.ModelViewSet):
+    queryset = LineaPedido.objects.all()
+    permission_classes = [permissions.IsAdminUser]
+    serializer_class = LineaPedidoSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            permission_classes = [permissions.AllowAny]
+        elif self.request.method == 'GET':
+            permission_classes = [IsOwnerOrAdmin]
         else:
             permission_classes = [permissions.IsAdminUser]
         return [permission() for permission in permission_classes]

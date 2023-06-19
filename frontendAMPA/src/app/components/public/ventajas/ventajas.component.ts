@@ -21,9 +21,9 @@ export class VentajasComponent implements OnInit {
   getMarkdownComedor(): void {
     this.vistaService.getVistas().subscribe(
       vistas => {
-        const vistaComedor = vistas.find((vista: { tipo: string; }) => vista.tipo === 'VENTAJAS');
-        if (vistaComedor) {
-          this.markdown = vistaComedor.markdown;
+        const vistaVentajas = vistas.find((vista: { tipo: string; }) => vista.tipo === 'VENTAJAS');
+        if (vistaVentajas) {
+          this.markdown = vistaVentajas.markdown;
         } else {
           console.log("No se encontró ninguna vista de 'VENTAJAS'.")
         }
