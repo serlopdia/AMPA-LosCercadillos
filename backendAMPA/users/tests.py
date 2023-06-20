@@ -13,7 +13,7 @@ class SocioViewSetTest(TestCase):
         self.view = SocioViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update', 'delete': 'destroy'})
         self.user = User.objects.create_user(username='admintest', password='admintest')
         self.user.is_staff = True
-        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Joe', last_name='Doe', email='test@ejemplo.com', password='doejohn321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
         self.socio_data = {
             'username': 'prueba',
             'first_name': 'Test',

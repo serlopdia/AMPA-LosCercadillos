@@ -1,3 +1,4 @@
+import json
 from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIRequestFactory, force_authenticate
@@ -154,7 +155,7 @@ class PedidoViewSetTest(TestCase):
         self.view = PedidoViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update', 'delete': 'destroy'})
         self.user = User.objects.create_user(username='admintest', password='admintest')
         self.user.is_staff = True
-        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Joe', last_name='Doe', email='test@ejemplo.com', password='doejohn321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
         self.pago1 = Pago.objects.create(
             nombre='Nombre existente', 
             email='correo@test.com', 
@@ -317,7 +318,7 @@ class LineaPedidoViewSetTest(TestCase):
         self.view = LineaPedidoViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update', 'delete': 'destroy'})
         self.user = User.objects.create_user(username='admintest', password='admintest')
         self.user.is_staff = True
-        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Joe', last_name='Doe', email='test@ejemplo.com', password='doejohn321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
         self.pago1 = Pago.objects.create(
             nombre='Nombre existente', 
             email='correo@test.com', 
@@ -408,3 +409,116 @@ class LineaPedidoViewSetTest(TestCase):
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=999)
         self.assertEqual(response.status_code, 404)
+
+# TESTS DE LAS FUNCIONES Y CLASES DE VIEWS.PY
+class PagosListAPITestCase(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.pago1 = Pago.objects.create(
+            nombre='Juan Luis', 
+            email='correo@test.com', 
+            telefono='678222097', 
+            estado='PENDIENTE', 
+            cantidad=10.0,
+            socio=self.socio,
+        )
+        self.pago2 = Pago.objects.create(
+            nombre='Nombre existente', 
+            email='juan@correo.com', 
+            telefono='654234892', 
+            estado='PAGADO', 
+            cantidad=24.69,
+            socio=self.socio,
+        )
+
+    def test_pagos_socio_list(self):
+        url = f'/shop/pagos/socio/{self.socio.pk}/'
+        request = self.factory.get(url)
+        force_authenticate(request, user=self.socio.user)
+
+        response = PagosSocioList.as_view()(request, pk=self.socio.pk)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+
+class PedidosListAPITestCase(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.pago1 = Pago.objects.create(
+            nombre='Juan Luis', 
+            email='correo@test.com', 
+            telefono='678222097', 
+            estado='PENDIENTE', 
+            cantidad=10.0,
+            socio=self.socio,
+        )
+        self.pago2 = Pago.objects.create(
+            nombre='Nombre existente', 
+            email='juan@correo.com', 
+            telefono='654234892', 
+            estado='PAGADO', 
+            cantidad=24.69,
+            socio=self.socio,
+        )
+        self.pedido1 = Pedido.objects.create(
+            nombre='Juan Luis', 
+            email='correo@test.com', 
+            telefono='678222097', 
+            estado='NO_PAGADO', 
+            observaciones='Observaciones existentes', 
+            pago=self.pago1, 
+            socio=self.socio
+        )
+        self.pedido2 = Pedido.objects.create(
+            nombre='Nombre existente', 
+            email='juan@correo.com', 
+            telefono='654234892', 
+            estado='ENTREGADO', 
+            observaciones='Observaciones existentes', 
+            pago=self.pago2, 
+            socio=self.socio
+        )
+
+    def test_pedidos_socio_list(self):
+        url = f'/shop/pedidos/socio/{self.socio.pk}/'
+        request = self.factory.get(url)
+        force_authenticate(request, user=self.socio.user)
+
+        response = PedidosSocioList.as_view()(request, pk=self.socio.pk)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+
+class CompraCheckoutAPITestCase(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.pedido = Pedido.objects.create(
+            nombre='Juan Luis', 
+            email='correo@test.com', 
+            telefono='678222097', 
+            estado='NO_PAGADO', 
+            observaciones='Observaciones existentes', 
+            socio=self.socio
+        )
+        self.data = {
+            'price': 10,
+            'product_name': 'Producto de prueba',
+            'nombre': 'Juan Sanchez',
+            'email': 'juan@correo.com',
+            'telefono': '987654321',
+            'idPedido': self.pedido.id,
+            'idSocio': self.socio.id,
+            'quantity': 1,
+            'successUrl': 'https://example.com/success',
+            'cancelUrl': 'https://example.com/cancel',
+        }
+
+    def test_create_checkout_session(self):
+        view = CreateCompraCheckoutSession.as_view()
+        request = self.factory.post('/shop/checkout/', json.dumps(self.data), content_type='application/json')
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('url', response.data)

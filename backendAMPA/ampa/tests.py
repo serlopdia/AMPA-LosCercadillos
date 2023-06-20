@@ -1,3 +1,4 @@
+import json
 from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIRequestFactory, force_authenticate
@@ -551,7 +552,7 @@ class HijoViewSetTest(TestCase):
         self.view = HijoViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update', 'delete': 'destroy'})
         self.user = User.objects.create_user(username='admintest', password='admintest')
         self.user.is_staff = True
-        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Joe', last_name='Doe', email='test@ejemplo.com', password='doejohn321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
         self.curso_escolar = CursoEscolar.objects.create(
             nombre='Curso escolar existente',
             precio_cuota=100.0,
@@ -712,7 +713,7 @@ class CitaViewSetTest(TestCase):
         self.view = CitaViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update', 'delete': 'destroy'})
         self.user = User.objects.create_user(username='admintest', password='admintest')
         self.user.is_staff = True
-        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Joe', last_name='Doe', email='test@ejemplo.com', password='doejohn321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
         self.asunto = Asunto.objects.create(
             nombre='Asunto de prueba',
             fecha_inicio=date.today(),
@@ -724,7 +725,7 @@ class CitaViewSetTest(TestCase):
             visible=True
         )
         self.cita = Cita.objects.create(
-            fecha=date.today(),
+            fecha=date(2023, 9, 20),
             hora=time(9, 30),
             socio=self.socio,
             asunto=self.asunto
@@ -794,7 +795,7 @@ class PagoCursoViewSetTest(TestCase):
         self.view = PagoCursoViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update', 'delete': 'destroy'})
         self.user = User.objects.create_user(username='admintest', password='admintest')
         self.user.is_staff = True
-        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Joe', last_name='Doe', email='test@ejemplo.com', password='doejohn321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
         self.curso_escolar = CursoEscolar.objects.create(
             nombre='Curso escolar existente',
             precio_cuota=100.0,
@@ -864,3 +865,246 @@ class PagoCursoViewSetTest(TestCase):
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=999)
         self.assertEqual(response.status_code, 404)
+
+# TESTS DE LAS FUNCIONES Y CLASES DE VIEWS.PY
+class EventoSubAPITestCase(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.curso_escolar = CursoEscolar.objects.create(
+            nombre='Curso escolar existente',
+            precio_cuota=100.0,
+            fecha_inicio=date(2022, 9, 1),
+            fecha_fin=date(2023, 6, 30),
+            actual=True
+        )
+        self.pago_curso = PagoCurso.objects.create(
+            cantidad=100.0, 
+            estado=EstadoPago.PAGADO, 
+            socio=self.socio, 
+            curso_escolar=self.curso_escolar
+        )
+        self.evento = Evento.objects.create(
+            titulo='Evento existente',
+            descripcion='Descripción existente',
+            capacidad=100,
+            fin_inscripcion=datetime.now(timezone.utc) + timedelta(days=7),
+            visible=True
+        )
+
+    def test_join_evento(self):
+        url = f'/ampa/eventos/{self.evento.pk}/join/'
+        request = self.factory.post(url)
+        force_authenticate(request, user=self.socio.user)
+
+        response = JoinEventoView.as_view()(request, pk=self.evento.pk)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.data,
+            {'status': 'El socio se ha apuntado correctamente al evento'}
+        )
+        self.assertTrue(self.socio in self.evento.socios.all())
+
+    def test_leave_evento(self):
+        self.evento.socios.add(self.socio)
+
+        url = f'/ampa/eventos/{self.evento.pk}/leave/'
+        request = self.factory.post(url)
+        force_authenticate(request, user=self.socio.user)
+
+        response = LeaveEventoView.as_view()(request, pk=self.evento.pk)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.data,
+            {'status': 'El socio ha sido eliminado correctamente del evento'}
+        )
+        self.assertTrue(self.socio not in self.evento.socios.all())
+
+class CitasListAPITestCase(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.asunto = Asunto.objects.create(
+            nombre='Asunto de prueba',
+            fecha_inicio=date.today(),
+            fecha_fin=date(2023, 12, 31),
+            hora_inicio=time(9, 0),
+            hora_fin=time(10, 0),
+            minutos_frecuencia=30,
+            dias_semana='LUNES,MARTES,MIERCOLES',
+            visible=True
+        )
+        self.cita1 = Cita.objects.create(
+            fecha=date(2023, 9, 20),
+            hora=time(9, 30),
+            socio=self.socio,
+            asunto=self.asunto
+        )
+        self.cita2 = Cita.objects.create(
+            fecha=date(2023, 9, 18),
+            hora=time(9, 0),
+            socio=self.socio,
+            asunto=self.asunto
+        )
+
+    def test_citas_socio_list(self):
+        url = f'/ampa/citas/socio/{self.socio.pk}/'
+        request = self.factory.get(url)
+        force_authenticate(request, user=self.socio.user)
+
+        response = CitasSocioList.as_view()(request, pk=self.socio.pk)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+
+class HijosListAPITestCase(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.curso_escolar = CursoEscolar.objects.create(
+            nombre='Curso escolar existente',
+            precio_cuota=100.0,
+            fecha_inicio=date(2022, 9, 1),
+            fecha_fin=date(2023, 6, 30),
+            actual=True
+        )
+        self.clase = Clase.objects.create(
+            curso='1',
+            letra='A',
+            tipo_clase='INFANTIL',
+            curso_escolar=self.curso_escolar
+        )
+        self.hijo1 = Hijo.objects.create(
+            nombre='Nombre existente',
+            apellidos='Apellidos existentes',
+            fecha_nacimiento=date(2010, 1, 1),
+            socio=self.socio,
+            clase=self.clase
+        )
+        self.hijo2 = Hijo.objects.create(
+            nombre='Nombre',
+            apellidos='Segundo hijo',
+            fecha_nacimiento=date(2015, 5, 12),
+            socio=self.socio,
+            clase=self.clase
+        )
+
+    def test_hijos_socio_list(self):
+        url = f'/ampa/hijos/socio/{self.socio.pk}/'
+        request = self.factory.get(url)
+        force_authenticate(request, user=self.socio.user)
+
+        response = HijosSocioList.as_view()(request, pk=self.socio.pk)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+
+class PagosCursoListAPITestCase(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.curso_escolar = CursoEscolar.objects.create(
+            nombre='Curso escolar existente',
+            precio_cuota=100.0,
+            fecha_inicio=date(2022, 9, 1),
+            fecha_fin=date(2024, 6, 30),
+            actual=True
+        )
+        self.pago_curso1 = PagoCurso.objects.create(
+            cantidad=100.0, 
+            estado=EstadoPago.RECHAZADO, 
+            socio=self.socio, 
+            curso_escolar=self.curso_escolar
+        )
+        self.pago_curso2 = PagoCurso.objects.create(
+            cantidad=100.0, 
+            estado=EstadoPago.PAGADO, 
+            socio=self.socio, 
+            curso_escolar=self.curso_escolar
+        )
+
+    def test_pagos_curso_socio_list(self):
+        url = f'/ampa/pagos_curso/socio/{self.socio.pk}/'
+        request = self.factory.get(url)
+        force_authenticate(request, user=self.socio.user)
+
+        response = PagosCursoSocioList.as_view()(request, pk=self.socio.pk)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+
+class AsuntoDisponibilidadAPITestCase(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.curso_escolar = CursoEscolar.objects.create(
+            nombre='Curso escolar existente',
+            precio_cuota=100.0,
+            fecha_inicio=date(2022, 9, 1),
+            fecha_fin=date(2024, 6, 30),
+            actual=True
+        )
+        self.pago_curso = PagoCurso.objects.create(
+            cantidad=100.0, 
+            estado=EstadoPago.PAGADO, 
+            socio=self.socio, 
+            curso_escolar=self.curso_escolar
+        )
+        self.asunto = Asunto.objects.create(
+            nombre='Asunto de prueba',
+            fecha_inicio=date.today(),
+            fecha_fin=date(2023, 12, 31),
+            hora_inicio=time(9, 0),
+            hora_fin=time(10, 0),
+            minutos_frecuencia=15,
+            dias_semana='LUNES,MARTES,MIERCOLES',
+            visible=True
+        )
+        self.cita = Cita.objects.create(
+            fecha=date(2023, 9, 20),
+            hora=time(9, 15),
+            socio=self.socio,
+            asunto=self.asunto
+        )
+        self.data = {'asunto_id': self.asunto.id, 'fecha': '2023-09-20'}
+
+    def test_asunto_disponibilidad_dia(self):
+        url = f'/ampa/disponibilidad_asunto/'
+        request = self.factory.post(url, self.data)
+        force_authenticate(request, user=self.socio.user)
+
+        view = AsuntoDisponibilidadDia.as_view()
+        response = view(request)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertListEqual(response.data, ['09:00', '09:30', '09:45', '10:00'])
+
+class CuotaCheckoutAPITestCase(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.socio = Socio.objects.create(user=User.objects.create(username='newusersocio', first_name='Juan', last_name='Sánchez', email='juan@correo.com', password='juansan321'), tel='987654321', dni='15412769D', address='Dirección de socio')
+        self.curso_escolar = CursoEscolar.objects.create(
+            nombre='Curso escolar existente',
+            precio_cuota=15.5,
+            fecha_inicio=date(2022, 9, 1),
+            fecha_fin=date(2024, 6, 30),
+            actual=True
+        )
+        self.data = {
+            'price': 15.5,
+            'product_name': 'Producto de prueba',
+            'idCurso': self.curso_escolar.id,
+            'idSocio': self.socio.id,
+            'quantity': 1,
+            'successUrl': 'https://example.com/success',
+            'cancelUrl': 'https://example.com/cancel',
+        }
+
+    def test_create_checkout_session(self):
+        view = CreateCuotaCheckoutSession.as_view()
+        request = self.factory.post('/ampa/checkout_cuota/', json.dumps(self.data), content_type='application/json')
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('url', response.data)

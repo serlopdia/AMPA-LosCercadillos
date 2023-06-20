@@ -79,7 +79,7 @@ El programa de mentoría también incluirá reuniones regulares entre los mentor
 
 El AMPA del CEIP Los Cercadillos espera que este programa de mentoría tenga un impacto positivo en la vida de los estudiantes, ayudándolos a desarrollar habilidades clave y a sentirse apoyados en su proceso educativo y personal."""
 
-""" @receiver(post_migrate, dispatch_uid="dependent_logic_signal")
+@receiver(post_migrate, dispatch_uid="dependent_logic_signal")
 def create_ampa(sender, **kwargs):
     if sender.name == "ampa":
         timezone = pytz.timezone("Europe/Madrid")
@@ -137,30 +137,13 @@ def create_ampa(sender, **kwargs):
             clase_sample_dos = Clase.objects.create(curso=1, letra="B", tipo_clase="INFANTIL", curso_escolar=curso_escolar)
             clase_sample_dos.save()
 
-        if socio and not Hijo.objects.filter(socio=socio).exists():
-            clase_sample_uno = Clase.objects.get(id=1)
-            clase_sample_dos = Clase.objects.get(id=2)
-            hijo_sample_uno = Hijo.objects.create(nombre="Juan", apellidos="Pérez", fecha_nacimiento=date(2010, 5, 10), socio=socio, clase=clase_sample_uno)
-            hijo_sample_uno.save()
-            hijo_sample_dos = Hijo.objects.create(nombre="María", apellidos="López", fecha_nacimiento=date(2012, 8, 15), socio=socio, clase=clase_sample_dos)
-            hijo_sample_dos.save()
-
         if not Asunto.objects.exists():
             asunto_sample_uno = Asunto.objects.create(nombre="Inscripción AMPA", fecha_inicio=date(2023, 6, 1), fecha_fin=date(2023, 12, 31), hora_inicio=time(9, 0), hora_fin=time(10, 0), minutos_frecuencia=10, dias_semana="LUNES, MIERCOLES, VIERNES", visible=True)
             asunto_sample_uno.save(); 
             asunto_sample_dos = Asunto.objects.create(nombre="Recogida de dinero orla", fecha_inicio=date(2023, 9, 1), fecha_fin=date(2023, 12, 31), hora_inicio=time(14, 0), hora_fin=time(15, 0), minutos_frecuencia=25, dias_semana="MARTES, JUEVES", visible=True); 
             asunto_sample_dos.save()
 
-        if socio and not Cita.objects.exists():
-            asunto_sample_uno = Asunto.objects.get(id=1)
-            asunto_sample_dos = Asunto.objects.get(id=2)
-            cita_sample_uno = Cita.objects.create(fecha=date(2023, 6, 7), hora=time(9, 0), socio=socio, asunto=asunto_sample_uno)
-            cita_sample_uno.save()
-            cita_sample_dos = Cita.objects.create(fecha=date(2023, 9, 14), hora=time(14, 0), socio=socio, asunto=asunto_sample_dos)
-            cita_sample_dos.save()
-
         if socio and not PagoCurso.objects.exists():
             curso_escolar = CursoEscolar.objects.get(id=1)
             pago_sample_curso = PagoCurso.objects.create(cantidad=14.0, estado=EstadoPago.PAGADO, socio=socio, curso_escolar=curso_escolar)
             pago_sample_curso.save()
- """
