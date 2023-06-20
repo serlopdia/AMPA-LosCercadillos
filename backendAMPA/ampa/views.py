@@ -15,8 +15,13 @@ webhook_secret = settings.STRIPE_PAGOCURSO_WEBHOOK_SECRET
 
 FRONTEND_CHECKOUT_SUCCESS_URL = settings.CHECKOUT_SUCCESS_URL
 FRONTEND_CHECKOUT_FAILED_URL = settings.CHECKOUT_FAILED_URL
+    
+class EstadoPago(models.TextChoices):
+    PAGADO = "PAGADO", _("Pagado"),
+    PENDIENTE = "PENDIENTE", _("Pendiente"),
+    RECHAZADO = "RECHAZADO", _("Rechazado"),
 
-class IsSocioOrAdmin(permissions.BasePermission):
+class IsOwnerOrAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         pk = view.kwargs.get('pk')
         if request.user.is_staff:
@@ -24,23 +29,44 @@ class IsSocioOrAdmin(permissions.BasePermission):
         if pk and request.user.socio.id == int(pk):
             return True
         return False
-    
-class EstadoPago(models.TextChoices):
-    PAGADO = "PAGADO", _("Pagado"),
-    PENDIENTE = "PENDIENTE", _("Pendiente"),
-    RECHAZADO = "RECHAZADO", _("Rechazado"),
+
+class IsSocioAbonadoOwnerOrAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        pk = view.kwargs.get('pk')
+        if not request.user.is_authenticated:
+            return False
+        if request.user.is_staff:
+            return True
+        elif not pk:
+            # Verificar si el usuario tiene un PagoCurso asociado en estado "PAGADO" con el curso_escolar actual
+            curso_actual = CursoEscolar.objects.filter(actual=True).first()
+            if curso_actual:
+                pago_curso = PagoCurso.objects.filter(socio=request.user.socio, curso_escolar=curso_actual, estado=EstadoPago.PAGADO).first()
+                if pago_curso:
+                    return True
+        elif pk and request.user.socio.id == int(pk):
+            # Verificar si el usuario tiene un PagoCurso asociado en estado "PAGADO" con el curso_escolar actual
+            curso_actual = CursoEscolar.objects.filter(actual=True).first()
+            if curso_actual:
+                pago_curso = PagoCurso.objects.filter(socio=request.user.socio, curso_escolar=curso_actual, estado=EstadoPago.PAGADO).first()
+                if pago_curso:
+                    return True
+
+        return False
 
 class IsSocioAbonado(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
             return False
-
-        # Verificar si el usuario tiene un PagoCurso asociado en estado "PAGADO" con el curso_escolar actual
-        curso_actual = CursoEscolar.objects.filter(actual=True).first()
-        if curso_actual:
-            pago_curso = PagoCurso.objects.filter(socio=request.user.socio, curso_escolar=curso_actual, estado=EstadoPago.PAGADO).first()
-            if pago_curso:
-                return True
+        if request.user.is_staff:
+            return False
+        else:
+            # Verificar si el usuario tiene un PagoCurso asociado en estado "PAGADO" con el curso_escolar actual
+            curso_actual = CursoEscolar.objects.filter(actual=True).first()
+            if curso_actual:
+                pago_curso = PagoCurso.objects.filter(socio=request.user.socio, curso_escolar=curso_actual, estado=EstadoPago.PAGADO).first()
+                if pago_curso:
+                    return True
 
         return False
 
@@ -87,7 +113,7 @@ class LeaveEventoView(APIView):
     
 class CitasSocioList(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsSocioOrAdmin]
+    permission_classes = [IsOwnerOrAdmin]
 
     def get(self, request, *args, **kwargs):
         pk = self.kwargs.get('pk')
@@ -98,7 +124,7 @@ class CitasSocioList(APIView):
 
 class HijosSocioList(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsSocioOrAdmin]
+    permission_classes = [IsOwnerOrAdmin]
 
     def get(self, request, *args, **kwargs):
         pk = self.kwargs.get('pk')
@@ -109,7 +135,7 @@ class HijosSocioList(APIView):
     
 class PagosCursoSocioList(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsSocioOrAdmin]
+    permission_classes = [IsOwnerOrAdmin]
 
     def get(self, request, *args, **kwargs):
         pk = self.kwargs.get('pk')
@@ -120,7 +146,7 @@ class PagosCursoSocioList(APIView):
     
 class AsuntoDisponibilidadDia(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsSocioOrAdmin]
+    permission_classes = [IsSocioAbonado]
 
     def post(self, request):
         asunto_id = request.data.get('asunto_id')
