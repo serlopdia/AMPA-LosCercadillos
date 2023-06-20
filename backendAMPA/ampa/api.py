@@ -156,9 +156,5 @@ class PagoCursoViewSet(viewsets.ModelViewSet):
             # Check if the user is the owner of the object or an admin
             permission_classes = [IsOwnerOrAdmin]
         else:
-            # Allow any authenticated user to create new PagoCurso objects
-            permission_classes = [permissions.IsAuthenticated]
-            # Only admins can modify existing PagoCurso objects
-            if self.request.method in ['PUT', 'PATCH', 'DELETE']:
-                permission_classes += [permissions.IsAdminUser]
+            permission_classes = [permissions.IsAdminUser]
         return [permission() for permission in permission_classes]

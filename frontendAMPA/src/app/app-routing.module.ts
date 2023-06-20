@@ -70,6 +70,7 @@ import { NotSocioComponent } from './layouts/not-socio/not-socio.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
+  { path: 'index', component: IndexComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'not-socio', component: NotSocioComponent },
 

@@ -120,7 +120,7 @@ class PagosCursoSocioList(APIView):
     
 class AsuntoDisponibilidadDia(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAdminUser, IsSocioAbonado]
+    permission_classes = [permissions.IsAuthenticated, IsSocioOrAdmin]
 
     def post(self, request):
         asunto_id = request.data.get('asunto_id')
