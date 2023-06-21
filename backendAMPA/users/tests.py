@@ -17,8 +17,8 @@ class SocioViewSetTest(TestCase):
         self.socio_data = {
             'username': 'prueba',
             'first_name': 'Test',
-            'last_name': 'Doe',
-            'password': 'testdoe345',
+            'last_name': 'Sanch',
+            'password': 'testsan345',
             'email': 'correo@prueba.com',
             'tel': '654373222',
             'dni': '15412769D',
@@ -26,12 +26,32 @@ class SocioViewSetTest(TestCase):
         }
         self.socio_updated_data = {
             'username': 'newusername',
-            'first_name': 'Jane',
-            'last_name': 'Smith',
-            'password': '321doejohn',
+            'first_name': 'Pepe',
+            'last_name': 'García',
+            'password': '321pepito',
             'email': 'newemail@example.com',
             'tel': '999999999',
             'dni': '15412769D',
+            'address': 'Updated address',
+        }
+        self.wrong_socio_data = {
+            'username': 'hey',
+            'first_name': 'Pepe',
+            'last_name': 'Garcia',
+            'password': 'aasderrt',
+            'email': 'newemail@example.com',
+            'tel': '999999999',
+            'dni': '73684440O',
+            'address': 'Updated address',
+        }
+        self.wrong_socio_updated_data = {
+            'username': 'newusername',
+            'first_name': 'Pepe',
+            'last_name': 'Garcia',
+            'password': '321pepito',
+            'email': 'FDSF&%/&%jh234',
+            'tel': '999999999',
+            'dni': '73684440O',
             'address': 'Updated address',
         }
 
@@ -47,8 +67,8 @@ class SocioViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_socio_required_fields(self):
-        request = self.factory.post('/users/socios/', {'last_name': 'Apellidos y faltan datos'})
+    def test_create_socio_wrong_fields(self):
+        request = self.factory.post('/users/socios/', self.wrong_socio_data)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
@@ -67,21 +87,11 @@ class SocioViewSetTest(TestCase):
         response = self.view(request, pk=self.socio.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_socio_invalid_id(self):
-        request_data = {
-            'username': 'newusername',
-            'first_name': 'Jane',
-            'last_name': 'Smith',
-            'password': 'newpassword123',
-            'email': 'newemail@example.com',
-            'tel': '999999999',
-            'dni': '98765432C',
-            'address': 'Updated address',
-        }
-        request = self.factory.put('/users/socios/999/', request_data)
+    def test_update_socio_wrong_fields(self):
+        request = self.factory.put(f'/users/socios/{self.socio.id}/', self.wrong_socio_updated_data)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.socio.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_socio(self):
         request = self.factory.delete(f'/users/socios/{self.socio.id}/')

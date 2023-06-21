@@ -28,6 +28,20 @@ class ProductoViewSetTest(TestCase):
             'precio_socio': 10.0,
             'imagen': 'imagen_prueba.jpg'
         }
+        self.wrong_producto_data1 = {
+            'nombre': '',
+            'descripcion': 'Descripción de prueba',
+            'precio_general': 20.0,
+            'precio_socio': 10.0,
+            'imagen': 'imagen_prueba.jpg'
+        }
+        self.wrong_producto_data2 = {
+            'nombre': 'Nombre de prueba',
+            'descripcion': '',
+            'precio_general': 20.0,
+            'precio_socio': 10.0,
+            'imagen': 'imagen_prueba.jpg'
+        }
 
     def test_get_productos(self):
         request = self.factory.get('/ampa/productos/')
@@ -40,8 +54,8 @@ class ProductoViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_producto_required_fields(self):
-        request = self.factory.post('/ampa/productos/', {'nombre': 'Nombre sin descripción'})
+    def test_create_producto_wrong_fields(self):
+        request = self.factory.post('/ampa/productos/', self.wrong_producto_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
@@ -60,11 +74,11 @@ class ProductoViewSetTest(TestCase):
         response = self.view(request, pk=self.producto.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_producto_invalid_id(self):
-        request = self.factory.put('/ampa/productos/999/', self.producto_data)
+    def test_update_producto_wrong_fields(self):
+        request = self.factory.put(f'/ampa/productos/{self.producto.id}/', self.wrong_producto_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.producto.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_producto(self):
         request = self.factory.delete(f'/ampa/productos/{self.producto.id}/')
@@ -98,6 +112,20 @@ class PagoViewSetTest(TestCase):
             'estado': 'PAGADO', 
             'cantidad': 20,
         }
+        self.wrong_pago_data1 = {
+            'nombre': 'Nuevo Nombre', 
+            'email': 'nuevo_correo@test.com', 
+            'telefono': '987654321', 
+            'estado': 'SIN HACER', 
+            'cantidad': 20,
+        }
+        self.wrong_pago_data2 = {
+            'nombre': 'Nuevo Nombre', 
+            'email': 'SLDFJ%$&%$D823', 
+            'telefono': '', 
+            'estado': 'PAGADO', 
+            'cantidad': 20,
+        }
 
     def test_get_pagos(self):
         request = self.factory.get('/ampa/pagos/')
@@ -111,8 +139,8 @@ class PagoViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_pago_required_fields(self):
-        request = self.factory.post('/ampa/pagos/', {'nombre': 'Nombre sin email'})
+    def test_create_pago_wrong_fields(self):
+        request = self.factory.post('/ampa/pagos/', self.wrong_pago_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
@@ -131,11 +159,11 @@ class PagoViewSetTest(TestCase):
         response = self.view(request, pk=self.pago.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_pago_invalid_id(self):
-        request = self.factory.put('/ampa/pagos/999/', self.pago_data)
+    def test_update_pago_wrong_fields(self):
+        request = self.factory.put(f'/ampa/pagos/{self.pago.id}/', self.wrong_pago_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.pago.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_pago(self):
         request = self.factory.delete(f'/ampa/pagos/{self.pago.id}/')
@@ -187,6 +215,22 @@ class PedidoViewSetTest(TestCase):
             'observaciones': 'Observaciones de prueba', 
             'pago': self.pago2.id, 
         }
+        self.wrong_pedido_data1 = {
+            'nombre': 'Nombre de prueba', 
+            'email': 'jsfd%&&%sjad', 
+            'telefono': 'as2345', 
+            'estado': 'PREPARACION', 
+            'observaciones': 'Observaciones de prueba', 
+            'pago': self.pago2.id, 
+        }
+        self.wrong_pedido_data2 = {
+            'nombre': 'Nombre de prueba', 
+            'email': 'test@example.com', 
+            'telefono': '987654321', 
+            'estado': 'ALMACEN', 
+            'observaciones': 'Observaciones de prueba', 
+            'pago': self.pago2.id, 
+        }
 
     def test_get_pedidos(self):
         request = self.factory.get('/ampa/pedidos/')
@@ -200,8 +244,8 @@ class PedidoViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_pedido_required_fields(self):
-        request = self.factory.post('/ampa/pedidos/', {'nombre': 'Nombre sin email'})
+    def test_create_pedido_wrong_fields(self):
+        request = self.factory.post('/ampa/pedidos/', self.wrong_pedido_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
@@ -220,11 +264,11 @@ class PedidoViewSetTest(TestCase):
         response = self.view(request, pk=self.pedido.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_pedido_invalid_id(self):
-        request = self.factory.put('/ampa/pedidos/999/', self.pedido_data)
+    def test_update_pedido_wrong_fields(self):
+        request = self.factory.put(f'/ampa/pedidos/{self.pedido.id}/', self.wrong_pedido_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.pedido.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_pedido(self):
         request = self.factory.delete(f'/ampa/pedidos/{self.pedido.id}/')
@@ -261,6 +305,16 @@ class StockProductoViewSetTest(TestCase):
             'cantidad': 5,
             'producto': self.producto.id
         }
+        self.wrong_stock_producto_data1 = {
+            'nombre': 'Stock 1',
+            'cantidad': 10,
+            'producto': self.producto.id
+        }
+        self.wrong_stock_producto_data2 = {
+            'nombre': 'Nuevo stock',
+            'cantidad': -5,
+            'producto': self.producto.id
+        }
 
     def test_get_stock_productos(self):
         request = self.factory.get('/ampa/stock-productos/')
@@ -274,8 +328,8 @@ class StockProductoViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_stock_producto_required_fields(self):
-        request = self.factory.post('/ampa/stock-productos/', {})
+    def test_create_stock_producto_wrong_fields(self):
+        request = self.factory.post('/ampa/stock-productos/', self.wrong_stock_producto_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
@@ -294,11 +348,11 @@ class StockProductoViewSetTest(TestCase):
         response = self.view(request, pk=self.stock_producto.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_stock_producto_invalid_id(self):
-        request = self.factory.put('/ampa/stock-productos/999/', self.stock_producto_data)
+    def test_update_stock_producto_wrong_fields(self):
+        request = self.factory.put(f'/ampa/stock-productos/{self.stock_producto.id}/', self.wrong_stock_producto_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.stock_producto.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_stock_producto(self):
         request = self.factory.delete(f'/ampa/stock-productos/{self.stock_producto.id}/')
@@ -359,6 +413,18 @@ class LineaPedidoViewSetTest(TestCase):
             'cantidad': 3,
             'pedido': self.pedido.id
         }
+        self.wrong_linea_pedido_data1 = {
+            'producto': self.producto.id,
+            'stock': self.stock_producto.id,
+            'cantidad': -33,
+            'pedido': self.pedido.id
+        }
+        self.wrong_linea_pedido_data2 = {
+            'producto': '766rrg4',
+            'stock': self.stock_producto.id,
+            'cantidad': 3,
+            'pedido': self.pedido.id
+        }
 
     def test_get_lineas_pedido(self):
         request = self.factory.get('/ampa/lineas-pedido/')
@@ -372,8 +438,8 @@ class LineaPedidoViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_linea_pedido_required_fields(self):
-        request = self.factory.post('/ampa/lineas-pedido/', {'producto': 'Producto sin stock'})
+    def test_create_linea_pedido_wrong_fields(self):
+        request = self.factory.post('/ampa/lineas-pedido/', self.wrong_linea_pedido_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
@@ -392,11 +458,11 @@ class LineaPedidoViewSetTest(TestCase):
         response = self.view(request, pk=self.linea_pedido.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_linea_pedido_invalid_id(self):
-        request = self.factory.put('/ampa/lineas-pedido/999/', self.linea_pedido_data)
+    def test_update_linea_pedido_wrong_fields(self):
+        request = self.factory.put(f'/ampa/lineas-pedido/{self.linea_pedido.id}/', self.wrong_linea_pedido_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.linea_pedido.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_linea_pedido(self):
         request = self.factory.delete(f'/ampa/lineas-pedido/{self.linea_pedido.id}/')

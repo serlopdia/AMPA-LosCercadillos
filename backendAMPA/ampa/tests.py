@@ -16,6 +16,8 @@ class VistaViewSetTest(TestCase):
         self.user.is_staff = True
         self.vista = Vista.objects.create(tipo='PRINCIPAL', markdown='Markdown existente')
         self.vista_data = {'tipo': 'COLEGIO', 'markdown': 'Markdown de prueba'}
+        self.wrong_vista_data1 = {'tipo': 'RECREO', 'markdown': 'Markdown de prueba'}
+        self.wrong_vista_data2 = {'tipo': 'DIRECCION', 'markdown': ''}
 
     def test_get_vistas(self):
         request = self.factory.get('/ampa/vistas/')
@@ -28,13 +30,13 @@ class VistaViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_vista_required_fields(self):
-        request = self.factory.post('/ampa/vistas/', {'tipo': 'PRINCIPAL'})
+    def test_create_vista_wrong_fields(self):
+        request = self.factory.post('/ampa/vistas/', self.wrong_vista_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_vista_by_id_valid(self):
+    def test_get_vista_by_id(self):
         request = self.factory.get(f'/ampa/vistas/{self.vista.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.vista.id)
@@ -48,11 +50,11 @@ class VistaViewSetTest(TestCase):
         response = self.view(request, pk=self.vista.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_vista_invalid_id(self):
-        request = self.factory.put('/ampa/vistas/999/', self.vista_data)
+    def test_update_vista_wrong_fields(self):
+        request = self.factory.put(f'/ampa/vistas/{self.vista.id}/', self.wrong_vista_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.vista.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_vista(self):
         request = self.factory.delete(f'/ampa/vistas/{self.vista.id}/')
@@ -74,6 +76,8 @@ class NoticiaViewSetTest(TestCase):
         self.user.is_staff = True
         self.noticia = Noticia.objects.create(titulo='Noticia existente', cuerpo='Cuerpo existente')
         self.noticia_data = {'titulo': 'Título de prueba', 'cuerpo': 'Cuerpo de prueba'}
+        self.wrong_noticia_data1 = {'titulo': '', 'cuerpo': 'Cuerpo de prueba'}
+        self.wrong_noticia_data2 = {'titulo': 'Título de prueba', 'cuerpo': ''}
 
     def test_get_noticias(self):
         request = self.factory.get('/ampa/noticias/')
@@ -86,13 +90,13 @@ class NoticiaViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_noticia_required_fields(self):
-        request = self.factory.post('/ampa/noticias/', {'titulo': 'Título sin cuerpo'})
+    def test_create_noticia_wrong_fields(self):
+        request = self.factory.post('/ampa/noticias/', self.wrong_noticia_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_noticia_by_id_valid(self):
+    def test_get_noticia_by_id(self):
         request = self.factory.get(f'/ampa/noticias/{self.noticia.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.noticia.id)
@@ -106,11 +110,11 @@ class NoticiaViewSetTest(TestCase):
         response = self.view(request, pk=self.noticia.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_noticia_invalid_id(self):
-        request = self.factory.put('/ampa/noticias/999/', self.noticia_data)
+    def test_update_noticia_wrong_fields(self):
+        request = self.factory.put(f'/ampa/noticias/{self.noticia.id}/', self.wrong_noticia_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.noticia.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_noticia(self):
         request = self.factory.delete(f'/ampa/noticias/{self.noticia.id}/')
@@ -143,7 +147,21 @@ class EventoViewSetTest(TestCase):
             'titulo': 'Título de prueba',
             'descripcion': 'Descripción de prueba',
             'capacidad': 50,
-            'fin_inscripcion': datetime.now(timezone.utc) + timedelta(days=2),
+            'fin_inscripcion': datetime.now(timezone.utc) + timedelta(days=7),
+            'socios': [self.socio1.id, self.socio2.id]
+        }
+        self.wrong_evento_data1 = {
+            'titulo': 'Título de prueba',
+            'descripcion': 'Descripción de prueba',
+            'capacidad': 50,
+            'fin_inscripcion': datetime.now(timezone.utc) - timedelta(days=7),
+            'socios': [self.socio1.id, self.socio2.id]
+        }
+        self.wrong_evento_data2 = {
+            'titulo': '',
+            'descripcion': '',
+            'capacidad': 50,
+            'fin_inscripcion': datetime.now(timezone.utc) + timedelta(days=7),
             'socios': [self.socio1.id, self.socio2.id]
         }
 
@@ -158,13 +176,13 @@ class EventoViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_evento_required_fields(self):
-        request = self.factory.post('/ampa/eventos/', {'titulo': 'Título sin descripción'})
+    def test_create_evento_wrong_fields(self):
+        request = self.factory.post('/ampa/eventos/', self.wrong_evento_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_evento_by_id_valid(self):
+    def test_get_evento_by_id(self):
         request = self.factory.get(f'/ampa/eventos/{self.evento.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.evento.id)
@@ -178,11 +196,11 @@ class EventoViewSetTest(TestCase):
         response = self.view(request, pk=self.evento.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_evento_invalid_id(self):
-        request = self.factory.put('/ampa/eventos/999/', self.evento_data)
+    def test_update_evento_wrong_data(self):
+        request = self.factory.put(f'/ampa/eventos/{self.evento.id}/', self.wrong_evento_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.evento.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_evento(self):
         request = self.factory.delete(f'/ampa/eventos/{self.evento.id}/')
@@ -214,6 +232,18 @@ class ColaboradorViewSetTest(TestCase):
             'descripcion': 'Descripción de prueba',
             'imagen': 'imagen.jpg'
         }
+        self.wrong_colaborador_data1 = {
+            'nombre': '',
+            'ventaja': 'Ventaja de prueba',
+            'descripcion': 'Descripción de prueba',
+            'imagen': 'imagen.jpg'
+        }
+        self.wrong_colaborador_data2 = {
+            'nombre': 'Nombre de prueba',
+            'ventaja': 'Ventaja de prueba',
+            'descripcion': '',
+            'imagen': ''
+        }
 
     def test_get_colaboradores(self):
         request = self.factory.get('/ampa/colaboradores/')
@@ -227,13 +257,13 @@ class ColaboradorViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_colaborador_required_fields(self):
-        request = self.factory.post('/ampa/colaboradores/', {'nombre': 'Nombre sin descripción'})
+    def test_create_colaborador_wrong_fields(self):
+        request = self.factory.post('/ampa/colaboradores/', self.wrong_colaborador_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_colaborador_by_id_valid(self):
+    def test_get_colaborador_by_id(self):
         request = self.factory.get(f'/ampa/colaboradores/{self.colaborador.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.colaborador.id)
@@ -247,11 +277,11 @@ class ColaboradorViewSetTest(TestCase):
         response = self.view(request, pk=self.colaborador.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_colaborador_invalid_id(self):
-        request = self.factory.put('/ampa/colaboradores/999/', self.colaborador_data)
+    def test_update_colaborador_wrong_fields(self):
+        request = self.factory.put(f'/ampa/colaboradores/{self.colaborador.id}/', self.wrong_colaborador_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.colaborador.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_colaborador(self):
         request = self.factory.delete(f'/ampa/colaboradores/{self.colaborador.id}/')
@@ -283,6 +313,18 @@ class SugerenciaViewSetTest(TestCase):
             'titulo': 'Título de prueba',
             'descripcion': 'Descripción de prueba'
         }
+        self.wrong_sugerencia_data1 = {
+            'nombre': 'Nombre de prueba',
+            'email': '65ujh€#2jdnf',
+            'titulo': 'Título de prueba',
+            'descripcion': 'Descripción de prueba'
+        }
+        self.wrong_sugerencia_data2 = {
+            'nombre': '',
+            'email': 'test@example.com',
+            'titulo': '',
+            'descripcion': 'Descripción de prueba'
+        }
 
     def test_get_sugerencias(self):
         request = self.factory.get('/ampa/sugerencias/')
@@ -296,13 +338,13 @@ class SugerenciaViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_sugerencia_required_fields(self):
-        request = self.factory.post('/ampa/sugerencias/', {'nombre': 'Nombre sin email'})
+    def test_create_sugerencia_wrong_fields(self):
+        request = self.factory.post('/ampa/sugerencias/', self.wrong_sugerencia_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_sugerencia_by_id_valid(self):
+    def test_get_sugerencia_by_id(self):
         request = self.factory.get(f'/ampa/sugerencias/{self.sugerencia.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.sugerencia.id)
@@ -316,11 +358,11 @@ class SugerenciaViewSetTest(TestCase):
         response = self.view(request, pk=self.sugerencia.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_sugerencia_invalid_id(self):
-        request = self.factory.put('/ampa/sugerencias/999/', self.sugerencia_data)
+    def test_update_sugerencia_wrong_fields(self):
+        request = self.factory.put(f'/ampa/sugerencias/{self.sugerencia.id}/', self.wrong_sugerencia_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.sugerencia.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_sugerencia(self):
         request = self.factory.delete(f'/ampa/sugerencias/{self.sugerencia.id}/')
@@ -350,6 +392,16 @@ class BalanceViewSetTest(TestCase):
             'asunto': 'Asunto de prueba',
             'cantidad': 200
         }
+        self.wrong_balance_data1 = {
+            'tipo': 'INGRESO',
+            'asunto': 'Asunto de prueba',
+            'cantidad': -20
+        }
+        self.wrong_balance_data2 = {
+            'tipo': 'NADA',
+            'asunto': '',
+            'cantidad': 3.678
+        }
 
     def test_get_balances(self):
         request = self.factory.get('/ampa/balances/')
@@ -363,13 +415,13 @@ class BalanceViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_balance_required_fields(self):
-        request = self.factory.post('/ampa/balances/', {'tipo': 'INGRESO'})
+    def test_create_balance_wrong_fields(self):
+        request = self.factory.post('/ampa/balances/', self.wrong_balance_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_balance_by_id_valid(self):
+    def test_get_balance_by_id(self):
         request = self.factory.get(f'/ampa/balances/{self.balance.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.balance.id)
@@ -383,11 +435,11 @@ class BalanceViewSetTest(TestCase):
         response = self.view(request, pk=self.balance.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_balance_invalid_id(self):
-        request = self.factory.put('/ampa/balances/999/', self.balance_data)
+    def test_update_balance_wrong_fields(self):
+        request = self.factory.put(f'/ampa/balances/{self.balance.id}/', self.wrong_balance_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.balance.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_balance(self):
         request = self.factory.delete(f'/ampa/balances/{self.balance.id}/')
@@ -421,6 +473,20 @@ class CursoEscolarViewSetTest(TestCase):
             'fecha_fin': date(2024, 6, 30),
             'actual': False
         }
+        self.wrong_curso_escolar_data1 = {
+            'nombre': 'Curso escolar de prueba',
+            'precio_cuota': 200.0,
+            'fecha_inicio': date(2024, 6, 30),
+            'fecha_fin': date(2023, 9, 1),
+            'actual': False
+        }
+        self.wrong_curso_escolar_data2 = {
+            'nombre': '',
+            'precio_cuota': 200.0,
+            'fecha_inicio': date(2023, 9, 1),
+            'fecha_fin': date(2024, 6, 30),
+            'actual': False
+        }
 
     def test_get_cursos_escolares(self):
         request = self.factory.get('/ampa/cursos-escolares/')
@@ -433,13 +499,13 @@ class CursoEscolarViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_curso_escolar_required_fields(self):
-        request = self.factory.post('/ampa/cursos-escolares/', {'nombre': 'Curso sin precio'})
+    def test_create_curso_escolar_wrong_fields(self):
+        request = self.factory.post('/ampa/cursos-escolares/', self.wrong_curso_escolar_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_curso_escolar_by_id_valid(self):
+    def test_get_curso_escolar_by_id(self):
         request = self.factory.get(f'/ampa/cursos-escolares/{self.curso_escolar.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.curso_escolar.id)
@@ -453,11 +519,11 @@ class CursoEscolarViewSetTest(TestCase):
         response = self.view(request, pk=self.curso_escolar.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_curso_escolar_invalid_id(self):
-        request = self.factory.put('/ampa/cursos-escolares/999/', self.curso_escolar_data)
+    def test_update_curso_escolar_wrong_fields(self):
+        request = self.factory.put(f'/ampa/cursos-escolares/{self.curso_escolar.id}/', self.wrong_curso_escolar_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.curso_escolar.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_curso_escolar(self):
         request = self.factory.delete(f'/ampa/cursos-escolares/{self.curso_escolar.id}/')
@@ -496,6 +562,18 @@ class ClaseViewSetTest(TestCase):
             'tipo_clase': 'PRIMARIA',
             'curso_escolar': self.curso_escolar.id
         }
+        self.wrong_clase_data1 = {
+            'curso': '2',
+            'letra': 'B',
+            'tipo_clase': 'ESO',
+            'curso_escolar': self.curso_escolar.id
+        }
+        self.wrong_clase_data2 = {
+            'curso': '1',
+            'letra': 'A',
+            'tipo_clase': 'INFANTIL',
+            'curso_escolar': self.curso_escolar.id
+        }
 
     def test_get_clases(self):
         request = self.factory.get('/ampa/clases/')
@@ -508,13 +586,13 @@ class ClaseViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_clase_required_fields(self):
-        request = self.factory.post('/ampa/clases/', {'curso': '1'})
+    def test_create_clase_wrong_fields(self):
+        request = self.factory.post('/ampa/clases/', self.wrong_clase_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_clase_by_id_valid(self):
+    def test_get_clase_by_id(self):
         request = self.factory.get(f'/ampa/clases/{self.clase.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.clase.id)
@@ -528,11 +606,11 @@ class ClaseViewSetTest(TestCase):
         response = self.view(request, pk=self.clase.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_clase_invalid_id(self):
-        request = self.factory.put('/ampa/clases/999/', self.clase_data)
+    def test_update_clase_wrong_fields(self):
+        request = self.factory.put(f'/ampa/clases/{self.clase.id}/', self.wrong_clase_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.clase.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_clase(self):
         request = self.factory.delete(f'/ampa/clases/{self.clase.id}/')
@@ -580,6 +658,20 @@ class HijoViewSetTest(TestCase):
             'socio': self.socio.id,
             'clase': self.clase.id
         }
+        self.wrong_hijo_data1 = {
+            'nombre': 'Nombre de prueba',
+            'apellidos': 'Apellidos de prueba',
+            'fecha_nacimiento': '2065-01-01',
+            'socio': self.socio.id,
+            'clase': self.clase.id
+        }
+        self.wrong_hijo_data2 = {
+            'nombre': 'Nombre de prueba',
+            'apellidos': '',
+            'fecha_nacimiento': '2005-01-01',
+            'socio': 'ninguno',
+            'clase': self.clase.id
+        }
 
     def test_get_hijos(self):
         request = self.factory.get('/ampa/hijos/')
@@ -593,13 +685,13 @@ class HijoViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_hijo_required_fields(self):
-        request = self.factory.post('/ampa/hijos/', {'nombre': 'Nombre sin apellidos'})
+    def test_create_hijo_wrong_fields(self):
+        request = self.factory.post('/ampa/hijos/', self.wrong_hijo_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_hijo_by_id_valid(self):
+    def test_get_hijo_by_id(self):
         request = self.factory.get(f'/ampa/hijos/{self.hijo.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.hijo.id)
@@ -613,11 +705,11 @@ class HijoViewSetTest(TestCase):
         response = self.view(request, pk=self.hijo.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_hijo_invalid_id(self):
-        request = self.factory.put('/ampa/hijos/999/', self.hijo_data)
+    def test_update_hijo_wrong_fields(self):
+        request = self.factory.put(f'/ampa/hijos/{self.hijo.id}/', self.wrong_hijo_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.hijo.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_hijo(self):
         request = self.factory.delete(f'/ampa/hijos/{self.hijo.id}/')
@@ -657,6 +749,26 @@ class AsuntoViewSetTest(TestCase):
             'dias_semana': 'LUNES,MARTES,MIERCOLES',
             'visible': True
         }
+        self.wrong_asunto_data1 = {
+            'nombre': 'Nuevo asunto',
+            'fecha_inicio': date(2023, 6, 1),
+            'fecha_fin': date(2023, 12, 31),
+            'hora_inicio': time(14, 0),
+            'hora_fin': time(17, 0),
+            'minutos_frecuencia': 17,
+            'dias_semana': 'DOMINGO',
+            'visible': True
+        }
+        self.wrong_asunto_data2 = {
+            'nombre': 'Nuevo asunto',
+            'fecha_inicio': date(2023, 12, 31),
+            'fecha_fin': date(2023, 6, 1),
+            'hora_inicio': time(14, 0),
+            'hora_fin': time(17, 0),
+            'minutos_frecuencia': 30,
+            'dias_semana': '',
+            'visible': True
+        }
 
     def test_get_asuntos(self):
         request = self.factory.get('/ampa/asuntos/')
@@ -670,13 +782,13 @@ class AsuntoViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_asunto_required_fields(self):
-        request = self.factory.post('/ampa/asuntos/', {'nombre': 'Nuevo asunto'})
+    def test_create_asunto_wrong_fields(self):
+        request = self.factory.post('/ampa/asuntos/', self.wrong_asunto_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_asunto_by_id_valid(self):
+    def test_get_asunto_by_id(self):
         request = self.factory.get(f'/ampa/asuntos/{self.asunto.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.asunto.id)
@@ -689,11 +801,11 @@ class AsuntoViewSetTest(TestCase):
         response = self.view(request, pk=self.asunto.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_asunto_invalid_id(self):
-        request = self.factory.put('/ampa/asuntos/999/', self.asunto_data)
+    def test_update_asunto_wrong_fields(self):
+        request = self.factory.put(f'/ampa/asuntos/{self.asunto.id}/', self.wrong_asunto_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.asunto.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_asunto(self):
         request = self.factory.delete(f'/ampa/asuntos/{self.asunto.id}/')
@@ -736,6 +848,18 @@ class CitaViewSetTest(TestCase):
             'socio': self.socio.id,
             'asunto': self.asunto.id
         }
+        self.wrong_cita_data1 = {
+            'fecha': date(2023, 9, 20),
+            'hora': time(9, 30),
+            'socio': self.socio.id,
+            'asunto': self.asunto.id
+        }
+        self.wrong_cita_data2 = {
+            'fecha': date(2021, 10, 10),
+            'hora': time(9, 19),
+            'socio': self.socio.id,
+            'asunto': self.asunto.id
+        }
 
     def test_get_citas(self):
         request = self.factory.get('/ampa/citas/')
@@ -749,18 +873,18 @@ class CitaViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_cita_required_fields(self):
-        request = self.factory.post('/ampa/citas/', {'fecha': date.today(), 'hora': datetime.now().time()})
+    def test_create_cita_wrong_fields(self):
+        request = self.factory.post('/ampa/citas/', self.wrong_cita_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_cita_by_id_valid(self):
+    def test_get_cita_by_id(self):
         request = self.factory.get(f'/ampa/citas/{self.cita.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.cita.id)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data[0]['fecha'], str(date.today()))
+        self.assertEqual(response.data[0]['fecha'], str(date(2023, 9, 20)))
         self.assertEqual(response.data[0]['hora'], str(time(9, 30)))
         self.assertEqual(response.data[0]['socio'], self.socio.id)
         self.assertEqual(response.data[0]['asunto'], self.asunto.id)
@@ -771,11 +895,11 @@ class CitaViewSetTest(TestCase):
         response = self.view(request, pk=self.cita.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_cita_invalid_id(self):
-        request = self.factory.put('/ampa/citas/999/', self.cita_data)
+    def test_update_cita_wrong_fields(self):
+        request = self.factory.put(f'/ampa/citas/{self.cita.id}/', self.wrong_cita_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.cita.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_cita(self):
         request = self.factory.delete(f'/ampa/citas/{self.cita.id}/')
@@ -815,6 +939,18 @@ class PagoCursoViewSetTest(TestCase):
             'socio': self.socio.id,
             'curso_escolar': self.curso_escolar.id
         }
+        self.wrong_pago_curso_data1 = {
+            'cantidad': 100.0,
+            'estado': 'ENMANO',
+            'socio': self.socio.id,
+            'curso_escolar': self.curso_escolar.id
+        }
+        self.wrong_pago_curso_data2 = {
+            'cantidad': 100.0,
+            'estado': '',
+            'socio': self.socio.id,
+            'curso_escolar': self.curso_escolar.id
+        }
 
     def test_get_pagos_curso(self):
         request = self.factory.get('/ampa/pagos_curso/')
@@ -828,13 +964,13 @@ class PagoCursoViewSetTest(TestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, 201)
 
-    def test_create_pago_curso_required_fields(self):
-        request = self.factory.post('/ampa/pagos_curso/', {'cantidad': 100})
+    def test_create_pago_curso_wrong_fields(self):
+        request = self.factory.post('/ampa/pagos_curso/', self.wrong_pago_curso_data1)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_pago_curso_by_id_valid(self):
+    def test_get_pago_curso_by_id(self):
         request = self.factory.get(f'/ampa/pagos_curso/{self.pago_curso.id}/')
         force_authenticate(request, user=self.user)
         response = self.view(request, pk=self.pago_curso.id)
@@ -848,11 +984,11 @@ class PagoCursoViewSetTest(TestCase):
         response = self.view(request, pk=self.pago_curso.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_pago_curso_invalid_id(self):
-        request = self.factory.put('/ampa/pagos_curso/999/', self.pago_curso_data)
+    def test_update_pago_curso_wrong_fields(self):
+        request = self.factory.put(f'/ampa/pagos_curso/{self.pago_curso.id}/', self.wrong_pago_curso_data2)
         force_authenticate(request, user=self.user)
-        response = self.view(request, pk=999)
-        self.assertEqual(response.status_code, 404)
+        response = self.view(request, pk=self.pago_curso.id)
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_pago_curso(self):
         request = self.factory.delete(f'/ampa/pagos_curso/{self.pago_curso.id}/')
