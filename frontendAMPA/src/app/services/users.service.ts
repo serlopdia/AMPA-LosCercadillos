@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { API_url } from '../global';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { PagoCursoService } from './pago-curso.service';
 import { CursoService } from './curso.service';
 import { Router } from '@angular/router';
@@ -215,15 +215,20 @@ export class UsersService {
   // COMPROBAR SI ES SOCIO DEL CURSO ACTUAL
   checkEsSocio(): Observable<boolean> {
     return new Observable<boolean>(observer => {
-      this.pagoCursoService.getPagosCursoSocioList().subscribe(pagos => {
-        this.cursoService.getCursos().subscribe(cursos => {
-          const pagosCursoPagados = pagos.filter((pago: { estado: string }) => pago.estado === "PAGADO");
-          const cursoActualId = cursos.find((curso: { actual: any }) => curso.actual).id;
-          const esSocio = pagosCursoPagados.some((pago: { curso_escolar: any }) => pago.curso_escolar === cursoActualId);
-          observer.next(esSocio);
-          observer.complete();
+      if (this.isLoggedIn()) {
+        this.pagoCursoService.getPagosCursoSocioList().subscribe(pagos => {
+          this.cursoService.getCursos().subscribe(cursos => {
+            const pagosCursoPagados = pagos.filter((pago: { estado: string }) => pago.estado === "PAGADO");
+            const cursoActualId = cursos.find((curso: { actual: any }) => curso.actual).id;
+            const esSocio = pagosCursoPagados.some((pago: { curso_escolar: any }) => pago.curso_escolar === cursoActualId);
+            observer.next(esSocio);
+            observer.complete();
+          }, error => observer.error(error));
         }, error => observer.error(error));
-      }, error => observer.error(error));
+      } else {
+        observer.next(false);
+        observer.complete();
+      }
     });
   }
 

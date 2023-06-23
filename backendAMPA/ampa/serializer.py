@@ -88,6 +88,28 @@ class EventoSerializer(serializers.ModelSerializer):
             instance.socios.add(socio_data)
         return instance
 
+class ColaboradorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Colaborador
+        fields = ('id', 'nombre', 'ventaja', 'descripcion', 'imagen', 'created_at')
+        read_only_fields = ('id', 'created_at')
+        extra_kwargs = {
+            'nombre': {'required': True},
+            'descripcion': {'required': True},
+        }
+
+    def create(self, validated_data):
+        colaborador = Colaborador.objects.create(**validated_data)
+        return colaborador
+
+    def update(self, instance, validated_data):
+        instance.nombre = validated_data.get('nombre', instance.nombre)
+        instance.ventaja = validated_data.get('ventaja', instance.ventaja)
+        instance.descripcion = validated_data.get('descripcion', instance.descripcion)
+        instance.imagen = validated_data.get('imagen', instance.imagen)
+        instance.save()
+        return instance
+    
 class SugerenciaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sugerencia
@@ -112,28 +134,6 @@ class SugerenciaSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.titulo = validated_data.get('titulo', instance.titulo)
         instance.descripcion = validated_data.get('descripcion', instance.descripcion)
-        instance.save()
-        return instance
-    
-class ColaboradorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Colaborador
-        fields = ('id', 'nombre', 'ventaja', 'descripcion', 'imagen', 'created_at')
-        read_only_fields = ('id', 'created_at')
-        extra_kwargs = {
-            'nombre': {'required': True},
-            'descripcion': {'required': True},
-        }
-
-    def create(self, validated_data):
-        colaborador = Colaborador.objects.create(**validated_data)
-        return colaborador
-
-    def update(self, instance, validated_data):
-        instance.nombre = validated_data.get('nombre', instance.nombre)
-        instance.ventaja = validated_data.get('ventaja', instance.ventaja)
-        instance.descripcion = validated_data.get('descripcion', instance.descripcion)
-        instance.imagen = validated_data.get('imagen', instance.imagen)
         instance.save()
         return instance
     

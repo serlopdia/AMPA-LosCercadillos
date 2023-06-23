@@ -19,13 +19,26 @@ export class DashboardComponent implements OnInit {
     const sidebar = document.querySelector("#sidebar");
     const container = document.querySelector(".my-container");
     const navcontainer = document.querySelector(".nav-container");
+    
+    const screenWidth = window.innerWidth;
   
-    if (menuBtn) {
-      menuBtn.addEventListener("click", () => {
-        sidebar?.classList.toggle("active-nav");
-        container?.classList.toggle("active-cont");
-        navcontainer?.classList.toggle("active-cont");
-      });
+    if (menuBtn && sidebar && container && navcontainer) {
+      if (screenWidth >= 700) {
+        menuBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("active-nav");
+          container.classList.toggle("active-cont");
+          navcontainer.classList.toggle("active-cont");
+        });
+      } else {
+        sidebar.classList.remove("active-nav");
+        container.classList.remove("active-cont");
+        navcontainer.classList.remove("active-cont");
+        menuBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("active-nav");
+          container.classList.toggle("active-cont");
+          navcontainer.classList.toggle("active-cont");
+        });
+      }
     }
   }
 

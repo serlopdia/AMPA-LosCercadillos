@@ -47,14 +47,23 @@ export class DatosPersonalesComponent implements OnInit {
     })
   }
 
-  borrarCuenta(): void {
-    this.usersService.deleteCuenta(this.socio.id).subscribe({
-      next: res => {
-        this.usersService.logout();
-      },error: err => {
-        console.log(err)
+  logoutAndDelete(){
+    this.usersService.logout().subscribe(
+      (data) =>{
+        this.usersService.deleteCuenta(this.socio.id).subscribe({
+          next: res => {
+            console.log("Cuenta eliminada correctamente.")
+          },error: err => {
+            console.log(err)
+          }
+        })
+        localStorage.clear();
+        window.location.href=""
+      },
+      error =>{
+        console.log(error)
       }
-    })
+    );
   }
 
   confirmarEliminacion1(): void {
@@ -65,7 +74,7 @@ export class DatosPersonalesComponent implements OnInit {
 
   confirmarEliminacion2(): void {
     if (confirm('Si la eliminas no la podrás recuperar, PERDERÁS EL DERECHO A SOCIO, todos los datos de pedidos, pagos, etc. Definitivamente, ¿estás seguro/a?')) {
-      this.borrarCuenta();
+      this.logoutAndDelete();
     }
   }
 
