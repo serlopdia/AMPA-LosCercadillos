@@ -11,7 +11,7 @@
             
             <div *ngFor="let producto of listaProductos" class="col-xl-4 col-md-6" [routerLink]="['/tienda/producto/'+producto.id]" style="margin-bottom: 30px;">
                 <div class="card h-100">
-                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">En venta</div>
                     <img class="card-img-top" src="{{ producto.imagen }}" alt="..." />
                     <div class="card-body p-4">
                         <div class="text-center">
