@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
-import { Observable, forkJoin, map } from 'rxjs';
+import { Observable, forkJoin, map, of, switchMap } from 'rxjs';
 import { environment } from 'src/app/global';
 import { CarritoService } from 'src/app/services/carrito.service';
 import { LineaPedidoService } from 'src/app/services/linea-pedido.service';
@@ -70,19 +70,17 @@ export class CarritoComponent implements OnInit {
   constructor(private carritoService: CarritoService, private productoService: ProductoService, private stockService: StockService, private pedidoService: PedidoService, private lineaPedidoService: LineaPedidoService, private usersService: UsersService) { }
 
   ngOnInit(): void {
-    this.carrito = this.carritoService.obtenerCarrito();
-    this.formatearCarrito();
-    this.getPrecioTotalCarrito().subscribe(
-      precioTotal => {
-        this.precioTotalCarrito = precioTotal;
+    this.usersService.checkEsSocio().subscribe({
+      next: esSocio => {
+        this.esSocio = esSocio;
+        this.carrito = this.carritoService.obtenerCarrito();
+        this.formatearCarrito();
+        this.getDatosSocio();
+        console.log('Todas las funciones han finalizado');
+      },
+      error: error => {
+        console.log(error);
       }
-    );
-    this.getDatosSocio();
-
-    this.usersService.checkEsSocio().subscribe(esSocio => {
-      this.esSocio = esSocio;
-    }, error => {
-      console.log(error);
     });
   }
 
@@ -112,12 +110,14 @@ export class CarritoComponent implements OnInit {
   }
 
   async formatearCarrito() {
+    let precioTotal = 0;
+  
     for (const lineaPedido of this.carrito) {
       const producto = await this.productoService.getProducto(lineaPedido.idProducto).toPromise();
       const stock = await this.stockService.getStock(lineaPedido.idStock).toPromise();
       let lineaFormateada: LineaFormateada;
-
-      if(this.esSocio) {
+  
+      if (this.esSocio) {
         lineaFormateada = {
           productoId: producto.id,
           imagen: producto.imagen,
@@ -136,41 +136,13 @@ export class CarritoComponent implements OnInit {
           cantidad: lineaPedido.cantidad
         }
       }
-  
       this.carritoFormateado.push(lineaFormateada);
-    }
-  }
   
-  getPrecioTotalCarrito(): Observable<number> {
-    const observables: Observable<Producto>[] = [];
-  
-    for (const lineaPedido of this.carrito) {
-      const observable = this.productoService.getProducto(lineaPedido.idProducto);
-      observables.push(observable);
+      const precioLinea = lineaFormateada.precio * lineaFormateada.cantidad;
+      precioTotal += precioLinea;
     }
   
-    return forkJoin(observables).pipe(
-      map((productos: Producto[]) => {
-        let precioTotal = 0;
-  
-        for (let i = 0; i < productos.length; i++) {
-          const producto = productos[i];
-          const lineaPedido = this.carrito[i];
-          let precioProducto: number;
-          
-          if(this.esSocio) {
-            precioProducto = producto.precio_socio;
-          } else {
-            precioProducto = producto.precio_general;
-          }
-          const cantidad = lineaPedido.cantidad;
-  
-          precioTotal += precioProducto * cantidad;
-        }
-  
-        return precioTotal;
-      })
-    );
+    this.precioTotalCarrito = precioTotal;
   }
 
   eliminarLinea(index: number) {

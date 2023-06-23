@@ -78,7 +78,7 @@ Los mentores, seleccionados cuidadosamente entre los miembros del AMPA, trabajar
 El programa de mentoría también incluirá reuniones regulares entre los mentores y los padres o tutores legales de los estudiantes, para mantener una comunicación fluida y asegurarse de que se aborden todas las necesidades y preocupaciones.
 
 El AMPA del CEIP Los Cercadillos espera que este programa de mentoría tenga un impacto positivo en la vida de los estudiantes, ayudándolos a desarrollar habilidades clave y a sentirse apoyados en su proceso educativo y personal."""
-""" 
+
 @receiver(post_migrate, dispatch_uid="dependent_logic_signal")
 def create_ampa(sender, **kwargs):
     if sender.name == "ampa":
@@ -147,4 +147,3 @@ def create_ampa(sender, **kwargs):
             curso_escolar = CursoEscolar.objects.get(id=1)
             pago_sample_curso = PagoCurso.objects.create(cantidad=14.0, estado=EstadoPago.PAGADO, socio=socio, curso_escolar=curso_escolar)
             pago_sample_curso.save()
- """

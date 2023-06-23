@@ -1,15 +1,15 @@
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
 from .models import *
-""" 
+
 @receiver(post_migrate)
 def create_shop(sender, **kwargs):
     if sender.name == "shop":
         socio = Socio.objects.filter(id=1).first()
         if not Producto.objects.exists():
-            producto_sample_uno = Producto.objects.create(nombre="Taza", descripcion="Taza edición especial AMPA 22/23.", precio_general=8.0, precio_socio=6.25, imagen="https://recuerdosbaby.es/wp-content/uploads/2022/08/Taza-personalizada-profesora-alumnos-recuerdosbaby-delante.jpg")
+            producto_sample_uno = Producto.objects.create(nombre="Taza", descripcion="Taza edición especial AMPA 2022/23.", precio_general=8.0, precio_socio=6.25, imagen="https://recuerdosbaby.es/wp-content/uploads/2022/08/Taza-personalizada-profesora-alumnos-recuerdosbaby-delante.jpg")
             producto_sample_uno.save()
-            producto_sample_dos = Producto.objects.create(nombre="Camiseta", descripcion="Camiseta edición especial AMPA 22/23.", precio_general=20.0, precio_socio=15.50, imagen="https://cdn.shopify.com/s/files/1/0631/8889/3955/products/equipacion-hummel-real-betis-2022-23-1_740x_e60ca0bb-d104-47bd-b77b-b811fa81c546_1200x1200.jpg?v=1664306825")
+            producto_sample_dos = Producto.objects.create(nombre="Agenda", descripcion="Agenda edición única del AMPA 2022/23.", precio_general=10.0, precio_socio=5.50, imagen="https://static.wixstatic.com/media/190bc0_d109193881d34f38bdd605884301ae99~mv2.jpg/v1/fill/w_1000,h_1000,al_c,q_85,usm_0.66_1.00_0.01/190bc0_d109193881d34f38bdd605884301ae99~mv2.jpg")
             producto_sample_dos.save()
 
         if not Pago.objects.exists():
@@ -43,6 +43,5 @@ def create_shop(sender, **kwargs):
             stock_producto_sample_uno.save()
             stock_producto_sample_dos = StockProducto.objects.create(nombre="Taza de 2ºA", cantidad=7, producto=producto_sample_uno)
             stock_producto_sample_dos.save()
-            stock_producto_sample_tres = StockProducto.objects.create(nombre="Camiseta AMPA", cantidad=25, producto=producto_sample_dos)
+            stock_producto_sample_tres = StockProducto.objects.create(nombre="Edición única", cantidad=25, producto=producto_sample_dos)
             stock_producto_sample_tres.save()
- """
