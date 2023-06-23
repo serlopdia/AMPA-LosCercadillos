@@ -10,6 +10,7 @@ export class CancelPayComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    localStorage.removeItem('carrito');
   }
 
 }

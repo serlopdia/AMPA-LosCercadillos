@@ -120,8 +120,7 @@ export class VistaProductoComponent implements OnInit {
     if (stockSeleccionado) {
       const cantidadAgregada = this.obtenerCantidadAgregada(stockSeleccionado.id.toString());
       const stockDisponible = stockSeleccionado.cantidad - cantidadAgregada;
-      const stockRestante = stockDisponible - this.cantidadUnidades - cantidadAgregada;
-      return stockRestante >= 0 ? stockRestante : 0;
+      return stockDisponible >= 0 ? stockDisponible : 0;
     }
     return 0;
   }

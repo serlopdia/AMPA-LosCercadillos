@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.db.models import F
 from django.http import JsonResponse
 from rest_framework import permissions, authentication, status
 from rest_framework.views import APIView
@@ -177,7 +178,7 @@ class CompraStripeWebhook(APIView):
             payment_email = payment_data['email']
             payment_telefono = payment_data['telefono']
             payment_idPedido = payment_data['idPedido']
-            payment_idSocio = payment_data.get('idSocio')  # Obtener el valor o None si no existe la clave
+            payment_idSocio = payment_data.get('idSocio')
 
             pedido = get_object_or_404(Pedido, id=payment_idPedido)
             if payment_idSocio is None:
@@ -194,6 +195,13 @@ class CompraStripeWebhook(APIView):
                 socio=socio,
             )
             pago.save()
+
+            lineas_pedido = LineaPedido.objects.filter(pedido=pedido)
+            for linea_pedido in lineas_pedido:
+                producto = linea_pedido.producto
+                stock = linea_pedido.stock
+                cantidad = linea_pedido.cantidad
+                StockProducto.objects.filter(id=stock.id).update(cantidad=F('cantidad') - cantidad)
 
             pedido.pago = pago
             pedido.estado = EstadoPedido.PREPARACION

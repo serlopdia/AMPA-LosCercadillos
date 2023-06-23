@@ -46,7 +46,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="col-auto">
+                                <div *ngIf="obtenerStockMaximo() > 0" class="col-auto">
                                     <ul class="list-inline pb-3 align-items-center">
                                         <li class="list-inline-item text-right">
                                             Cantidad
@@ -55,6 +55,13 @@
                                         <li class="list-inline-item"><button class="btn btn-success" id="btn-minus" (click)="decrementarCantidad()" [disabled]="cantidadUnidades === 0">-</button></li>
                                         <li class="list-inline-item"><span class="badge bg-secondary" id="var-value" style="font-size: 13px;">{{ cantidadUnidades }}</span></li>
                                         <li class="list-inline-item"><button class="btn btn-success" id="btn-plus" (click)="incrementarCantidad()" [disabled]="cantidadUnidades >= obtenerStockDisponible() || cantidadUnidades >= obtenerStockMaximo()">+</button></li>
+                                    </ul>
+                                </div>
+                                <div *ngIf="obtenerStockMaximo() === 0" class="col-auto">
+                                    <ul class="list-inline pb-3 align-items-center">
+                                        <li class="list-inline-item text-right">
+                                            <h4 class="list-inline-item text-danger">No hay stock.</h4>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
