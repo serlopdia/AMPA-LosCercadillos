@@ -35,6 +35,7 @@ export class EventosComponent implements OnInit {
   isLoggedIn = false;
   isAdmin = false;
   socio!: Socio;
+  esSocio = false;
   listaEventos: Evento[] = [];
   eventosFormateados: Evento[] = [];
   errorMessage = ''; 
@@ -46,6 +47,12 @@ export class EventosComponent implements OnInit {
     this.isAdmin = this.usersService.isLogAdmin();
     this.getDatosSocio();
     this.formatearEventos();
+
+    this.usersService.checkEsSocio().subscribe(esSocio => {
+      this.esSocio = esSocio;
+    }, error => {
+      console.log(error);
+    });
   }
 
   getDatosSocio() {
@@ -111,6 +118,12 @@ export class EventosComponent implements OnInit {
 
   isSocioInEvento(evento: Evento): boolean {
     return this.socio && evento.socios.some(s => s.id === this.socio.id);
+  }
+
+  informarSerAbonado() {
+    document.location.href = "/miperfil/pagos";
+    window.location.href = "/miperfil/pagos";
+    window.alert("Debe pagar la cuota de abonado para poder inscribirse en el evento.");
   }
 
 }

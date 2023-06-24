@@ -18,12 +18,14 @@
 					<div class="card shadow-lg bg-blue">
 						<div class="card-body p-5" style="background-color: darkslateblue;">
 							<h1 class="fs-4 card-title fw-bold mb-4 text-white">Inicia sesión como Administrador</h1>
-							<form *ngIf="!isAdminLogged" name="form" (ngSubmit)="logForm()" #f="ngForm" novalidate class="needs-validation">
+							<form *ngIf="!isAdminLogged" name="form" (ngSubmit)="f.form.valid && logForm()" #f="ngForm" novalidate>
 								<div class="mb-3">
 									<label class="mb-2 text-light" for="username">Usuario</label>
-									<input [(ngModel)]="form.username" #username="ngModel" id="username" type="text" class="form-control" name="username" required>
-									<div class="invalid-feedback">
-										El usuario no es válido
+									<input [(ngModel)]="form.username" #username="ngModel" id="username" type="username" class="form-control" name="username" [ngClass]="{ 'is-invalid': f.submitted && username.errors }" required autofocus>
+									<div class="invalid-feedback error text-warning" *ngIf="username.errors && f.submitted">
+										<div *ngIf="username.errors['required']">
+											Debe introducir un usuario
+										</div>
 									</div>
 								</div>
 
@@ -31,10 +33,12 @@
 									<div class="mb-2 w-100">
 										<label class="text-light" for="password">Contraseña</label>
 									</div>
-									<input [(ngModel)]="form.password" #password="ngModel" id="password" type="password" class="form-control" name="password" required>
-								    <div class="invalid-feedback">
-								    	La contraseña es obligatoria
-							    	</div>
+									<input [(ngModel)]="form.password" #password="ngModel" id="password" type="password" class="form-control" name="password" [ngClass]="{ 'is-invalid': f.submitted && password.errors }" required>
+								    <div class="invalid-feedback error text-warning" *ngIf="password.errors && f.submitted">
+										<div *ngIf="password.errors['required']">
+											Debe introducir una contraseña
+										</div>
+									</div>
 								</div>
 
 								<div class="text-center">

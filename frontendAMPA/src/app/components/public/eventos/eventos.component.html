@@ -19,8 +19,11 @@
                 <p>{{ evento.created_at }}</p>
             </div>
             <div class="align-items-center d-flex">
-                <button *ngIf="!isSocioInEvento(evento) && isLoggedIn && !isAdmin" type="submit" class="btn big-button ms-auto" (click)="inscribirSocio(evento.id)">
+                <button *ngIf="!isSocioInEvento(evento) && isLoggedIn && !isAdmin && esSocio" type="button" class="btn big-button ms-auto" (click)="inscribirSocio(evento.id)">
                     <b>Apuntarse</b>
+                </button>
+                <button *ngIf="!isSocioInEvento(evento) && isLoggedIn && !isAdmin && !esSocio" type="button" class="btn big-button ms-auto" (click)="informarSerAbonado()">
+                    <b>Abónate y apúntate</b>
                 </button>
                 <button *ngIf="!isLoggedIn || isAdmin" type="submit" class="btn big-button ms-auto" routerLink="/login">
                     <b>Inicia sesión para apuntarte</b>

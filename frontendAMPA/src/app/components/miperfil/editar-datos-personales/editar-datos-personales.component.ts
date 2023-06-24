@@ -22,10 +22,11 @@ interface Socio {
 export class EditarDatosPersonalesComponent implements OnInit {
 
   form:any ={
-    username: null,
     first_name: null,
     last_name:null,
     email:null,
+    username: null,
+    password: null,
     tel:null,
     dni: null,
     address: null,
@@ -50,6 +51,7 @@ export class EditarDatosPersonalesComponent implements OnInit {
         this.form.last_name = this.socio.last_name;
         this.form.email = this.socio.email;
         this.form.username = this.socio.username;
+        this.form.password = this.socio.password;
         this.form.tel = this.socio.tel;
         this.form.dni = this.socio.dni;
         this.form.address = this.socio.address;
