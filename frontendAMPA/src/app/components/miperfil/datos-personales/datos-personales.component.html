@@ -62,8 +62,12 @@
             
             <div class="form-group row">
                 <div class="mb-4 col-sm-12">
-                    <h4 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Hijos asociados: </h4>
-                    <h4 class="d-inline">{{ socio.email }}</h4>
+                    <h4 class="mb-2 text-muted d-inline" style="margin-right: 15px;">Alumnos asociados: </h4>
+                    <h4 *ngFor="let hijo of hijosSocio" class="d-inline">
+                        <a *ngIf="esSocio" [routerLink]="['/miperfil/hijos']">{{ hijo.nombre }}</a> &nbsp;
+                        <span *ngIf="!esSocio">{{ hijo.nombre }}&nbsp;</span>
+                    </h4>
+                    <h4 *ngIf="hijosSocio.length === 0" class="d-inline text-danger">No tiene alumnos asociados.</h4>
                 </div>
             </div>
 

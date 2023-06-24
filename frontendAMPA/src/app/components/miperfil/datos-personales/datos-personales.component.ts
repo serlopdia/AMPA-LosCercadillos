@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HijoService } from 'src/app/services/hijo.service';
 import { UsersService } from 'src/app/services/users.service';
 
 interface Socio {
@@ -13,6 +14,15 @@ interface Socio {
   password: string;
   created_at: string;
 }
+interface Hijo {
+  id: number;
+  nombre: string;
+  apellidos: string;
+  fecha_nacimiento: string;
+  socio: number;
+  clase: number;
+  created_at: string;
+}
 
 @Component({
   selector: 'app-datos-personales',
@@ -23,11 +33,14 @@ export class DatosPersonalesComponent implements OnInit {
 
   esSocio = false;
   socio!: Socio;
+  hijosSocio: Hijo[] = [];
+  hijo!:Hijo;
 
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UsersService, private hijoService: HijoService) { }
 
   ngOnInit(): void {
     this.getDatosSocio();
+    this.getHijosSocio();
 
     this.usersService.checkEsSocio().subscribe(esSocio => {
       this.esSocio = esSocio;
@@ -45,6 +58,17 @@ export class DatosPersonalesComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  getHijosSocio() {
+    this.hijoService.getHijosSocioList().subscribe({
+      next: (res: Hijo[]) => {
+        this.hijosSocio = res;
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
   }
 
   logoutAndDelete(){

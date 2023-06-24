@@ -75,7 +75,7 @@ export class RegisterComponent implements OnInit {
           });
         },
         error: err => {
-          let errorMessages = "Credenciales incorrectas";
+          let errorMessages = "Error desconocido, el usuario o email pueden estar ya en uso.";
           if (err.error && typeof err.error === "object") {
             const errors = Object.values(err.error);
             const messages = errors.flatMap((error: any) => {
@@ -89,6 +89,9 @@ export class RegisterComponent implements OnInit {
             });
             if (messages.length > 0) {
               errorMessages = messages.join("\n");
+            }
+            if (err.error.non_field_errors) {
+              errorMessages = err.error.non_field_errors[0];
             }
           }
           this.errorMessage = errorMessages;

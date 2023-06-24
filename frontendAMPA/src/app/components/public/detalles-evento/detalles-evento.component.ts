@@ -39,6 +39,7 @@ export class DetallesEventoComponent implements OnInit {
   isAdmin = false;
   socio!: Socio;
   evento!:Evento;
+  esSocio = false;
   isSuccessful = false;
   errorMessage = '';
 
@@ -51,6 +52,12 @@ export class DetallesEventoComponent implements OnInit {
     this.isAdmin = this.usersService.isLogAdmin();
     this.getDatosSocio();
     this.getDatosEvento();
+
+    this.usersService.checkEsSocio().subscribe(esSocio => {
+      this.esSocio = esSocio;
+    }, error => {
+      console.log(error);
+    });
   }
 
   getDatosSocio() {
@@ -120,7 +127,12 @@ export class DetallesEventoComponent implements OnInit {
     const minutos = fecha.getMinutes().toString().padStart(2, '0');
     return `${diaSemana} ${dia.toString().padStart(2, '0')}/${mes.toString().padStart(2, '0')}/${anio} a las ${hora}:${minutos}`;
   }
-  
+
+  informarSerAbonado() {
+    document.location.href = "/miperfil/pagos";
+    window.location.href = "/miperfil/pagos";
+    window.alert("Debe pagar la cuota de abonado para poder inscribirse en el evento.");
+  }
 
 }
 

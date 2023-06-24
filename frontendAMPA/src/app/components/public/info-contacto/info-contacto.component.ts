@@ -29,7 +29,7 @@ export class InfoContactoComponent implements OnInit {
       next: res => {
         document.location.href = ""
         window.location.href = ""
-        window.alert("Sugerencia mandada correctamente");
+        window.alert("Sugerencia mandada correctamente.");
       },
       error: err => {
         let errorMessages = "Datos erróneos";
