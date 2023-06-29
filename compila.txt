@@ -46,6 +46,8 @@ Quiere decir que se ha desplegado correctamente y esa es la dirección del servi
 
 7- Si se desea hacer un test sobre las pruebas unitarias del servidor (python .\manage.py test): Habrá que comentar antes todos los archivos "signals.py" de las carpetas ampa, shop y users.
 
+*Lamentablemente no se pueden validar pagos en local, ya que es necesario activar los webhooks de Stripe de forma local, a no ser que sea yo mismo el que lo haga, ya que tengo que iniciar sesión con mi propia cuenta. Usando el despliegue público (http://ampa.pythonanywhere.com/) como backend, sí se pueden realizar pagos, ya que ya se encuentra conectado con Stripe.
+
 
 ===================================================================
 ===================================================================
@@ -68,4 +70,5 @@ https://nodejs.org/en
 "Compiled successfully."
 Quiere decir que se ha compilado correctamente y desplegado en esa dirección en local.
 
+5- Para usar el servidor local como backend, habrá que sustituir las urls del archivo "\frontendAMPA\src\app\global.ts" por "http://localhost:4200/".
 
