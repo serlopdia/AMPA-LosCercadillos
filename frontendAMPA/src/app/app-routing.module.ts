@@ -6,6 +6,7 @@ import { SocioGuard } from './guards/socio.guard';
 
 import { IndexComponent } from './components/index/index.component';
 import { UnauthorizedComponent } from './layouts/unauthorized/unauthorized.component';
+import { NotFoundComponent } from './layouts/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginAdminComponent } from './components/admin/login-admin/login-admin.component';
@@ -72,6 +73,7 @@ const routes: Routes = [
   { path: '', component: IndexComponent },
   { path: 'index', component: IndexComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
+  { path: 'not-found', component: NotFoundComponent },
   { path: 'not-socio', component: NotSocioComponent },
 
   { path: 'login', component: LoginComponent },
@@ -137,6 +139,8 @@ const routes: Routes = [
 
   { path: 'success', component: SuccessPayComponent, canActivate: [] },
   { path: 'cancel', component: CancelPayComponent, canActivate: [] },
+  
+  { path: '**', redirectTo: '/not-found' },
 ];
 
 @NgModule({

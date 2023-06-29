@@ -103,12 +103,27 @@ export class SocioComponent implements OnInit {
     });
   }
 
-  eliminarStock(idStock: any): void {
+  deleteSocio(idSocio: number){
+    this.usersService.deleteCuenta(idSocio).subscribe({
+      next: res => {
+        document.location.href = "/dashboard/socios";
+        window.location.href = "/dashboard/socios";
+        console.log("Cuenta eliminada correctamente.");
+      },error: err => {
+        console.log(err)
+      }
+    })
   }
 
-  confirmarEliminacion(idStock: any): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este socio?')) {
-      this.eliminarStock(idStock);
+  confirmarEliminacion1(idSocio: number): void {
+    if (confirm('Vas a eliminar la cuenta del socio ' + idSocio + '. ¿Estás seguro/a?')) {
+      this.confirmarEliminacion2(idSocio);
+    }
+  }
+
+  confirmarEliminacion2(idSocio: number): void {
+    if (confirm('Si la eliminas no se podrá recuperar, PERDERÁ EL DERECHO A SOCIO, todos los datos de pedidos, pagos, etc. Definitivamente, ¿estás seguro/a?')) {
+      this.deleteSocio(idSocio);
     }
   }
 

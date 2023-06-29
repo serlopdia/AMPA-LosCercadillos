@@ -39,7 +39,7 @@
                     <button *ngIf="!isLoggedIn || isAdmin" type="submit" class="btn big-button" style="background-color: rgb(72, 0, 206);" routerLink="/login">
                         <b>Inicia sesión para apuntarte</b>
                     </button>
-                    <button *ngIf="isSocioInEvento(evento)" type="submit" class="btn big-button bg-danger" (click)="abandonarEvento(evento.id)">
+                    <button *ngIf="isSocioInEvento(evento) && !isAdmin" type="submit" class="btn big-button bg-danger" (click)="abandonarEvento(evento.id)">
                         <b>Borrar inscripción</b>
                     </button>
                 </div>

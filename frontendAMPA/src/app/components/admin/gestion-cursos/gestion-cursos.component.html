@@ -17,7 +17,7 @@
                                     </select>
                                 </div>
                                     
-                                <div *ngIf="cursoSeleccionado" class="table-container">
+                                <div *ngIf="cursoSeleccionado && clasesCurso.length > 0" class="table-container">
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                         <tr>
@@ -40,6 +40,11 @@
                                         </tr>
                                         </tbody>
                                     </table>
+                                </div>
+    
+                                <div *ngIf="clasesCurso.length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+                                  <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+                                  <div style="opacity: .2;">No hay clases aún.</div>
                                 </div>
 
                                 <form *ngIf="!isSuccessfulClase" name="form" (ngSubmit)="f.form.valid && crearClase()" #f="ngForm" novalidate>

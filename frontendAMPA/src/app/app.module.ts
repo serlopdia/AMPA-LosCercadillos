@@ -74,6 +74,7 @@ import { PedidosSocioComponent } from './components/miperfil/pedidos-socio/pedid
 import { NotSocioComponent } from './layouts/not-socio/not-socio.component';
 import { EditarPasswordSocioComponent } from './components/miperfil/editar-password-socio/editar-password-socio.component';
 import { ShowSugerenciaComponent } from './components/admin/shows/show-sugerencia/show-sugerencia.component';
+import { NotFoundComponent } from './layouts/not-found/not-found.component';
 
 registerLocaleData(localeEs);
 
@@ -144,6 +145,7 @@ registerLocaleData(localeEs);
     NotSocioComponent,
     EditarPasswordSocioComponent,
     ShowSugerenciaComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

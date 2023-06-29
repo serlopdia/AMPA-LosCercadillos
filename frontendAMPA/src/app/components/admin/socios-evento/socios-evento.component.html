@@ -6,7 +6,7 @@
     <div *ngIf="evento">
         <h1 style="margin: 2vh 50px;">Socios inscritos a: <span class="text-primary">{{ evento.titulo }}</span></h1>
     
-        <div class="table-container">
+        <div *ngIf="listaSocios.length > 0" class="table-container">
           <table class="table table-bordered table-hover">
             <thead>
               <tr>
@@ -33,9 +33,14 @@
           </table>
         </div>
     
+        <div *ngIf="listaSocios.length == 0" style="font-weight: bold; font-size: x-large; text-align: center; margin: 20px 0;">
+          <img src="https://static.thenounproject.com/png/2902077-200.png" class="imagen-vacia" alt="">
+          <div style="opacity: .2;">No hay socios inscritos aún.</div>
+        </div>
+    
         <h5 class="text-muted" style="margin: 1vh 50px;">Inscritos <span class="text-primary">{{ evento.socios.length }}</span> socios de <span class="text-primary">{{ evento.capacidad }}</span> de capacidad.</h5>
     
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div *ngIf="listaSocios.length > 0" style="display: flex; justify-content: space-between; align-items: center;">
           <button type="button" class="btn btn-rosa enviar-correo" (click)="enviarCorreo()">
             <i class="fa-solid fa-file-export" style="margin-right: 10px;"></i>
             Enviar correo
