@@ -1,0 +1,71 @@
+
+
+----------------	ANOTACIONES PREVIAS	----------------
+1- Se explicarán los procesos para un SO Windows.
+2- Puede ser necesario tener añadido en las variables del sistema de nuestro PC algunos programas de los que se usan.
+3- En esta carpeta se encuentra tres directorios, uno llamado backendAMPA, otro frontendAMPA y un tercero llamado venv, todos serán necesarios.
+
+
+===================================================================
+===================================================================
+
+
+----------------	REQUERIMIENTOS	----------------
+1- SO: Windows 7 o superior, macOS o Linux.
+
+2- RAM: Al menos 2GB de RAM.
+
+3- Almacenamiento: Al menos 6GB de almacenamiento.
+
+
+===================================================================
+===================================================================
+
+
+----------------	LANZAMIENTO BACKEND	----------------
+1- Descargar e instalar Python 3.8 o superior.
+
+2- No es necesario instalar ninguna librería ya que en la carpeta va añadido un directorio con un entorno virtual preparado para el lanzamiento del servidor en local.
+
+3A- Activaremos el entorno virtual. En una consola, situándonos en la carpeta "codigo", ejecutamos: 
+"cd .\venv\Scripts\activate"
+
+3B- En caso de que el entorno virtual proporcionado esté roto, podemos crear uno nuevo siguiento los siguientes pasos:
+	3B.1- Crearemos el entorno con: "python3 -m venv nombre_del_entorno"
+	3B.2- Activaremos el entorno como dice el paso 3A
+	3B.2- En el entorno virtual proporcionado inicialmente (venv), existe un archivo llamado "requirements.txt", nos situaremos a su altura en una consola y ejecutaremos:
+"pip install -r requirements.txt"
+
+4- Una vez activado el entorno, nos debería de aparecer "(venv)" en la consola.
+
+5- Desde la consola, volvemos a la carpeta "codigo" y ejecutamos lo siguiente:
+"python .\manage.py runserver"
+
+6- Una vez realizado eso, la consola nos dirá: "Starting development server at http://127.0.0.1:8000/" 
+Quiere decir que se ha desplegado correctamente y esa es la dirección del servidor en local.
+
+7- Si se desea hacer un test sobre las pruebas unitarias del servidor (python .\manage.py test): Habrá que comentar antes todos los archivos "signals.py" de las carpetas ampa, shop y users.
+
+
+===================================================================
+===================================================================
+
+
+----------------	LANZAMIENTO FRONTEND	----------------
+
+1- Descargar e instalar la versión 18.16.1 o en su defecto la última LTS de Node.js en su página oficial: 
+https://nodejs.org/en
+(Asegurarse de marcar la opción de instalar automáticamente las herramientas necesarias)
+
+2- Tras haber descargado e instalado Angular CLI mediante la consola de comandos: 
+"npm install -g @angular/cli"
+
+3- Desde una consola, nos situaremos de nuevo en el directorio de "codigo", entraremos en la carpeta de "frontendAMPA" y ejecutaremos en la consola: 
+"ng serve"
+
+4- Una vez haya finalizado la compilación del código, nos aparecerá en la terminal: 
+"** Angular Live Development Server is listening on localhost:4200, open your browser on http://localhost:4200/ **" 
+"Compiled successfully."
+Quiere decir que se ha compilado correctamente y desplegado en esa dirección en local.
+
+
